@@ -1,0 +1,62 @@
+Source: espeak
+Section: sound
+Priority: optional
+Maintainer: Mario Lang <mlang@debian.org>
+Build-Depends: debhelper (>= 5.0.0), portaudio19-dev
+Standards-Version: 3.7.2
+
+Package: espeak
+Architecture: alpha amd64 arm hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 mipsel
+Depends: ${shlibs:Depends}, espeak-data (= ${Source-Version})
+Description: A multi-lingual software speech synthesizer
+ eSpeak is a software speech synthesizer for English, and some other
+ languages.
+ .
+ eSpeak produces good quality English speech. It uses a different synthesis
+ method from other open source text to speech (TTS) engines, and sounds quite
+ different. It's perhaps not as natural or "smooth", but some find the
+ articulation clearer and easier to listen to for long periods.
+ .
+ It can run as a command line program to speak text from a file or from stdin.
+ .
+ It works well as a "Talker" with the KDE text to speech system (KTTS), as an
+ alternative to Festival for example. As such, it can speak text which has been
+ selected into the clipboard, or directly from the Konquerer browser or the Kate
+ editor.
+ .
+   * Includes different Voices, whose characteristics can be altered.
+   * Can produce speech output as a WAV file.
+   * Can translate text to phoneme codes, so it could be adapted as a front end
+     for another speech synthesis engine.
+   * Potential for other languages. Rudimentary (and probably humourous)
+     attempts at German and Esperanto are included.
+   * Compact size. The program and its data total about 350 kbytes.
+   * Written in C++.
+
+Package: espeak-data
+Architecture: all
+Conflicts: espeak (<= 1.11)
+Replaces: espeak (<= 1.11)
+Recommends: espeak (= ${Source-Version})
+Suggests: libespeak1 (= ${Source-Version})
+Description: A multi-lingual software speech synthesizer: speech data files
+ eSpeak is a software speech synthesizer for English, and some other
+ languages. This package contains necessary synthesizer data files needed
+ for the espeak program, and the shared library.
+
+Package: libespeak1
+Architecture: alpha amd64 arm hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 mipsel
+Section: libs
+Depends: ${shlibs:Depends}, espeak-data (= ${Source-Version})
+Description: A multi-lingual software speech synthesizer: shared library
+ eSpeak is a software speech synthesizer for English, and some other
+ languages. This package contains the espeak program in a shared library.
+
+Package: libespeak-dev
+Architecture: alpha amd64 arm hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 mipsel
+Section: libdevel
+Depends: libespeak1 (= ${Source-Version})
+Description: A multi-lingual software speech synthesizer: development files
+ eSpeak is a software speech synthesizer for English, and some other
+ languages. This package contains the eSpeak development files needed to
+ build against the espeak shared library.

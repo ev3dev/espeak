@@ -1,0 +1,87 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+soname=libespeak.so.1
+version=1.16
+
+
+CFLAGS = -Wall -g
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
+
+DEB_HOST_ARCH?=$(shell dpkg-architecture -qDEB_HOST_ARCH)
+# get the list of architectures from debian/control
+# so we fail to build early on big-endian archs
+ARCHS=$(shell awk 'BEGIN { FS = ":" } /^Architecture:/ { print $$2; exit }' < debian/control)
+
+build: build-stamp
+
+build-stamp:
+	dh_testdir
+
+ifeq (,$(findstring $(DEB_HOST_ARCH),$(ARCHS)))
+	@echo architecture $(DEB_BUILD_ARCH) not allowed in source
+	@exit 1
+endif
+
+	# Add here commands to compile the package.
+	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE)
+
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+
+	-cd src && $(MAKE) distclean
+
+	dh_clean 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	dh_installdirs
+
+	install -m 755 -o root -g root src/speak $(CURDIR)/debian/espeak/usr/bin/espeak
+	cp -r espeak-data $(CURDIR)/debian/espeak-data/usr/share
+	find $(CURDIR)/debian/espeak-data/usr/share -type f -exec chmod 644 {} \;
+	find $(CURDIR)/debian/espeak-data/usr/share -type d -exec chmod 755 {} \;
+	install -m 644 -o root -g root src/$(soname).$(version) $(CURDIR)/debian/libespeak1/usr/lib/$(soname).$(version)
+	cd $(CURDIR)/debian/libespeak1/usr/lib && ln -s $(soname).$(version) $(soname)
+	cd $(CURDIR)/debian/libespeak1/usr/lib && ln -s $(soname).$(version) libespeak.so 
+	mv $(CURDIR)/debian/libespeak1/usr/lib/libespeak.so $(CURDIR)/debian/libespeak-dev/usr/lib
+	install -m 644 -o root -g root src/speak_lib.h $(CURDIR)/debian/libespeak-dev/usr/include
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs ChangeLog
+	dh_installdocs
+	dh_installman debian/espeak.1
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_shlibdeps
+	dh_makeshlibs
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install

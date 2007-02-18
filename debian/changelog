@@ -1,0 +1,51 @@
+espeak (1.16-2.1) testing-proposed-updates; urgency=high
+
+  * Non-maintainer upload.
+  * Don't build on big-endian architectures (closes: #408741).
+
+ -- Julien Cristau <jcristau@debian.org>  Sun, 18 Feb 2007 09:41:44 +0100
+
+espeak (1.16-2) unstable; urgency=low
+
+  * Fix first-person description (Closes Bug#399585)
+
+ -- Mario Lang <mlang@debian.org>  Mon, 27 Nov 2006 15:24:02 +0100
+
+espeak (1.16-1) unstable; urgency=low
+
+  * New upstream release
+  * Add missing dh_makeshlibs and fix misplaced dh_installdeb call.
+
+ -- Mario Lang <mlang@debian.org>  Tue,  7 Nov 2006 10:55:27 +0100
+
+espeak (1.15-0ubuntu2) edgy; urgency=low
+
+  * Fixed up dependencies for espeak and libespeak1 to properly depend 
+    on espeak-data.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Fri, 29 Sep 2006 09:40:44 +1000
+
+espeak (1.15-0ubuntu1) edgy; urgency=low
+
+  * New upstream release.
+  * Updated manpage.
+  * Break out synthesizer data files into new package, espeak-data.
+  * Created libespeak1 and libespeak-dev library packages.
+  * debian/control: Removed ${misc:Depends} from the espeak package
+    Depends field as it isn't needed.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Tue, 26 Sep 2006 18:58:56 +1000
+
+espeak (1.11-0ubuntu1) edgy; urgency=low
+
+  * New upstream release.
+  * debian/rules: Cleaned up a little bit.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Wed,  9 Aug 2006 20:59:08 +1000
+
+espeak (1.10-0ubuntu1) edgy; urgency=low
+
+  * Initial release.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Fri, 23 Jun 2006 08:49:03 +0200
+
