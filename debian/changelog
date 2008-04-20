@@ -1,13 +1,74 @@
-espeak (1.16-2.1) testing-proposed-updates; urgency=high
+espeak (1.37-1) unstable; urgency=low
 
-  * Non-maintainer upload.
-  * Don't build on big-endian architectures (closes: #408741).
+  * New upstream release.
 
- -- Julien Cristau <jcristau@debian.org>  Sun, 18 Feb 2007 09:41:44 +0100
+ -- Mario Lang <mlang@debian.org>  Sun, 20 Apr 2008 19:01:41 +0200
+
+espeak (1.36.02-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Mario Lang <mlang@debian.org>  Tue, 18 Mar 2008 17:32:49 +0100
+
+espeak (1.30-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/control:
+    - Add Hompeage field.
+    - Update Standards-Version to 3.7.3 (no changes).
+  * debian/copyright: Update to include missed copyright
+    holders and mention big_endian/espeak-phoneme-data.c.
+
+ -- Mario Lang <mlang@debian.org>  Sat, 05 Jan 2008 12:58:30 +0100
+
+espeak (1.29-1) unstable; urgency=low
+
+  * New upstream release (Closes: Bug#439770).
+  * debian/copyright: Upstream switched to GPLv3.  Update accordingly.
+  * debian/libespeak1.shlibs: Bump version.
+
+ -- Mario Lang <mlang@debian.org>  Sun, 14 Oct 2007 12:51:29 +0200
+
+espeak (1.26-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/control: Change ${Source-Version} to ${binary:Version}.
+
+ -- Mario Lang <mlang@debian.org>  Fri, 08 Jun 2007 20:04:18 +0200
+
+espeak (1.25-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/rules: Grab the upstream version using dpkg-parsechangelog.
+
+ -- Mario Lang <mlang@debian.org>  Sun, 20 May 2007 16:12:39 +0200
+
+espeak (1.22-1) unstable; urgency=low
+
+  * New upstream release.
+  * Install speak_lib.h in /usr/include/espeak.
+  * Install src/espeak (dynamically linked) rather then src/speak.
+  * Use -L and -l with dh_shlibdeps so we pick up a tight dependency
+    on libespeak1 for package espeak.
+  * Change espeak-data to Arch: any.
+
+ -- Mario Lang <mlang@debian.org>  Sat, 14 Apr 2007 22:42:03 +0200
+
+espeak (1.19-2) unstable; urgency=low
+
+  * Change roundl() to round() in src/wave.cpp.
+
+ -- Mario Lang <mlang@debian.org>  Mon, 29 Jan 2007 13:32:47 +0100
+
+espeak (1.19-1) unstable; urgency=low
+
+  * New upstream release (Closes: Bug#406840, Bug#408741).
+
+ -- Mario Lang <mlang@debian.org>  Sun, 28 Jan 2007 23:58:18 +0100
 
 espeak (1.16-2) unstable; urgency=low
 
-  * Fix first-person description (Closes Bug#399585)
+  * Fix first-person description (Closes: Bug#399585)
 
  -- Mario Lang <mlang@debian.org>  Mon, 27 Nov 2006 15:24:02 +0100
 

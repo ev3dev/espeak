@@ -5,8 +5,9 @@
 #export DH_VERBOSE=1
 
 soname=libespeak.so.1
-version=1.16
+version=$(shell dpkg-parsechangelog|sed -n -e 's/^Version: //p'|cut -d- -f1)
 
+voicelist=$(shell ls -1 dictsource/*_list | cut -f2 -d/ | cut -f1 -d_)
 
 CFLAGS = -Wall -g
 
@@ -16,23 +17,27 @@ else
 	CFLAGS += -O2
 endif
 
-DEB_HOST_ARCH?=$(shell dpkg-architecture -qDEB_HOST_ARCH)
-# get the list of architectures from debian/control
-# so we fail to build early on big-endian archs
-ARCHS=$(shell awk 'BEGIN { FS = ":" } /^Architecture:/ { print $$2; exit }' < debian/control)
 
 build: build-stamp
 
 build-stamp:
 	dh_testdir
 
-ifeq (,$(findstring $(DEB_HOST_ARCH),$(ARCHS)))
-	@echo architecture $(DEB_BUILD_ARCH) not allowed in source
-	@exit 1
-endif
-
-	# Add here commands to compile the package.
 	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE)
+
+	# Build static speak binary
+	#cd src && $(MAKE) clean
+	#cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) speak DATADIR=$(CURDIR)/espeak-data
+	#cd platforms/big_endian && CFLAGS="$(CFLAGS)" $(MAKE)
+	# Build voice metadata.
+	#mkdir -p $(CURDIR)/tmp
+	#$(CURDIR)/platforms/big_endian/espeak-phoneme-data $(CURDIR)/espeak-data $(CURDIR)/tmp $(CURDIR)/platforms/big_endian/phondata-manifest
+	#mv $(CURDIR)/tmp/* $(CURDIR)/espeak-data
+	#rmdir $(CURDIR)/tmp
+	#cd dictsource && \
+	#for voice in $(voicelist); do \
+	#    $(CURDIR)/src/speak --compile=$$voice; \
+	#done
 
 	touch build-stamp
 
@@ -42,6 +47,7 @@ clean:
 	rm -f build-stamp
 
 	-cd src && $(MAKE) distclean
+	-cd platforms/big_endian && $(MAKE) clean
 
 	dh_clean 
 
@@ -51,7 +57,7 @@ install: build
 	dh_clean -k 
 	dh_installdirs
 
-	install -m 755 -o root -g root src/speak $(CURDIR)/debian/espeak/usr/bin/espeak
+	install -m 755 -o root -g root src/espeak $(CURDIR)/debian/espeak/usr/bin/espeak
 	cp -r espeak-data $(CURDIR)/debian/espeak-data/usr/share
 	find $(CURDIR)/debian/espeak-data/usr/share -type f -exec chmod 644 {} \;
 	find $(CURDIR)/debian/espeak-data/usr/share -type d -exec chmod 755 {} \;
@@ -59,7 +65,7 @@ install: build
 	cd $(CURDIR)/debian/libespeak1/usr/lib && ln -s $(soname).$(version) $(soname)
 	cd $(CURDIR)/debian/libespeak1/usr/lib && ln -s $(soname).$(version) libespeak.so 
 	mv $(CURDIR)/debian/libespeak1/usr/lib/libespeak.so $(CURDIR)/debian/libespeak-dev/usr/lib
-	install -m 644 -o root -g root src/speak_lib.h $(CURDIR)/debian/libespeak-dev/usr/include
+	install -m 644 -o root -g root src/speak_lib.h $(CURDIR)/debian/libespeak-dev/usr/include/espeak
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -76,9 +82,9 @@ binary-arch: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
-	dh_shlibdeps
-	dh_makeshlibs
-	dh_installdeb
+	dh_makeshlibs -V
+	dh_shlibdeps -L libespeak1 -l debian/libespeak1/usr/lib
+	dh_installdeb -v
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb

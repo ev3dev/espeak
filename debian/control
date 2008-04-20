@@ -2,12 +2,13 @@ Source: espeak
 Section: sound
 Priority: optional
 Maintainer: Mario Lang <mlang@debian.org>
+Homepage: http://espeak.sourceforge.net/
 Build-Depends: debhelper (>= 5.0.0), portaudio19-dev
-Standards-Version: 3.7.2
+Standards-Version: 3.7.3
 
 Package: espeak
-Architecture: alpha amd64 arm hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 mipsel
-Depends: ${shlibs:Depends}, espeak-data (= ${Source-Version})
+Architecture: any
+Depends: ${shlibs:Depends}
 Description: A multi-lingual software speech synthesizer
  eSpeak is a software speech synthesizer for English, and some other
  languages.
@@ -34,28 +35,25 @@ Description: A multi-lingual software speech synthesizer
    * Written in C++.
 
 Package: espeak-data
-Architecture: all
-Conflicts: espeak (<= 1.11)
-Replaces: espeak (<= 1.11)
-Recommends: espeak (= ${Source-Version})
-Suggests: libespeak1 (= ${Source-Version})
+Architecture: any
+Recommends: espeak (= ${binary:Version})
 Description: A multi-lingual software speech synthesizer: speech data files
  eSpeak is a software speech synthesizer for English, and some other
  languages. This package contains necessary synthesizer data files needed
  for the espeak program, and the shared library.
 
 Package: libespeak1
-Architecture: alpha amd64 arm hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 mipsel
+Architecture: any
 Section: libs
-Depends: ${shlibs:Depends}, espeak-data (= ${Source-Version})
+Depends: ${shlibs:Depends}, espeak-data (= ${binary:Version})
 Description: A multi-lingual software speech synthesizer: shared library
  eSpeak is a software speech synthesizer for English, and some other
  languages. This package contains the espeak program in a shared library.
 
 Package: libespeak-dev
-Architecture: alpha amd64 arm hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 mipsel
+Architecture: any
 Section: libdevel
-Depends: libespeak1 (= ${Source-Version})
+Depends: libespeak1 (= ${binary:Version})
 Description: A multi-lingual software speech synthesizer: development files
  eSpeak is a software speech synthesizer for English, and some other
  languages. This package contains the eSpeak development files needed to
