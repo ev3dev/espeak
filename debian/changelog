@@ -1,3 +1,10 @@
+espeak (1.40.02-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/control: Update Standards-Version to 3.8.0 (no changes).
+
+ -- Mario Lang <mlang@debian.org>  Sun, 15 Feb 2009 14:13:26 +0100
+
 espeak (1.37-1) unstable; urgency=low
 
   * New upstream release.

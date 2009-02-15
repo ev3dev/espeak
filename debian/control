@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Mario Lang <mlang@debian.org>
 Homepage: http://espeak.sourceforge.net/
 Build-Depends: debhelper (>= 5.0.0), portaudio19-dev
-Standards-Version: 3.7.3
+Standards-Version: 3.8.0
 
 Package: espeak
 Architecture: any

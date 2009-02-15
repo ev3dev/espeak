@@ -5,7 +5,8 @@
 #export DH_VERBOSE=1
 
 soname=libespeak.so.1
-version=$(shell dpkg-parsechangelog|sed -n -e 's/^Version: //p'|cut -d- -f1)
+#version=$(shell dpkg-parsechangelog|sed -n -e 's/^Version: //p'|cut -d- -f1)
+version=1.40
 
 voicelist=$(shell ls -1 dictsource/*_list | cut -f2 -d/ | cut -f1 -d_)
 
