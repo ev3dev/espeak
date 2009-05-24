@@ -1,0 +1,51 @@
+
+The eSpeak homepage is:  http://espeak.sourceforge.net
+
+
+Compiling
+=========
+
+The  src  directory contains a simple  makefile  that compiles all the
+source files in the directory and produces a  "speak"  binary.
+
+When run, the "speak" program expects to find the  espeak-data  directory
+either in the user's home directory, or if not there, in /use/share.
+
+
+Library Version.
+================
+
+The makefile also compiles a shared library version of eSpeak and creates a
+file:  libespeak.so.1.xx  where xx is the version number.  This is not
+currently used by the "speak" program, but is available for use by other
+software (eg. the next version of Speech Dispatcher).
+
+The API is described in the file:  speak_lib.h.
+
+
+Portaudio.
+========== 
+
+The "speak" program uses the PortAudio sound interface library.  There are two
+versions, V18 and V19 and their APIs are different.  Some Linux distributions
+use V18 (eg. Debian, Ubuntu) others (eg. SuSe) use V19.
+
+To compile to use a particular version of the PortAudio library, first copy
+either  portaudio18.h  or  portaudio19.h  to  portaudio.h.
+
+If you don't need eSpeak to output sound, but only to produce WAV files,
+then you can remove or comment out the following line in  speech.h.
+This will mean that eSpeak doesn't use any PortAudio functions.
+ #define  USE_PORTAUDIO
+
+
+Compiling Data
+==============
+
+You can modifiy spelling-to-phoneme rules and exceptions and re-compile this
+data with the  speak  program (see  docs/dictionary.html).
+
+In order to modify the sounds or other characteristics of phonemes, or
+to add additional phonemes, another program, espeakedit, is needed, which
+is not part of this package.
+

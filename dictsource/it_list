@@ -1,0 +1,365 @@
+// This file is UTF-8 encoded
+
+// Italian:  any [E] or [O] phonemes in unstressed words must be listed explicitly
+
+// Letters
+// If a letter has a "word" pronunciation which is different from its
+// "letter" name, then include the letter name here, with the letter
+// prefixed by a _ character.
+_e	e:
+_i	i:
+_o	O:
+
+// character names
+_cap k'apital
+_??  s'imbolo
+
+_!   p'Untoesklamat'ivo
+_"   virgolet:e
+_#   kantSellet:o
+_$   dolla:ro
+_%   pertS'ento
+_&   _!e:
+_'   ap'Ostrofo
+_(   ap'ertapar'entezi
+_)   kj,Uzapar'entezi
+_*   asterisko
+_+   pjU
+_,   v'irgola
+_-   trat:ino
+_.   pUnto
+_/   slaS
+_:   d,Uep'Unte
+_;   p'Untoev'irgola
+_<   ap'erta'angolo
+_=   Ugw2ale
+_>   kj,Uza'angolo
+_?   p'UntointeRogat'ivo
+_@   ki'otS:ola
+_[   ap'ertakw2'adra
+_\   bakslaS
+_]   kj,Uzakw2'adra
+_^   kap:UtS:o
+__   'Underskore
+_`   bakpraIm
+_{   ap'ertagr'af:a
+_|   b'aRa
+_}   kj,Uzagr'af:a
+_~   tilde
+
+
+
+// numbers
+_0	dz'eRo
+_1	'Uno
+_2	d'Ue
+_3	tR'e
+_4	kw2'at:Ro
+_5	tS'inkw2e
+_6	s'ej
+_7	s'Et:e
+_8	'Okt:o
+_9	n'Ove
+_10     di'etSi
+_11     'unditSi
+_12     d'oditSi
+_13     tr'editSi
+_14     kw2at:'OrditSi
+_15     kw2'imditSi
+_16     s'editSi
+_17     ditSas:'Et:e
+_18     ditS'Ot:o
+_19     ditSann'ove
+_20     v'ente
+_30     tr'enta
+_40     kw2ar'anta
+_50     tSinkw2'anta
+_60     sess'anta
+_70     set:'anta
+_80     ot'anta
+_90     nov'anta
+_0H     tS'ento
+_0T1    m'ila
+_1T1	m'ille
+_0T2    mili'oni
+_1T2	unmili'one
+_0T3	mili'ardi
+_1T3	unmili'ardo
+_dpt    _v'irgola
+_0Z2	tSent'ezimi     // 100ths
+_0Z3	mill'ezimi      // 1000ths
+
+// abbreviations
+(http ://)       'ak:at,i:t,i:p'i:_
+
+// articles
+i	$u
+il	$u
+la	$u
+le	$u
+lo	$u
+un	$u
+una	$u
+
+gli	l^i  $u
+
+
+// pronouns
+io	$u $strend
+tu	$u $strend
+lui	$u $strend
+lei	$u $strend
+noi	$u $strend
+voi	$u $strend
+loro	$u $strend
+
+egli	$u $strend
+ella	$u $strend
+essa	$u $strend
+esse	$u $strend
+essi	$u $strend
+
+mi	$u $strend
+ti	$u $strend
+si      $u $strend
+ci	$u $strend
+vi	$u $strend
+li	$u $strend
+
+
+// words that double the following consonant
+qualche  $double
+come     $double
+
+// possessive adjectives
+mio	$u
+tuo	$u
+suo	$u
+nostro	$u
+vostro	$u
+loro	$u
+mia	$u
+tua	$u
+sua	$u
+nostra	$u
+vostra	$u
+miei	$u
+tuoi	$u
+suoi	$u
+nostri	$u
+vostri	$u
+mie	$u
+tue	$u
+sue	$u
+nostre	$u
+vostre	$u
+
+questo	$u	// this
+questa	$u	// this
+questi  $u      // these
+queste  $u      // these
+
+quel	$u	// that
+quella	$u	// that
+quei    $u      // those
+quegli  $u      // those
+quelle  $u      // those
+
+
+
+// conjunctions
+e		$u $pause $double  // and
+ed		$u $pause
+o		$u $pause $double  // or
+se		$pause      // if
+ma		$pause      // but
+perché		$pause      // because
+benchè		$pause      // though
+anche		$pause      // although
+tuttavia	$pause      // however
+invece		$pause      // instead
+malevolenza	$pause      // despite
+pertanto        $pause      // therefore
+né              $pause      // neither-nor
+
+(in cui)        in||kw,i  $pause   // in which
+che             $u $pause   // which
+
+
+// prepositions
+a       $u $double
+al      $u
+allo    $u
+alla    $u
+ai      $u
+agli    $u
+alle    $u
+
+da	$u      // by
+dal	$u
+dallo   $u
+dalla	$u	// by the
+dai     $u
+dagli   $u
+dalle   $u
+
+di	$u	// of
+del	$u
+dello   $u
+della	$u	// of the
+dei     $u
+degli   $u
+delle   $u
+de      $u
+
+in	$u	// in
+nel	$u
+nello   $u
+nella	$u	// in the
+nei     $u
+negli   $u
+nelle   $u
+ne      $u
+
+su	$u $double	// on
+sul	$u
+sullo   $u
+sulla	$u	// on the
+sui     $u
+sugli   $u
+sulle   $u
+
+con	$u $pause	// with
+col     $u
+coi     $u
+
+attraverso $u $strend	// across, through
+contro     $u $strend   // against
+accanto    $u $strend   // beside
+verso      $u $strend   // toward
+sopra	   $u $strend	// above
+sotto	   $u $strend	// below
+per        $u $pause    // for
+eccetto    $pause       // except
+senza      $pause       // without
+durante    $pause       // during
+
+
+// aux verb, to be
+sono	$u
+sei	$u
+è	E  $u $double
+siamo	$u
+siete	$u
+sono	$u
+fui	$u
+fosti	$u
+fu	$u $double
+fummo	$u
+foste	$u
+furono	$u
+ero	$u
+eri	$u
+era	$u
+eravamo	$u
+eravate	$u
+erano	$u
+sarò	sa/r'O $u
+sarai	$u
+sarà	$u
+saremo	$u
+srete	$u
+saranno	$u
+
+sia	$u
+siate	$u
+siano	$u
+fossi	$u
+fosse	$u
+fossimo	$u
+fossero	$u
+sarei	$u
+saresti	$u
+sarebbe	$u
+saremmo	$u
+sareste	$u
+sarebbero	$u
+
+// aux verb, to have
+ho	$u $double
+hai	$u $double
+ha	$u $double
+abbiamo	$u
+avete	$u
+hanno	$u
+
+ebbi	$u
+avesti	$u
+ebbe	$u
+avemmo	$u
+aveste	$u
+ebbero	$u
+
+avevo	$u
+avevi	$u
+aveva	$u
+avevamo	$u
+avevate	$u
+avevano	$u
+
+avrò	a/vr'O $u
+avrai	$u
+avrà	$u
+avremo	$u
+avrete	$u
+avranno	$u
+
+abbia	$u $strend
+abbiamo	$u $strend
+abbiate	$u $strend
+abbiano	$u $strend
+avessi	$u
+avesse	$u
+avessimo	$u
+aveste	$u
+avessero	$u
+
+avrei	$u
+avresti	$u
+avrebbe	$u
+avremmo	$u
+avreste	$u
+avrebbero	$u
+
+// to do/make
+fare	$u $strend
+faccio	$u $strend
+facciamo	$u $strend
+fai	$u $strend
+fate	$u $strend
+fa	$u $strend
+fanno	$u $strend
+
+facevo	$u $strend
+facevi	$u $strend
+faceva	$u $strend
+facevamo	$u $strend
+facevate	$u $strend
+facevano	$u $strend
+
+
+// exceptions
+aereo        $2
+difficile    $2
+pneumatici   $3
+
+nott        nOt: $stem
+tavol       $1   $stem
+vent        vEnt $stem
+
+celsius     tsElsj'us
+conoscerla   $1
+no          nO
+posta       pOsta
+tesser      tess'Er
+uomini       $1

@@ -1,0 +1,156 @@
+eSpeak 1.16   02.Pct.2006
+
+NOTE:  The contents of the files in the espeak-dat
+  directory, and the format of their contents has changed
+  for this version. Please delete your old  espeak-dat
+  directory and replace it with the new one in this
+  package.
+
+1. espeakedit now includes a makefile.
+
+2. Added dental variants of [t] and [d] phonemes for
+   it, es, ru, pl
+
+3. Added palatal [l^] for ru, it ("gli").
+
+4. Fixed a bug with portaudio interface aborting speech
+   in some circumstances.
+
+
+eSpeak 1.15   25.Sep.2006
+
+1. Added "length" field to espeak_EVENT structure in
+   speak_lib.h.
+
+
+eSpeak 1.14   21.Sep.2006
+
+1. Makefile now produces both the "speak" program and
+   the shared library version:  libespeak.so.1.1.14
+
+2. Most languages now speak groups of digits rather than
+   just single digits.
+   Translating groups of digits into spoken numbers is now
+   done by a program function: TranslateNumber() rather
+   than by a large number of rules in the xx_rules file.
+   The number fragments used by TranslateNumber() are
+   found in the xx_list file and their labels all begin
+   with underscore followed by a digit.
+
+3. Improvements to Italian, German.
+   Initial version of Welsh and Russian (note, a larger
+   Russian dictionary file is available as a separate
+   download).
+
+4. Added functions to libespeak API (see speak_lib.h):
+   void espeak_SetPhonemes(int value, FILE *stream);
+   void espeak_CompileDictionary(const char *path, FILE *log);
+
+5. Added some additional experimental intonation types.
+   To try these add a line to the end of a voices file:
+      intonation <type>
+
+   0 is the default, the other values are 1, 2, 3, 16.
+
+   Let me know if you want to experiment with writing a
+   different intonation algorithm.
+
+
+
+eSpeak 1.13   30.Aug.2006
+1. Now compiles for use with either V18 or V19 of
+   PortAudio.  Copy either portaudio18.h or portaudio19.h
+   to portaudio.h.
+
+2. Can be used as a library rather than a separate
+   process. Compile with source file  speak_lib.cpp
+   rather than speak.cpp.
+   The API is described in  speak_lib.h.
+
+3. Added language: Greek (just guesswork, it needs work by
+   a native speaker).
+
+4. Various improvements, including the Italian voice.
+
+
+eSpeak 1.12   29.Aug.2006
+   Withdrawn due to an error.
+
+
+eSpeak 1.11   07.Aug.2006
+
+1. Recognise and obey some SSML (Speak synthesis markup
+   language) and HTML tags, and ignore unrecognised tags.
+   Use with the -m option.
+
+2. Added language: Afrikaans.
+
+3. Added initial draft implementation of languages which
+   need work and advice from native speakers:
+    Spanish, Italian, Polish,
+   as well as previous: German, Esperanto.
+
+4. English languages variants (Voice file now renamed to:
+   en-n, en-rp, en-wm) are improved.
+
+5. Added --voices command option to list voices.  Voice
+   files can now be in subdirectories in
+   espeak-data/voices.
+
+
+
+eSpeak 1.10   29.Apr.2006
+
+1. Add UTF-8 capability.  Assume input text is UTF-8 until
+   any non-UTF-8 sequences are found.
+
+2. Use UTF-8 encoding for eSpeaks's data files (_rules,
+   _list, _extra)
+
+3. Treat any accented characters which are not recognized
+   in the _rules data as their un-accented equivalents.
+
+4. Improve pronunciation of number strings.
+
+5. Added embedded commands within the input text to change,
+   pitch, speed, amplitude, etc.  See docs/ReadMe for details.
+
+6. Added command option  --punct  to speak punctuation within
+   the input text.
+
+7. Added command option  -k  to indicate capital letters
+   within the input text by either a click, raised pitch,
+   or spoken word "capital".
+
+8. Changed command options for phoneme display from -p -P
+   to -x -X.  Added new option -p to adjust pitch.
+
+9. Improvements to Esperanto language, including numbers.
+
+10. Added "roughness" attribute for voice files.
+
+
+
+eSpeak 1.09   10.Apr.2006
+
+1. Changes for use with ARM/RISCOS version.
+
+2. Added "flutter" attribute for voice files.
+
+
+
+eSpeak 1.08   06.Apr.2006
+
+1. Added command syntax to speak text string:
+      speak [options] "this is some text"
+
+2. Added command option --stdout to write speech output to
+   stdout
+
+3. Change SpeakNextClause() function to take input from
+   either  a file or memory.
+
+4. Changed compiler options in Makefile
+
+5. Added phonemes @- Q  o- u-
+

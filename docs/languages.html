@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+  <title>Speak</title>
+  <meta name="GENERATOR" content="Quanta Plus">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<A href="index.html">Back</A>
+<hr>
+<h2>3. LANGUAGES</h2>
+<hr>
+<h4>Help Needed</h4>
+Many of these are mostly just experimental attempts at these languages, produced after a quick reading of the corresponding article on wikipedia.org.  They will need work or advice from native speakers to improve them.  Please contact me if you want to advise or assist with these or other languages.<p>
+The sound of some phonemes may be poorly implemented, particularly [r] since I'm English and therefore unable to make a "proper" [r] sound.<p>
+A major factor is the rhythm or cadance.  An Italian speaker told me the Italian voice improved from "difficult to understand" to "good" by changing the relative length of stressed syllables.  Identifying unstressed function words in the xx_list file is also important to make the speech flow well.  See <a href="add_language.html">Adding or Improving a Language</a>
+<h4>Character sets</h4>
+Languages recognise text either as UTF8 or alternatively in an 8-bit character set which is appropriate for that language.  For example, for Polish this is Latin2, for Russian it is KOI8-R.  This choice can be overridden by a line in the voices file to specify an ISO 8859 character set, eg. for Russian the line:<br>
+<pre>     charset 5</pre>
+will mean that ISO 8859-5 is used as the 8-bit character set rather than KOI8-R.
+<p>
+In the case of a language which uses a non-Latin character set (eg. Greek or Russian) if the text contains a word with Latin characters then that particular word will be pronounced using English pronunciation rules and English phonemes.  Speaking entirely English text using a Greek or Russian voice will sound OK, but each word is spoken separately so it won't flow properly.
+<p>
+Sample texts in various languages can be found at  <a href="http://meta.wikimedia.org/wiki/List_of_Wikipedias"> http://&lt;language&gt;.wikipedia.org</a>  and <a href="http://www.gutenberg.org">www.gutenberg.org</a>
+<h3>3.1 Voice Files</h3>
+
+A number of Voice files are provided in the <code>espeak-data/voices</code> directory.
+You can select one of these with the <strong>-v &lt;voice filename&gt;</strong> parameter to the
+speak command, eg:
+<pre>   speak -vaf</pre>
+to speak using the Afrikaans voice.
+<p>
+For details of the voice files see <a href="voices.html">Voices</a>.
+<h4>Default Voice</h4>
+<ul>
+<dl>
+<dt>
+<strong>default</strong><br>
+<dd>   This voice is used if none is specified in the speak command.  Copy your preferred voice to "default" so you can use the speak command without the need to specify a voice.</dd>
+</dl>
+</ul>
+<h3>3.2 English Voices</h3>
+<ul><dl>
+<dt>
+<strong>en</strong><br>
+<dd>   is the standard default English voice.</dd>
+<p>
+<dt>
+<strong>en-n<br>
+en-rp<br>
+en-wn</strong><br>
+<dd>   are different English voices.  These can be considered caricatures of
+   various British accents: Northern, Received Pronunciation, West Midlands
+   respectively.</dd>
+<p>
+<dt>
+<strong>en-f, en-n-f, en-rp-f, en-wm-f</strong><br>
+<dd>   Female versions of the above. Not genuine female voices, just variants
+   with different pitch and formant parameters.</dd>
+<p>
+<dt>
+<strong>en1 to en8</strong><br>
+<dd>   Variations of "en" with different effects and parameters set in the voice files.  Experiment with the variations.</dd>
+</dl></ul>
+<h3>3.3 Other Languages</h3>
+<ul>
+<dl>
+<p>
+<dt>
+<strong>af &nbsp;Afrikaans</strong><br>
+<dd>This has been worked on by a native speaker.  He says it's ready for release, although needing some more work, particularly in the area of which syllables are stressed (Afrikaans has irregular phonemic stress, like English) and pronunciation of compound words.  Features include some distinctive diphthongs and an interesting "g" sound (a sort of gargling noise).</dd>
+<p>
+<dt>
+<strong>cy &nbsp;Welsh</strong><br>
+<dd>An initial guess, awaiting feedback.
+</dd>
+<p>
+<dt>
+<strong>de &nbsp;German</strong><br>
+<dd>A simple attempt at German, perhaps a bit improved from previous releases.
+   I have only a small knowledge of German, from school many years ago,
+   but even I can at tell that it needs much improvement.  A big problem is stress placement (which like English is irregular), prosody, and the use of compound words where correct detection of the sub-word boundaries would probably be needed for accurate pronunciation.
+</dd>
+<p>
+<dt>
+<strong>el &nbsp;Greek</strong><br>
+<dd>No feedback from Greek speakers yet. Stress position is marked in text and spelling is fairly regular, so it shouldn't be too bad.  It uses a different alphabet and switches to English pronunciation for words which contain Latin characters a-z.</dd>
+<p>
+<dt>
+<strong>eo &nbsp;Esperanto</strong><br>
+<dd>Esperanto has simple and regular pronunciation rules, so it should be OK, although I'm not
+   certain how it's supposed to sound, other than what I've read in an introduction.
+   The stress pattern (stress on penultimate syllables) is different from English.
+   Text can be either UTF-8, or Latin3 alphabet, or
+   can use the Latin1 convention of two-letter combinations (cx,
+   gx, etc).</dd>
+<p>
+<dt>
+<strong>es &nbsp;Spanish</strong><br>
+<dd>Just something I knocked together one day after reading a couple of articles on Spanish pronunciation.  However, since spelling is regular and stress is explicitly marked when it deviates from the normal rules, it might even be intelligible.  This would be a good opportunity for a native Spanish speaker to assist.  Perhaps we could have different variants for Castilian Spanish, Mexican Spanish, etc., in a similar way to how I've done different English accents.</dd>
+<p>
+<dt>
+<strong>it &nbsp;Italian</strong><br>
+<dd>This has had some feedback from a native speaker but more work is needed.  Spelling is fairly regular, but stress marks and vowel accents are often omitted from text, so for some words the dictionary/exceptions list will need to determine the stress position or whether to use open/close [e] or [E] and [o] or [O].</dd>
+<p>
+<dt>
+<strong>pl &nbsp;Polish</strong><br>
+<dd>An experiment with a language with some fearsome consonant clusters, palatal consonants, and even a couple of nasal vowels.  I don't know whether I've got those anything like correct, or how it will sound to a Pole, but it sounds vaguely Slavic to me.  I've been told that the intonation is wrong.</dd>
+<p>
+<dt>
+<strong>ru &nbsp;Russian</strong><br>
+<dd>So far it's just an initial attempt with basic pronunciation rules.  Work is needed especially on the consonants.  Russian has two versions of most consonants, "hard" and "soft" (palatalised) and in most cases eSpeak doesn't yet make a proper distinction.<br>
+Russian stress position is unpredictable so a large lookup dictionary is needed of those words where eSpeak doesn't guess correctly.  To avoid increasing the size of the basic eSpeak package, this is available separately at: <a href="http://espeak.sourceforge.net/data/">http://espeak.sourceforge.net/data/</a>
+</dd>
+</dl></ul>
+<hr>
+
+
+</body>
+</html>
