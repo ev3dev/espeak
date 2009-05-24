@@ -62,10 +62,13 @@ install: build
 	cp -r espeak-data $(CURDIR)/debian/espeak-data/usr/share
 	find $(CURDIR)/debian/espeak-data/usr/share -type f -exec chmod 644 {} \;
 	find $(CURDIR)/debian/espeak-data/usr/share -type d -exec chmod 755 {} \;
+	cp -al $(CURDIR)/debian/espeak-data/usr $(CURDIR)/debian/espeak-data-udeb
+	rm -fr $(CURDIR)/debian/espeak-data-udeb/usr/share/espeak-data/mbrola* $(CURDIR)/debian/espeak-data-udeb/usr/share/espeak-data/voices/mb $(CURDIR)/debian/espeak-data-udeb/usr/share/espeak-data/voices/test
 	install -m 644 -o root -g root src/$(soname).$(version) $(CURDIR)/debian/libespeak1/usr/lib/$(soname).$(version)
 	cd $(CURDIR)/debian/libespeak1/usr/lib && ln -s $(soname).$(version) $(soname)
 	cd $(CURDIR)/debian/libespeak1/usr/lib && ln -s $(soname).$(version) libespeak.so 
 	mv $(CURDIR)/debian/libespeak1/usr/lib/libespeak.so $(CURDIR)/debian/libespeak-dev/usr/lib
+	install -m 644 -o root -g root src/libespeak.a $(CURDIR)/debian/libespeak-dev/usr/lib
 	install -m 644 -o root -g root src/speak_lib.h $(CURDIR)/debian/libespeak-dev/usr/include/espeak
 
 # Build architecture-independent files here.

@@ -42,6 +42,14 @@ Description: A multi-lingual software speech synthesizer: speech data files
  languages. This package contains necessary synthesizer data files needed
  for the espeak program, and the shared library.
 
+Package: espeak-data-udeb
+Architecture: any
+XC-Package-Type: udeb
+Description: A multi-lingual software speech synthesizer: speech data files
+ eSpeak is a software speech synthesizer for English, and some other
+ languages. This package contains necessary synthesizer data files needed
+ for the espeak program, and the shared library.
+
 Package: libespeak1
 Architecture: any
 Section: libs
