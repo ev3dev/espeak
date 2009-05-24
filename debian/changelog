@@ -1,9 +1,11 @@
 espeak (1.40.02-2) unstable; urgency=low
 
   * Provide espeak-data-udeb. (Closes: 522578)
-  * debian/control: Add Vcs-Git and Vcs-Browser fields.
+  * debian/control:
+    - Add Vcs-Git and Vcs-Browser fields.
+    - Update Standards-Version to 3.8.1 (no changes).
 
- -- Mario Lang <mlang@debian.org>  Sun, 24 May 2009 22:47:55 +0200
+ -- Mario Lang <mlang@debian.org>  Sun, 24 May 2009 22:55:52 +0200
 
 espeak (1.40.02-1) unstable; urgency=low
 
