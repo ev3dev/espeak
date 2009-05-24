@@ -7,6 +7,7 @@ _cap	m'aJ^us   // should be "mayúscula" after the letter?
 _??	s'imbOlo
 _#32	Esp'aTjo
 
+
 // accent names
 _lig	liQaD'u**a
 _acu	aQ'uDo
@@ -35,15 +36,11 @@ _!	TE*R'aRaDmi**aTj'On
 _?	TE*R'aRintE*R,oQaTj'On
 _¡	aB**'iRaDmi**aTj'On
 _¿	aB**'iRintE*R,oQaTj'On
-_=	iQw'al
 _<	men'ORke
 _>	maJ^'ORke
 _'	apOst**'ofo
 _"	kom'iJ^as
 _+	s'iQnOdesum'aR
-_$	dolar
-_#	almoaD'iJ^a
-_*	aste*'isko
 _-	gJ^On
 __	suB**aJ^'aDo
 _/	ba*Ra
@@ -58,9 +55,15 @@ _}	Tj,E*RaJ^'aBe
 _«	kom'iJ^as||iTkJ^'ERDas
 _»	kom'iJ^as||dE**'EtSas
 
+=	iQw'al $max3
++	m'as  $max3
+#	almOaD'iJ^a  $max3
+*	astE*'isko  $max3
+.	punto  $max3
+
 ^	TiRkumfl'exo
-€	eU*o
-%	pOrTj'Ento
+€	eU**o
+%	pOrTj'Ento  $max3
 &	ampERs'ant
 @	a*R'oBa
 /	ba*Ra
@@ -351,6 +354,29 @@ alguna   $u
 // If a letter has a "word" pronunciation which is different from its
 // "letter" name, then include the letter name here, with the letter
 // prefixed by a _ character.
+
+b	be
+c	Te
+d	de
+f	Efe
+g	xe
+h	atSe
+j	xOta
+k	ka
+l	Ele
+m	Eme
+n	Ene
+ñ	En^e
+p	pe
+q	ku
+r	E**e
+s	Ese
+t	te
+v	uBe
+w	,uBe||d'OBle
+x	Ekis
+z	TEta
+
 _a	a
 a       a  $atend
 _o	o
@@ -360,7 +386,8 @@ x	Ekis
 _y	,ig**'iEQa
 y	,ig**'iEQa  $atend
 ch	tSe
-ll	Ejje
+ll	EJ^e
+?2 ll	Ej:e
 á	'a||aTEntw'aDa
 é	'e||aTEntw'aDa
 í	'i||aTEntw'aDa

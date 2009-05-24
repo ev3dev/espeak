@@ -42,26 +42,26 @@
 #define N_XML_BUF   256
 
 
-const char *xmlbase = "";    // base URL from <speak>
+static const char *xmlbase = "";    // base URL from <speak>
 
-int namedata_ix=0;
-int n_namedata = 0;
+static int namedata_ix=0;
+static int n_namedata = 0;
 char *namedata = NULL;
 
 
-FILE *f_input = NULL;
-int ungot_char2 = 0;
+static FILE *f_input = NULL;
+static int ungot_char2 = 0;
 char *p_textinput;
 wchar_t *p_wchar_input;
-int ungot_char;
-const char *ungot_word = NULL;
-int end_of_input;
+static int ungot_char;
+static const char *ungot_word = NULL;
+static int end_of_input;
 
-int ignore_text=0;   // set during <sub> ... </sub>  to ignore text which has been replaced by an alias
-int clear_skipping_text = 0;  // next clause should clear the skipping_text flag
+static int ignore_text=0;   // set during <sub> ... </sub>  to ignore text which has been replaced by an alias
+static int clear_skipping_text = 0;  // next clause should clear the skipping_text flag
 int count_characters = 0;
-int sayas_mode;
-int ssml_ignore_l_angle = 0;
+static int sayas_mode;
+static int ssml_ignore_l_angle = 0;
 
 static const char *punct_stop = ".:!?";    // pitch fall if followed by space
 static const char *punct_close = ")]}>;'\"";  // always pitch fall unless followed by alnum
@@ -71,7 +71,7 @@ static const char *tone_punct_on = "\0016T";  // add reverberation, lower pitch
 static const char *tone_punct_off = "\001T";
 
 // punctuations symbols that can end a clause
-const unsigned short punct_chars[] = {',','.','?','!',':',';',
+static const unsigned short punct_chars[] = {',','.','?','!',':',';',
   0x2013,  // en-dash
   0x2014,  // em-dash
   0x2026,  // elipsis
@@ -79,6 +79,21 @@ const unsigned short punct_chars[] = {',','.','?','!',':',';',
   0x037e,  // Greek question mark (looks like semicolon)
   0x0387,  // Greek semicolon, ano teleia
   0x0964,  // Devanagari Danda (fullstop)
+
+  0x0589,  // Armenian period
+  0x055d,  // Armenian comma
+  0x055c,  // Armenian exclamation
+  0x055e,  // Armenian question
+  0x055b,  // Armenian emphasis mark
+
+  0x1362,  // Ethiopic period
+  0x1363,
+  0x1364,
+  0x1365,
+  0x1366,
+  0x1367,
+  0x1368,
+
   0x3001,  // ideograph comma
   0x3002,  // ideograph period
 
@@ -103,6 +118,21 @@ static const unsigned int punct_attributes [] = { 0,
   CLAUSE_QUESTION,   // Greek question mark
   CLAUSE_SEMICOLON,  // Greek semicolon
   CLAUSE_PERIOD+0x8000,     // Devanagari Danda (fullstop)
+
+  CLAUSE_PERIOD+0x8000,  // Armenian period
+  CLAUSE_COMMA,     // Armenian comma
+  CLAUSE_EXCLAMATION + PUNCT_IN_WORD,  // Armenian exclamation
+  CLAUSE_QUESTION + PUNCT_IN_WORD,  // Armenian question
+  CLAUSE_PERIOD + PUNCT_IN_WORD,  // Armenian emphasis mark
+
+  CLAUSE_PERIOD,     // Ethiopic period
+  CLAUSE_COMMA,      // Ethiopic comma
+  CLAUSE_SEMICOLON,  // Ethiopic semicolon
+  CLAUSE_COLON,      // Ethiopic colon
+  CLAUSE_COLON,      // Ethiopic preface colon
+  CLAUSE_QUESTION,   // Ethiopic question mark
+  CLAUSE_PERIOD,     // Ethiopic paragraph
+
   CLAUSE_COMMA+0x8000,      // ideograph comma
   CLAUSE_PERIOD+0x8000,     // ideograph period
 
@@ -129,17 +159,17 @@ typedef struct {
 } SSML_STACK;
 
 #define N_SSML_STACK  20
-int n_ssml_stack;
-SSML_STACK ssml_stack[N_SSML_STACK];
+static int n_ssml_stack;
+static SSML_STACK ssml_stack[N_SSML_STACK];
 
-char current_voice_id[40] = {0};
+static char current_voice_id[40] = {0};
 
 
 #define N_PARAM_STACK  20
-int n_param_stack;
+static int n_param_stack;
 PARAM_STACK param_stack[N_PARAM_STACK];
 
-int speech_parameters[N_SPEECH_PARAM];     // current values, from param_stack
+static int speech_parameters[N_SPEECH_PARAM];     // current values, from param_stack
 
 const int param_defaults[N_SPEECH_PARAM] = {
    0,     // silence (internal use)
@@ -481,8 +511,8 @@ static void UngetC(int c)
 }
 
 
-const char *WordToString2(unsigned int word)
-{//========================================
+static const char *WordToString2(unsigned int word)
+{//================================================
 // Convert a language mnemonic word into a string
 	int  ix;
 	static char buf[5];
@@ -499,27 +529,27 @@ const char *WordToString2(unsigned int word)
 }
 
 
-const char *Translator::LookupSpecial(const char *string, char* text_out)
-{//======================================================================
+static const char *LookupSpecial(Translator *tr, const char *string, char* text_out)
+{//=================================================================================
 	unsigned int flags[2];
 	char phonemes[55];
 	char phonemes2[55];
 	char *string1 = (char *)string;
 
-	if(LookupDictList(&string1,phonemes,flags,0,NULL))
+	if(LookupDictList(tr,&string1,phonemes,flags,0,NULL))
 	{
-		SetWordStress(phonemes,flags[0],-1,0);
+		SetWordStress(tr, phonemes, flags[0], -1, 0);
 		DecodePhonemes(phonemes,phonemes2);
 		sprintf(text_out,"[[%s]]",phonemes2);
-		option_phoneme_input = 1;
+		option_phoneme_input |= 2;
 		return(text_out);
 	}
 	return(NULL);
 }
 
 
-const char *Translator::LookupCharName(int c)
-{//==========================================
+static const char *LookupCharName(Translator *tr, int c)
+{//=====================================================
 // Find the phoneme string (in ascii) to speak the name of character c
 // Used for punctuation characters and symbols
 
@@ -541,28 +571,28 @@ const char *Translator::LookupCharName(int c)
 	single_letter[2+ix]=0;
 
 	string = &single_letter[1];
-	if(LookupDictList(&string, phonemes, flags, 0, NULL) == 0)
+	if(LookupDictList(tr, &string, phonemes, flags, 0, NULL) == 0)
 	{
 		// try _* then *
 		string = &single_letter[2];
-		if(LookupDictList(&string, phonemes, flags, 0, NULL) == 0)
+		if(LookupDictList(tr, &string, phonemes, flags, 0, NULL) == 0)
 		{
 			// now try the rules
 			single_letter[1] = ' ';
-			TranslateRules(&single_letter[2], phonemes, sizeof(phonemes), NULL,0,NULL);
+			TranslateRules(tr, &single_letter[2], phonemes, sizeof(phonemes), NULL,0,NULL);
 		}
 	}
 
-	if((phonemes[0] == 0) && (translator_name != L('e','n')))
+	if((phonemes[0] == 0) && (tr->translator_name != L('e','n')))
 	{
 		// not found, try English
 		SetTranslator2("en");
 		string = &single_letter[1];
 		single_letter[1] = '_';
-		if(translator2->LookupDictList(&string, phonemes, flags, 0, NULL) == 0)
+		if(LookupDictList(translator2, &string, phonemes, flags, 0, NULL) == 0)
 		{
 			string = &single_letter[2];
-			translator2->LookupDictList(&string, phonemes, flags, 0, NULL);
+			LookupDictList(translator2, &string, phonemes, flags, 0, NULL);
 		}
 		if(phonemes[0])
 		{
@@ -578,24 +608,25 @@ const char *Translator::LookupCharName(int c)
 	{
 		if(lang_name)
 		{
-			translator2->SetWordStress(phonemes,flags[0],-1,0);
+			SetWordStress(translator2, phonemes, flags[0], -1, 0);
 			DecodePhonemes(phonemes,phonemes2);
-			sprintf(buf,"[[_^_%s %s _^_%s]]","en",phonemes2,WordToString2(translator_name));
+			sprintf(buf,"[[_^_%s %s _^_%s]]","en",phonemes2,WordToString2(tr->translator_name));
 			SelectPhonemeTable(voice->phoneme_tab_ix);  // revert to original phoneme table
 		}
 		else
 		{
-			SetWordStress(phonemes,flags[0],-1,0);
+			SetWordStress(tr, phonemes, flags[0], -1, 0);
 			DecodePhonemes(phonemes,phonemes2);
 			sprintf(buf,"[[%s]] ",phonemes2);
 		}
+		option_phoneme_input |= 2;
 	}
 	else
 	{
 		strcpy(buf,"[[(X1)(X1)(X1)]]");
+		option_phoneme_input |= 2;
 	}
 
-	option_phoneme_input = 1;
 	return(buf);
 }
 
@@ -623,7 +654,6 @@ static int LoadSoundFile(const char *fname, int index)
 	int  length;
 	char fname_temp[100];
 	char fname2[sizeof(path_home)+13+40];
-	char command[sizeof(fname2)+sizeof(fname2)+40];
 
 	if(fname == NULL)
 	{
@@ -649,6 +679,7 @@ static int LoadSoundFile(const char *fname, int index)
 		int fd_temp;
 		const char *resample;
 		int header[3];
+		char command[sizeof(fname2)+sizeof(fname2)+40];
 
 		fseek(f,20,SEEK_SET);
 		for(ix=0; ix<3; ix++)
@@ -758,8 +789,8 @@ static int LoadSoundFile2(const char *fname)
 
 
 
-int Translator::AnnouncePunctuation(int c1, int c2, char *buf, int bufix)
-{//======================================================================
+static int AnnouncePunctuation(Translator *tr, int c1, int c2, char *buf, int bufix)
+{//=================================================================================
 	// announce punctuation names
 	// c1:  the punctuation character
 	// c2:  the following character
@@ -778,7 +809,7 @@ int Translator::AnnouncePunctuation(int c1, int c2, char *buf, int bufix)
 		found = 1;
 	}
 	else
-	if((punctname = LookupCharName(c1)) != NULL)
+	if((punctname = LookupCharName(tr, c1)) != NULL)
 	{
 		found = 1;
 		if(bufix==0)
@@ -806,9 +837,9 @@ int Translator::AnnouncePunctuation(int c1, int c2, char *buf, int bufix)
 			}
 			else
 			{
-				sprintf(p,"%s %s %d %s %s [[______]]",
+				sprintf(p,"%s %s %d %s %s",
 						tone_punct_on,punctname,punct_count,punctname,tone_punct_off);
-				option_phoneme_input = 1;
+				return(CLAUSE_COMMA);
 			}
 		}
 		else
@@ -836,7 +867,7 @@ int Translator::AnnouncePunctuation(int c1, int c2, char *buf, int bufix)
 	if(iswspace(c2) && strchr_w(punct_stop,c1)!=NULL)
 		return(punct_attributes[lookupwchar(punct_chars,c1)]);
 	
-	return(CLAUSE_COMMA);
+	return(CLAUSE_SHORTCOMMA);
 }  //  end of AnnouncePunctuation
 
 #define SSML_SPEAK     1
@@ -852,7 +883,7 @@ int Translator::AnnouncePunctuation(int c1, int c2, char *buf, int bufix)
 #define SSML_AUDIO    11
 #define SSML_EMPHASIS 12
 #define SSML_BREAK    13
-#define SSML_METADATA 14
+#define SSML_IGNORE_TEXT 14
 #define HTML_BREAK    15
 #define SSML_CLOSE    0x10   // for a closing tag, OR this with the tag type
 
@@ -860,7 +891,7 @@ int Translator::AnnouncePunctuation(int c1, int c2, char *buf, int bufix)
 static char ignore_if_self_closing[] = {0,1,1,1,1,0,0,0,0,1,1,0,1,0,1,0,0};
 
 
-MNEM_TAB ssmltags[] = {
+static MNEM_TAB ssmltags[] = {
 	{"speak", SSML_SPEAK},
 	{"voice", SSML_VOICE},
 	{"prosody", SSML_PROSODY},
@@ -874,7 +905,7 @@ MNEM_TAB ssmltags[] = {
 	{"audio", SSML_AUDIO},
 	{"emphasis", SSML_EMPHASIS},
 	{"break", SSML_BREAK},
-	{"metadata", SSML_METADATA},
+	{"metadata", SSML_IGNORE_TEXT},
 
 	{"br", HTML_BREAK},
 	{"li", HTML_BREAK},
@@ -885,6 +916,8 @@ MNEM_TAB ssmltags[] = {
 	{"h3", SSML_PARAGRAPH},
 	{"h4", SSML_PARAGRAPH},
 	{"hr", SSML_PARAGRAPH},
+	{"script", SSML_IGNORE_TEXT},
+	{"style", SSML_IGNORE_TEXT},
 	{NULL,0}};
 
 
@@ -898,6 +931,7 @@ static const char *VoiceFromStack()
 	SSML_STACK *sp;
 	const char *v_id;
 	int voice_name_specified;
+	int voice_found;
 	espeak_VOICE voice_select;
 	char voice_name[40];
 	char language[40];
@@ -939,7 +973,7 @@ static const char *VoiceFromStack()
 
 	voice_select.name = voice_name;
 	voice_select.languages = language;
-	v_id = SelectVoice(&voice_select);
+	v_id = SelectVoice(&voice_select, &voice_found);
 	if(v_id == NULL)
 		return("default");
 	return(v_id);
@@ -1173,7 +1207,7 @@ static int attr_prosody_value(int param_type, const wchar_t *pw, int *value_out)
 		pw++;	
 		sign = -1;
 	}
-	value = wcstod(pw,&tail);
+	value = (float)wcstod(pw,&tail);
 	if(tail == pw)
 	{
 		// failed to find a number, return 100%
@@ -1212,6 +1246,7 @@ static int attr_prosody_value(int param_type, const wchar_t *pw, int *value_out)
 int AddNameData(const char *name, int wide)
 {//========================================
 // Add the name to the namedata and return its position
+// (Used by the Windows SAPI wrapper)
 	int ix;
 	int len;
 	void *vp;
@@ -1612,12 +1647,12 @@ static int ProcessSsmlTag(wchar_t *xml_buf, char *outbuf, int &outix, int n_outb
 		}
 		break;
 
-	case SSML_METADATA:
+	case SSML_IGNORE_TEXT:
 		ignore_text = 1;
 		break;
 
 	case SSML_SUB + SSML_CLOSE:
-	case SSML_METADATA + SSML_CLOSE:
+	case SSML_IGNORE_TEXT + SSML_CLOSE:
 		ignore_text = 0;
 		break;
 
@@ -1715,7 +1750,7 @@ static int ProcessSsmlTag(wchar_t *xml_buf, char *outbuf, int &outix, int n_outb
 		}
 		if((attr2 = GetSsmlAttribute(px,"time")) != NULL)
 		{
-			value = (attrnumber(attr2,0,1) * 25) / speed_factor1; // compensate for speaking speed to keep constant pause length
+			value = (attrnumber(attr2,0,1) * 25) / speed.speed_factor1; // compensate for speaking speed to keep constant pause length
 
 			if(terminator == 0)
 				terminator = CLAUSE_NONE;
@@ -1747,14 +1782,21 @@ static int ProcessSsmlTag(wchar_t *xml_buf, char *outbuf, int &outix, int n_outb
 		return(CLAUSE_VOICE);
 
 	case SSML_SPEAK + SSML_CLOSE:
-		terminator = CLAUSE_PERIOD;
+		// unwind stack until the previous <voice> or <speak> tag
+		while((n_ssml_stack > 1) && (ssml_stack[n_ssml_stack-1].tag_type != SSML_SPEAK))
+		{
+			n_ssml_stack--;
+		}
+		return(CLAUSE_PERIOD + GetVoiceAttributes(px, tag_type));
+
 	case SSML_VOICE + SSML_CLOSE:
 		// unwind stack until the previous <voice> or <speak> tag
-		while((n_ssml_stack > 1) && (ssml_stack[n_ssml_stack-1].tag_type != (tag_type - SSML_CLOSE)))
+		while((n_ssml_stack > 1) && (ssml_stack[n_ssml_stack-1].tag_type != SSML_VOICE))
 		{
 			n_ssml_stack--;
 		}
 
+terminator=0;  // ??  Sentence intonation, but no pause ??
 		return(terminator + GetVoiceAttributes(px, tag_type));
 
 	case HTML_BREAK:
@@ -1808,7 +1850,7 @@ static int ProcessSsmlTag(wchar_t *xml_buf, char *outbuf, int &outix, int n_outb
 }  // end of ProcessSsmlTag
 
 
-MNEM_TAB xml_char_mnemonics[] = {
+static MNEM_TAB xml_char_mnemonics[] = {
 	{"gt",'>'},
 	{"lt",'<'},
 	{"amp", '&'},
@@ -1818,8 +1860,8 @@ MNEM_TAB xml_char_mnemonics[] = {
 	{NULL,-1}};
 
 
-int Translator::ReadClause(FILE *f_in, char *buf, unsigned short *charix, int n_buf)
-{//=================================================================================
+int ReadClause(Translator *tr, FILE *f_in, char *buf, short *charix, int n_buf, int *tone_type)
+{//============================================================================================
 /* Find the end of the current clause.
 	Write the clause into  buf
 
@@ -1847,6 +1889,7 @@ int Translator::ReadClause(FILE *f_in, char *buf, unsigned short *charix, int n_
 	int any_alnum = 0;
 	int self_closing;
 	int punct_data;
+	int stressed_word = 0;
 	const char *p;
 	wchar_t xml_buf[N_XML_BUF+1];
 
@@ -1861,9 +1904,10 @@ int Translator::ReadClause(FILE *f_in, char *buf, unsigned short *charix, int n_
 		clear_skipping_text = 0;
 	}
 
-	clause_upper_count = 0;
-	clause_lower_count = 0;
+	tr->clause_upper_count = 0;
+	tr->clause_lower_count = 0;
 	end_of_input = 0;
+	*tone_type = 0;
 
 f_input = f_in;  // for GetC etc
 
@@ -2102,25 +2146,35 @@ f_input = f_in;  // for GetC etc
 		if(iswalnum(c1))
 			any_alnum = 1;
 		else
-		if(iswspace(c1))
 		{
-			char *p_word;
-
-			if(translator_name == 0x6a626f)
+			if(stressed_word)
 			{
-				// language jbo : lojban
-				// treat "i" or ".i" as end-of-sentence
-				p_word = &buf[ix-1];
-				if(p_word[0] == 'i')
+				stressed_word = 0;
+				c1 = CHAR_EMPHASIS;   // indicate this word is strtessed
+				UngetC(c2);
+				c2 = ' ';
+			}
+
+			if(iswspace(c1))
+			{
+				char *p_word;
+	
+				if(tr->translator_name == 0x6a626f)
 				{
-					if(p_word[-1] == '.')
-						p_word--;
-					if(p_word[-1] == ' ')
+					// language jbo : lojban
+					// treat "i" or ".i" as end-of-sentence
+					p_word = &buf[ix-1];
+					if(p_word[0] == 'i')
 					{
-						ungot_word = "i ";
-						UngetC(c2);
-						p_word[0] = 0;
-						return(CLAUSE_PERIOD);
+						if(p_word[-1] == '.')
+							p_word--;
+						if(p_word[-1] == ' ')
+						{
+							ungot_word = "i ";
+							UngetC(c2);
+							p_word[0] = 0;
+							return(CLAUSE_PERIOD);
+						}
 					}
 				}
 			}
@@ -2128,12 +2182,12 @@ f_input = f_in;  // for GetC etc
 
 		if(iswupper(c1))
 		{
-			clause_upper_count++;
+			tr->clause_upper_count++;
 			if((option_capitals == 2) && (sayas_mode == 0) && !iswupper(cprev))
 			{
 				char text_buf[40];
 				char text_buf2[30];
-				if(LookupSpecial("_cap",text_buf2) != NULL)
+				if(LookupSpecial(tr, "_cap", text_buf2) != NULL)
 				{
 					sprintf(text_buf,"%s%s%s",tone_punct_on,text_buf2,tone_punct_off);
 					j = strlen(text_buf);
@@ -2147,7 +2201,7 @@ f_input = f_in;  // for GetC etc
 		}
 		else
 		if(iswalpha(c1))
-			clause_lower_count++;
+			tr->clause_lower_count++;
 
 		if(option_phoneme_input)
 		{
@@ -2203,14 +2257,24 @@ if(option_ssml) parag=1;
 			// if a list of allowed punctuation has been set up, check whether the character is in it
 			if((option_punctuation == 1) || (wcschr(option_punctlist,c1) != NULL))
 			{
-				if((terminator = AnnouncePunctuation(c1, c2, buf, ix)) >= 0)
+				if((terminator = AnnouncePunctuation(tr, c1, c2, buf, ix)) >= 0)
 					return(terminator);
 			}
 		}
 
 		if((phoneme_mode==0) && (sayas_mode==0) && ((punct = lookupwchar(punct_chars,c1)) != 0))
 		{
-			if((iswspace(c2) || (punct_attributes[punct] & 0x8000) || IsBracket(c2) || (c2=='?') || (c2=='-') || Eof()))
+			punct_data = punct_attributes[punct];
+
+			if(punct_data & PUNCT_IN_WORD)
+			{
+				// Armenian punctuation inside a word
+				stressed_word = 1;
+				*tone_type = punct_data >> 12 & 0xf;   // override the end-of-sentence type
+				continue;
+			}
+
+			if((iswspace(c2) || (punct_data & 0x8000) || IsBracket(c2) || (c2=='?') || (c2=='-') || Eof()))
 			{
 				// note: (c2='?') is for when a smart-quote has been replaced by '?'
 				buf[ix] = ' ';
@@ -2236,7 +2300,7 @@ if(option_ssml) parag=1;
 	
 				if((nl_count==0) && (c1 == '.'))
 				{
-					if(iswdigit(cprev) && (langopts.numbers & 0x10000))
+					if(iswdigit(cprev) && (tr->langopts.numbers & 0x10000))
 					{
 						// dot after a number indicates an ordinal number
 						c2 = ' ';
@@ -2274,7 +2338,7 @@ if(option_ssml) parag=1;
 		{
 			charix[ix] = count_characters - clause_start_char;
 			while(j < ix)
-				charix[j++] = 0xffff;   // subsequent bytes of a multibyte character
+				charix[j++] = -1;   // subsequent bytes of a multibyte character
 		}
 
 		if(((ix > (n_buf-20)) && !IsAlpha(c1) && !iswdigit(c1))  ||  (ix >= (n_buf-2)))
@@ -2286,6 +2350,11 @@ if(option_ssml) parag=1;
 			UngetC(c2);
 			return(CLAUSE_NONE);
 		}
+	}
+
+	if(stressed_word)
+	{
+		ix += utf8_out(CHAR_EMPHASIS, &buf[ix]);
 	}
 	buf[ix] = ' ';
 	buf[ix+1] = 0;
@@ -2308,6 +2377,8 @@ void InitNamedata(void)
 void InitText2(void)
 {//=================
 	int param;
+
+	ungot_char = 0;
 
 	n_ssml_stack =1;
 	n_param_stack = 1;

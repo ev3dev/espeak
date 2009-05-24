@@ -2,7 +2,10 @@
 // This file is UTF8 encoded 
 
 // letter groups:
-// B - vowel signes and virama ्
+// A   vowel letters
+// B   vowel signs and virama ्
+// C   consonants
+// Y   vowel letters and vowel signs
 
 // conditional rules
 // ?1   drop schwa at end of word
@@ -35,6 +38,8 @@
 
 .group इ
         इ        I
+//       इँ        i~
+//       इं        i~
 
 .group ई
         ई        i:
@@ -96,6 +101,8 @@
 
 .group ि
         ि        I
+//      िँ       i~
+//      िं       i~
 
 .group ी
         ी        i:
@@ -240,13 +247,17 @@
         ड (B     d.
 ?1      ड (_     d.
 
+        ड़        r.V
+        ड़ (B     r.
+?1      ड़ (_     r.
+
 .group ढ
         ढ        d.hV
         ढ (B     d.h
 ?1      ढ (_     d.h
-        ढ़        r-V  // nukta  (should retroflex flap)
-        ढ़ (B     r-   // nukta
-?1      ढ़ (_     r-   // nukta
+        ढ़        r.hV  // nukta  (should retroflex flap)
+        ढ़ (B     r.h   // nukta
+?1      ढ़ (_     r.h   // nukta
 
 .group ण
         ण        n.V   // (temporary) same as dental [n]
@@ -345,14 +356,14 @@
 .group ळ
         ळ        l.V
         ळ (B     l.
-?1      ल (_     l.
-     ्) ल (_     l.V
+?1      ळ (_     l.
+     ्) ळ (_     l.V
 
 .group ऴ
         ऴ        l.V  // (temporary) same as [l.]
         ऴ (B     l.
-?1      ल (_     l.
-     ्) ल (_     l.V
+?1      ऴ (_     l.
+     ्) ऴ (_     l.V
 
 .group व
         व        vV
@@ -392,7 +403,7 @@
 	ँ	n	// candrabindu
 
 .group ं 
-        ं        N     // anusvara
+        ं        n     // anusvara
         ं  (प    m
         ं  (फ    m
         ं  (ब    m
@@ -422,7 +433,8 @@
 .group ः
         ः        H   //  visarga
 
-
+.group ्		// virama
+	्
 
 // Extra consonants
 
@@ -447,14 +459,14 @@
 ?1      ज़ (_     z
 
 .group ड़    // dddha   (should retroflex flap)
-        ड़        r-V
-        ड़ (B     r-
-?1      ड़ (_     r-
+        ड़        r.V
+        ड़ (B     r.
+?1      ड़ (_     r.
 
 .group ढ़    // rha  (aspirated version of dddha)
-        ढ़        hrV
-        ढ़ (B     hr
-?1      ढ़ (_     hr
+        ढ़        r.hV
+        ढ़ (B     r.h
+?1      ढ़ (_     r.h
 
 .group फ़    // fa
         फ़        fV
@@ -474,61 +486,11 @@
 
 
 // If we find a Latin letter a-z, then translate as English
+// (This is now done automatically by the eSpeak program)
 
-.group a
-           a        _^_EN
-.group b
-           b        _^_EN
-.group c
-           c        _^_EN
-.group d
-           d        _^_EN
-.group e
-           e        _^_EN
-.group f
-           f        _^_EN
-.group g
-           g        _^_EN
-.group h
-           h        _^_EN
-.group i
-           i        _^_EN
-.group j
-           j        _^_EN
-.group k
-           k        _^_EN
-.group l
-           l        _^_EN
-.group m
-           m        _^_EN
-.group n
-           n        _^_EN
 .group o
-           o        _^_EN
      D__) of (__D    me
 
-.group p
-           p        _^_EN
-.group q
-           q        _^_EN
-.group r
-           r        _^_EN
-.group s
-           s        _^_EN
-.group t
-           t        _^_EN
-.group u
-           u        _^_EN
-.group v
-           v        _^_EN
-.group w
-           w        _^_EN
-.group x
-           x        _^_EN
-.group y
-           y        _^_EN
-.group z
-           z        _^_EN
 
 
 

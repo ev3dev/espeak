@@ -81,7 +81,7 @@ static const char *help_text =
 "-p <integer>\n"
 "\t   Pitch adjustment, 0 to 99, default is 50\n"
 "-s <integer>\n"
-"\t   Speed in words per minute 80 to 370, default is 170\n"
+"\t   Speed in words per minute 80 to 390, default is 170\n"
 "-v <voice name>\n"
 "\t   Use voice file of this name from espeak-data/voices\n"
 "-w <wave file name>\n"
@@ -96,12 +96,16 @@ static const char *help_text =
 "--compile=<voice name>\n"
 "\t   Compile the pronunciation rules and dictionary in the current\n"
 "\t   directory. =<voice name> is optional and specifies which language\n"
+"--path=\"<path>\"\n"
+"\t   Specifies the directory containing the espeak-data directory\n"
+"--phonout=\"<filename>\"\n"
+"\t   Write output from -x -X commands and mbrola phoneme data to this file\n"
 "--punct=\"<characters>\"\n"
 "\t   Speak the names of punctuation characters during speaking.  If\n"
 "\t   =<characters> is omitted, all punctuation is spoken.\n"
 "--split=\"<minutes>\"\n"
 "\t   Starts a new WAV file every <minutes>.  Used with -w\n"
-"--voices=<langauge>\n"
+"--voices=<language>\n"
 "\t   List the available voices for the specified language.\n"
 "\t   If <language> is omitted, then list all voices.\n"
 "-k <integer>\n"
@@ -208,23 +212,6 @@ void DisplayVoices(FILE *f_out, char *language)
 		fputc('\n',f_out);
 	}
 }   //  end of DisplayVoices
-
-
-
-
-static void PitchAdjust(int pitch_adjustment)
-{//==========================================
-	int ix, factor;
-
-	voice->pitch_base = (voice->pitch_base * pitch_adjust_tab[pitch_adjustment])/128;
-
-	// adjust formants to give better results for a different voice pitch
-	factor = 256 + (25 * (pitch_adjustment - 50))/50;
-	for(ix=0; ix<=5; ix++)
-	{
-		voice->freq[ix] = (voice->freq2[ix] * factor)/256;
-	}
-}  //  end of PitchAdjustment
 
 
 
@@ -336,8 +323,15 @@ static int WavegenFile(void)
 
 
 
-static void init_path(char *argv0)
-{//===============================
+static void init_path(char *argv0, char *path_specified)
+{//=====================================================
+
+	if(path_specified)
+	{
+		sprintf(path_home,"%s/espeak-data",path_specified);
+		return;
+	}
+
 #ifdef PLATFORM_WINDOWS
 	HKEY RegKey;
 	unsigned long size;
@@ -414,9 +408,12 @@ static int initialise(void)
 	if((result = LoadPhData()) != 1)
 	{
 		if(result == -1)
+		{
 			fprintf(stderr,"Failed to load espeak-data\n");
+			exit(1);
+		}
 		else
-			fprintf(stderr,"Wrong version of espeak-data 0x%x (expects 0x%x)\n",result,version_phdata);
+			fprintf(stderr,"Wrong version of espeak-data 0x%x (expects 0x%x) at %s\n",result,version_phdata,path_home);
 	}
 	LoadConfig();
 	SetVoiceStack(NULL);
@@ -446,11 +443,12 @@ static void StopSpeak(int unused)
 		int *flag;
 		int val;
 	};
-	static int optind;
+	int optind;
 	static int optional_argument;
 	static const char *arg_opts = "afklpsvw";  // which options have arguments
 	static char *opt_string="";
 #define no_argument 0
+#define required_argument 1
 #define optional_argument 2
 #endif
 
@@ -473,6 +471,8 @@ int main (int argc, char **argv)
 		{"voices",  optional_argument, 0, 0x104},
 		{"stdout",  no_argument,       0, 0x105},
 		{"split",   optional_argument, 0, 0x106},
+		{"path",    required_argument, 0, 0x107},
+		{"phonout", required_argument, 0, 0x108}, 
 		{0, 0, 0, 0}
 		};
 
@@ -480,6 +480,7 @@ int main (int argc, char **argv)
 
 	FILE *f_text=NULL;
 	const char *p_text=NULL;
+	char *data_path = NULL;   // use default path for espeak-data
 
 	int option_index = 0;
 	int c;
@@ -493,7 +494,8 @@ int main (int argc, char **argv)
 	int flag_stdin = 0;
 	int flag_compile = 0;
 	int pitch_adjustment = 50;
-	char filename[120];
+	espeak_VOICE voice_select;
+	char filename[200];
 	char voicename[40];
 	char dictname[40];
 
@@ -507,13 +509,13 @@ int main (int argc, char **argv)
 	option_waveout = 0;
 	option_wordgap = 0;
 	option_endpause = 1;
+	option_phoneme_input = 1;
 	option_multibyte = espeakCHARS_AUTO;  // auto
 	f_trans = stdout;
 
-	init_path(argv[0]);
-
 #ifdef NEED_GETOPT
 	optind = 1;
+	opt_string = "";
 	while(optind < argc)
 	{
 		int len;
@@ -674,9 +676,9 @@ int main (int argc, char **argv)
 			break;
 
 		case 0x104:   // --voices
+			init_path(argv[0],data_path);
 			DisplayVoices(stdout,optarg2);
 			exit(0);
-
 
 		case 0x106:   // -- split
 			if(optarg2 == NULL)
@@ -684,11 +686,25 @@ int main (int argc, char **argv)
 			else
 				samples_split = atoi(optarg2);
 			break;
+
+		case 0x107:  // --path
+			data_path = optarg2;
+			break;
+
+		case 0x108:  // --phonout
+			if((f_trans = fopen(optarg2,"w")) == NULL)
+			{
+				fprintf(stderr,"Can't write to: %s\n",optarg2);
+				f_trans = stderr;
+			}
+			break;
+
 		default:
 			exit(0);
 		}
 	}
 
+	init_path(argv[0],data_path);
 	initialise();
 
 
@@ -722,8 +738,13 @@ int main (int argc, char **argv)
 
 	if(SetVoiceByName(voicename) != EE_OK)
 	{
-		fprintf(stderr,"%svoice '%s'\n",err_load,voicename);
-		exit(2);
+		memset(&voice_select,0,sizeof(voice_select));
+		voice_select.languages = voicename;
+		if(SetVoiceByProperties(&voice_select) != EE_OK)
+		{
+			fprintf(stderr,"%svoice '%s'\n",err_load,voicename);
+			exit(2);
+		}
 	}
 
 	SetParameter(espeakRATE,speed,0);
@@ -734,7 +755,7 @@ int main (int argc, char **argv)
 
 	if(pitch_adjustment != 50)
 	{
-		PitchAdjust(pitch_adjustment);
+		SetParameter(espeakPITCH,pitch_adjustment,0);
 	}
 	DoVoiceChange(voice);
 

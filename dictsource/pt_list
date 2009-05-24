@@ -4,6 +4,8 @@
 // Options
 // ?1  European Portuguese
 // ?2  Brazilian Portuguese
+// ?3  Epenthetic [I] between consonants
+// ?4  Brazil mbrola voice
 
 // Note for "pt-pt" [R] is the same sound as [r]
 //      for "pt" [y] is the same sound as [i]
@@ -21,7 +23,7 @@ _ac2	&g'udUd'uplU
 _brv	bR'Evi
 _ced	sedZ'ilj&
 ?1 _ced	syd'il^&
-_cir	sirkuNfl'EksU
+_cir	sirku~Nfl'EksU
 _dia	tR'em&
 _dot	p'oNtU
 _grv	gR'avi
@@ -51,10 +53,10 @@ _ô	$accent
 _õ	$accent
 _ú	$accent
 _ü	$accent
+ß	_^_DE
 
 v	ve       // not Roman numbers
 x	Sis#
-
 
 _cap	maI'uskulU
 _?A	l'etR&_
@@ -63,21 +65,31 @@ _#32	esp'asU
 ?1 _#32	Sp'asU
 _#9	tab
 
-_.	p'oNtU
+*	&ste*'iskU	$max3
+=	__igw'&l_	$max3
+.	p'oNtU		$max3
++	maIs#		$max3
+%	pors'eINtU	$max3
+&	_'e_
+@	&x'ob&
+¤	'eU*U
+€	'eU*U
+§	p&*'agRafU
+
+
 _!	,eskl&mas'&U~
 _"	'asp&s#
 
 ?1   _#	k,ardin'al
 ?2   _#	k,ardZin'aU
 _$	s,ifR'&U~
-_%	pors'eINtU
 _&	'e
 ?1   _'	ap'Ostr,ofy
-?2   _'	ap'OstR,ofU
-_(	,abRipa*'eINtezi
-_)	f,ES&pa*'eINtezi
-_*	,aste*'iskU
-_+	m'aIs#
+?2   _'	&p'OstRofU
+_(	,abRipa*'eINtezy
+_)	f,ES&pa*'eINtezy
+_*	&ste*'iskU
+_−	m'enUs
 
 _,	v'irgul&
 _-	'ifeIN
@@ -89,11 +101,10 @@ _<      men'Or
 ?2   _=	igw'aU
 _>	maI'Or
 _?	,iNtex,ogas'&U~
-_@	ax'ob&
 _[	,abRikowS'etSi
 _\	b,ax&,iNvertS'id&
 _]	f,ES&kowS'etSi
-_^	s,irkuNfl'Eksu
+_^	s,irku~Nfl'Eksu
 __	s,ublin^'adu
 _`	gR'avi
 _{	,abRiS'avi
@@ -106,6 +117,9 @@ _¡	,eskl&mas,&U~,iNvertS'id&
 _¿	,iNtex,ogas,&U~,iNvertS'id&
 
 _"	'abRi;'asp&||d'upl&s#
+_º	Oz'in^U
+_ª	az'in^U
+°	gR'aU
 
 
 // numeric
@@ -114,7 +128,7 @@ _"	'abRi;'asp&||d'upl&s#
 ?1 _0	z'E*u
 ?2 _0	z'E*U
 ?1 _1	'um
-?2 _1	'uN
+?2 _1	'u~N
    _2	d'oIs#
    _3	tR'es#
 ?1 _4	kw'atru
@@ -122,10 +136,9 @@ _"	'abRi;'asp&||d'upl&s#
    _5	s'iNku
    _6	s'eIs#
 ?1 _7	s'Ety
-?2 _7	s'EtSi
+?2 _7	s'EtSy
    _8	'oItu
-?1 _9	n'Ovy
-?2 _9	n'Ovi
+   _9	n'Ovy
    _10	d'Es#
 
 _11	'oNzy
@@ -133,18 +146,18 @@ _12	d'ozy
 ?1_13	tr'ezy
 ?2_13	tR'ezi
 ?1_14	k&t'orzy
-?2_14	kat'orzi
+?2_14	kat'orzy
 _15	k'iNzy
 ?1_16	dyz&s'eis#
 ?2_16	d,ezes'eIs#
 ?1_17	dyz&s'Ety
-?2_17	d,ezes'EtSi
+?2_17	d,ezes'EtSy
 ?1_18	dyz'Oitu
 ?2_18	dez'oItu
 ?1_19	dyz&n'Ovy
-?2_19	dezen'Ovi
+?2_19	dezen'Ovy
 ?1_2X	v'iNty
-?2_2X	v'iNtSi
+?2_2X	v'iNtSy
 _3X	tR'iNt&
 
 ?1_4X	kw&*'eNt&
@@ -183,8 +196,8 @@ _1M3	'u~mbilj'&U~
 _1M4	'u~ntrilj'&U~
 _0and	_i
 _dpt    _v'irgul&
-_0Z2	seNt'Ezim&     // 100ths
-_0Z3	mil'Ezim&      // 1000ths
+// _0Z2	seNt'Ezim&     // 100ths
+// _0Z3	mil'Ezim&      // 1000ths
 
 // not roman numbers
 vi	vi
@@ -235,28 +248,30 @@ dra	$dot
 mr	$dot
 mrs	$dot
 prof	pr'Of	$dot
+profº	pR,ofes'or
+profª	pR,ofes'o*&
 sr	$dot
 ?1 sra	,Es;'Errj'a	$dot
 ?2 sra	$dot
 
 // articles
-o	$u+
-a	$u+
-os	$u+
-as	$u+
-?1 a    & $u+
+o	$u+	$nounf
+a	$u+	$nounf
+os	$u+	$nounf
+as	$u+	$nounf
+?1 a    & $u+   $nounf
 
-um	$u
-uma	$u
-uns	$u
-umas	$u
+um	$u	$nounf
+uma	$u	$nounf
+uns	$u	$nounf
+umas	$u	$nounf
 
 
 // pronouns
-eu	$u+
+eu	$u+	$verbf
 tu	$u+
-você	$u+
-ele	$u+
+você	vos'e	$u+
+ele	'ely	$u+
 ela	$u+
 nós	$u+
 vós	$u+
@@ -267,29 +282,38 @@ elas	$u+
 me	$u	// reflexive
 te	$u 
 nos	$u 
+la	$u
+lo	$u
+las	$u
+los	$u
 //se	$u
 
-?2	este	$u+	'estSi       // this
-?2	estes	$u+	'estSis       // these
-?2	esta	'Est& $brk $u+
-?2	esse	$u+	'esi       // that
+?2	este	$u+	$nounf	'estSi       // this
+?2	estes	$u+	$nounf	'estSis       // these
+?2	esta	'Est& $brk $u+	$nounf
+?2	neste	$u+	$nounf	n'estSi      //in this
+?2	nestes	$u+	n'estSis      //in these
+?2	esse	$u+	$nounf	'esi       // that
 essa	'Es& $brk  $u+
-aquele	$u+       // that
+desse	d'esy	$u+
+nesse	n'esy	$u+
+aquele	&k'ely	$u+	$nounf       // that
 aquela	$u+
+daquele	d&k'ely	$u+	$nounf
 
 ?1	que	ky	$u 
-?2	que	$u $pause
+?2	que	ke	$u $pause
 
 // possessive adjectives
-meu	$u+
+meu	$u+	$nounf
 minha	$u+
 meus	$u+
 minhas	$u+
-teu	$u+
+teu	$u+	$nounf
 tua	$u+
 teus	$u+
 tuas	$u+
-seu	$u+
+seu	$u+	$nounf
 sua	$u+
 seus	$u+
 suas	$u+
@@ -297,16 +321,16 @@ suas	$u+
 ?2	nossa	$u+	n'Os&
 ?2	nossos	$u+	n'OsUs
 ?2	nossas	$u+	n'Os&s
-dele	$u+
+dele	dely	$u1+
 dela	$u+
 deles	$u+
 delas	$u+
-
+nele	nely	$u1+
 
 // prepositions
 de	$u	// of,from
-do	$u
-da	$u
+do	$u	$nounf
+da	$u	$nounf
 dos	$u
 das	$u
 dum	$u
@@ -315,7 +339,7 @@ duns	$u
 dumas	$u
 
 em	$u $brk  // in,on,at
-no	nu $u $brk
+no	nu $u $brk	$nounf
 na	$u $brk
 ?2	nos	nus# $u $brk
 nas	$u $brk
@@ -330,15 +354,13 @@ pelo	$u $brk
 pelos	$u $brk
 ?2	pelas	$u $brk	p'el&s
 
-a	$u $brk	// to,at
-?1 a    & $u $brk
 ao	$u $brk
 à	,a: $brk
 aos	$u $brk
 às	,a:s $brk
 
 para	$u $brk		// for,to
-pro	$u $brk
+pro	$u $brk	$nounf
 pra	$u $brk
 pros	$u $brk
 pras	$u $brk
@@ -353,7 +375,7 @@ com	$u $brk		// with
 ?2	desde	$u $pause	// from,since
 ?2	entre	$pause		// between,among
 ?2	por	$u $pause	// by,for,through
-?2	sobre	$pause		// on,above,about
+?2	sobre	s'obRy	$pause		// on,above,about
 ?2	sob	$pause		// under,below
 ?2	debaixo	$pause		// under,below
 
@@ -420,25 +442,24 @@ somos	$u
 sois	$u
 são	$u
 
-era	$u	// .. imperfect
+era	E*& $u1	// .. imperfect
 éramos	$u
 éreis	$u
-eram	$u
+eram	E*&U~  $u1
 
 fui	$u      // .. preterite
 foste	$u
 foi	$u
 fomos	$u
 fostes	$u
-foram	$u
 
 fora	$u      // .. pluperfect
 fômamos	$u
 fôreis	$u
-foram	$u
+foram	fo*&U~  $u1
 
 serei	$u	// .. future
-será	$u
+?2 será	se*a	$u2
 seremos	$u
 sereis	$u
 serão	$u
@@ -461,7 +482,7 @@ estávamos	$u
 astavam	$u
 
 estive	$u
-esteve	$u
+?2 esteve	estevy	$u2
 estivemos	$u
 estiveram	$u
 estiver	$u	estSiv'Er
@@ -488,7 +509,7 @@ tinham	$u
 
 tive	$u
 tiveste	$u
-teve	$u
+teve	tevy	$u1
 tivemos	$u
 tivestes	$u
 tiveram	$u
@@ -529,8 +550,8 @@ pôde	$u+
 pudemos	$u+
 puderam	$u+
 
-poderei	$u+
-poderá	$u+
+poderei	$u3+
+poderá	$u3+
 poderemos	$u+
 poderão	$u+
 
@@ -559,34 +580,48 @@ alguns		$u	// some
 algumas		$u	// some
 não		n,&U~ $strend	// not
 
+// Words with two possible pronounciations
+jogo	Z'OgU	$verb
+gosto	g'OstU	$verb
+começo	kom'EsU	$verb
+almoço	aUm'OsU	$verb
+retorno	xet'OrnU	$verb
+acordo	&k'OrdU	$verb
+governo	gov'ernU	$noun
+?2 olho	'oljU	$noun
+?4 olho	'ol^U	$noun
+?2 colher	kolj'Er	$noun
+?4 colher	kol^'Er	$noun
 
 
 // MAIN WORD DICTIONARY
 //*********************
+borboleta        b,orbol'et&
+catorze        k&t'orzy
+fosse        f'osy
+fossem       f'oseIN
+hoje         'oZi
+líderes        l'ide*ys
+mexa     m'eS&
+mexi        meS'i
+mexo     m'eSU
+?2 mulher       mulj'Er
+?4 mulher       mul^'Er
 mui          mu~j
 muito        m'u~jtu	// -s is included as a suffix
 muita        m'u~jt&
+praxedes        pR&S'EdZys
+?2 rede      x'edZy
+selvagem        seUv'aZeIN
+teta         t'et&
 
-// $alt   changes the first [o] phoneme to [O]
-costa        $alt
-forte        $alt
-porta        $alt
+// $alt   changes the first [o] phoneme to open [O]
 novos        $alt
-novas        $alt
-morte        $alt
 mortos       $alt
-porte        $alt
-norte        $alt
 corpos       $alt
 modo         $alt
 modos        $alt
 fogos        $alt
-sorte        $alt
-toque        $alt
-bloco        $alt
-blocos       $alt
-floco        $alt
-flocos       $alt
 lopes        $alt
 jogos        $alt
 
@@ -597,23 +632,18 @@ jogos        $alt
 ?1 sobre       s'obry
 
 
-
-// Open [E]
-nela         n'El&
-nessa        n'Es&
-era          'E*&
-
-abacaxi      abakaSi
+abacaxi      abakaSy
 axé          aSE
 elixir       eliSir
 ?1 fixe       f'iSy
-lixo         l'iSu
 roxo         x'oSU
-
+xiquexique     S,ikeS'iky
 // foreign words
 ?1 alt        'alt
 ?2        agosto        &g'ostU
 ?1 back       b'Ek
+?2  backup        bEk'&p
+?2  backups     bEk'&ps
 ?1 blind      bl'aind
 ?1 braille    b:r'aily
 ?2        Braille        bR'aili
@@ -628,8 +658,12 @@ roxo         x'oSU
 ?1 dj         d,i:dZ'eI
 ?1 down       d'a,wn
 ?1 download   d'a,wnl'oud
+?2 download        daUNl'owd
+?3 download        dau~Nl'owd
 ?1 end        'end
 ?1 escape     Sk'eIpy
+?2 esc     'Esk
+?3 esc     'EskI
 ?1 explorer   ,ekspl'O:*&r-
 ?2        Explorer        ekspl'O*er
 ?1 eyes       'aiz
@@ -665,6 +699,8 @@ roxo         x'oSU
 ?2        menores        men'O*is
 ?2        melhor        melj'Or
 ?2        melhores        melj'O*is
+?4        melhor        mel^'Or
+?4        melhores        mel^'O*is
 ?2        mouse        m'aUzi
 ?1 menu       menu
 ?1 next       n'Ekst
@@ -686,6 +722,8 @@ python     p'aIT&~N
 ?1 site       s'aIt
 ?2 site       s'aItSi
 ?1   software   s'Oft,w'Er-
+símbolo	s'imbolU
+?4 símbolo	s'iNbolU
 ?2   software   s'Oftwe@-
 ?1 space      sp'eIsy
 ?1 sporting   sp'Ort,ing
@@ -720,7 +758,6 @@ louis       _^_FR
 ?2    firefox     f'ai@fOks
 ?1 front       fr'ont
 ?1 jaws        dZ'au:z
-?2 jaws        dZ'Os
 ?1 linux       l,in'uks
 ?2 linux       l'inUks
 ?1 live        l'aiv
@@ -755,6 +792,8 @@ louis       _^_FR
    ubuntu      ub'untu
 ?1 unix        ,u:n'iks
 ?2 unix        j'uniks
+     wagner     v'agner
+?3 wagner        v'agIner
 ?1 windows     w'iNd'ou:z
 ?2 windows     w'iNdows
 ?1 window     w'iNd'ou

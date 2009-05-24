@@ -62,7 +62,7 @@ static espeak_ERROR push(t_espeak_command* the_command);
 static t_espeak_command* pop();
 static void init();
 static int node_counter=0;
-enum {MAX_NODE_COUNTER=200,
+enum {MAX_NODE_COUNTER=400,
       INACTIVITY_TIMEOUT=50, // in ms, check that the stream is inactive
       MAX_INACTIVITY_CHECK=2
 };
@@ -269,7 +269,7 @@ int fifo_is_busy ()
 
 //<sleep_until_start_request_or_inactivity
 
-int sleep_until_start_request_or_inactivity()
+static int sleep_until_start_request_or_inactivity()
 {
   SHOW_TIME("fifo > sleep_until_start_request_or_inactivity > ENTER");
   int a_start_is_required=0;

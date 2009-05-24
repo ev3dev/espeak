@@ -40,7 +40,7 @@ int HashDictionary(const char *string);
 static FILE *f_log = NULL;
 extern char *dir_dictionary;
 
-int linenum;
+static int linenum;
 static int error_count;
 static int transpose_offset;  // transpose character range for LookupDictList()
 static int transpose_min;
@@ -48,8 +48,9 @@ static int transpose_max;
 static int text_mode = 0;
 static int debug_flag = 0;
 
-int hash_counts[N_HASH_DICT];
-char *hash_chains[N_HASH_DICT];
+static int hash_counts[N_HASH_DICT];
+static char *hash_chains[N_HASH_DICT];
+static char letterGroupsDefined[N_LETTER_GROUPS];
 
 MNEM_TAB mnem_flags[] = {
 	// these in the first group put a value in bits0-3 of dictionary_flags
@@ -89,6 +90,7 @@ MNEM_TAB mnem_flags[] = {
 	{"$alt2",      21},
 	
 
+	{"$max3",      27},   // limit to 3 repetitions
 	{"$brk",       28},   // a shorter $pause
 	{"$text",      29},   // word translates to replcement text, not phonemes
 
@@ -114,8 +116,10 @@ MNEM_TAB mnem_flags[] = {
 };
 
 
+#define LEN_GROUP_NAME  12
+
 typedef struct {
-	char name[6];
+	char name[LEN_GROUP_NAME+1];
 	unsigned int start;
 	unsigned int length;
 } RGROUP;
@@ -130,6 +134,28 @@ int isspace2(unsigned int c)
 		return(0);
 	return(1);
 }
+
+
+static const char *LookupMnem2(MNEM_TAB *table, int value)
+{//=======================================================
+	while(table->mnem != NULL)
+	{
+		if(table->value == value)
+			return(table->mnem);
+		table++;
+	}
+	return("");
+}
+
+
+char *print_dictionary_flags(unsigned int *flags)
+{//==============================================
+	static char buf[20];
+
+	sprintf(buf,"%s  0x%x/%x",LookupMnem2(mnem_flags,(flags[0] & 0xf)+0x40), flags[0], flags[1]);
+	return(buf);
+}
+
 
 
 static FILE *fopen_log(const char *fname,const char *access)
@@ -164,8 +190,8 @@ static const char *lookup_mnem(MNEM_TAB *table, int value)
 
 
 
-int compile_line(char *linebuf, char *dict_line, int *hash)
-{//========================================================
+static int compile_line(char *linebuf, char *dict_line, int *hash)
+{//===============================================================
 // Compile a line in the language_list file
 	unsigned char  c;
 	char *p;
@@ -184,6 +210,7 @@ int compile_line(char *linebuf, char *dict_line, int *hash)
 	int len_phonetic;
 	int text_not_phonemes;   // this word specifies replacement text, not phonemes
 	unsigned int  wc;
+	int all_upper_case;
 	
 	char *mnemptr;
 	char *comment;
@@ -196,6 +223,10 @@ static char nullstring[] = {0};
 	text_not_phonemes = 0;
 	phonetic = word = nullstring;
 
+if(memcmp(linebuf,"_-",2)==0)
+{
+step=1;  // TEST
+}
 	p = linebuf;
 //	while(isspace2(*p)) p++;
 
@@ -310,6 +341,11 @@ static char nullstring[] = {0};
 			break;
 	
 		case 1:
+			if((c == '-') && (word[0] != '_'))
+			{
+				flag_codes[n_flag_codes++] = BITNUM_FLAG_HYPHENATED;
+				c = ' ';
+			}
 			if(isspace2(c))
 			{
 				p[0] = 0;   /* terminate english word */
@@ -423,11 +459,34 @@ static char nullstring[] = {0};
 		word[ix] = 0;
 	}
 	else
-	if((word[0] & 0x80)==0)  // 7 bit ascii only
+	if(word[0] != '_')
 	{
-		// If first letter is uppercase, convert to lower case.  (Only if it's 7bit ascii)
-		// ??? need to consider utf8 here
-		word[0] = tolower(word[0]);
+		// convert to lower case, and note if the word is all-capitals
+		int c2;
+
+		all_upper_case = 1;
+		p = word;
+		for(p=word;;)
+		{
+			// this assumes that the lower case char is the same length as the upper case char
+			// OK, except for Turkish "I", but use towlower() rather than towlower2()
+			ix = utf8_in(&c2,p);
+			if(c2 == 0)
+				break;
+			if(iswupper(c2))
+			{
+				utf8_out(towlower(c2),p);
+			}
+			else
+			{
+				all_upper_case = 0;
+			}
+			p += ix;
+		}
+		if(all_upper_case)
+		{
+			flag_codes[n_flag_codes++] = BITNUM_FLAG_ALLCAPS;
+		}
 	}
 
 	len_word = strlen(word);
@@ -514,8 +573,8 @@ static char nullstring[] = {0};
 
 
 
-void compile_dictlist_start(void)
-{//==============================
+static void compile_dictlist_start(void)
+{//=====================================
 // initialise dictionary list
 	int ix;
 	char *p;
@@ -536,8 +595,8 @@ void compile_dictlist_start(void)
 }
 
 
-void compile_dictlist_end(FILE *f_out)
-{//===================================
+static void compile_dictlist_end(FILE *f_out)
+{//==========================================
 // Write out the compiled dictionary list
 	int hash;
 	int length;
@@ -573,8 +632,8 @@ void compile_dictlist_end(FILE *f_out)
 
 
 
-int compile_dictlist_file(const char *path, const char* filename)
-{//==============================================================
+static int compile_dictlist_file(const char *path, const char* filename)
+{//=====================================================================
 	int  length;
 	int  hash;
 	char *p;
@@ -627,26 +686,19 @@ int compile_dictlist_file(const char *path, const char* filename)
 
 
 
-char rule_cond[80];
-char rule_pre[80];
-char rule_post[80];
-char rule_match[80];
-char rule_phonemes[80];
-char group_name[12];
+static char rule_cond[80];
+static char rule_pre[80];
+static char rule_post[80];
+static char rule_match[80];
+static char rule_phonemes[80];
+static char group_name[LEN_GROUP_NAME+1];
 
 #define N_RULES 2000		// max rules for each group
 
 
-int hexdigit(char c)
-{//=================
-	if(isdigit(c))
-		return(c - '0');
-	return(tolower(c) - 'a' + 10);
-}
 
-
-void copy_rule_string(char *string, int &state)
-{//============================================
+static void copy_rule_string(char *string, int &state)
+{//===================================================
 // state 0: conditional, 1=pre, 2=match, 3=post, 4=phonemes
 	static char *outbuf[5] = {rule_cond, rule_pre, rule_match, rule_post, rule_phonemes};
 	static int next_state[5] = {2,2,4,4,4};
@@ -767,10 +819,16 @@ void copy_rule_string(char *string, int &state)
 					c = *p++ - '0';
 					value = *p++ - '0';
 					c = c * 10 + value;
-					if((value < 0) || (value > 9) || (c <= 0) || (c >= N_LETTER_GROUPS))
+					if((value < 0) || (value > 9))
 					{
 						c = 0;
-						fprintf(f_log,"%5d: Expected 2 digits after 'L'",linenum);
+						fprintf(f_log,"%5d: Expected 2 digits after 'L'\n",linenum);
+						error_count++;
+					}
+					else
+					if((c <= 0) || (c >= N_LETTER_GROUPS) || (letterGroupsDefined[(int)c] == 0))
+					{
+						fprintf(f_log,"%5d: Letter group L%.2d not defined\n",linenum,c);
 						error_count++;
 					}
 					c += 'A';
@@ -786,9 +844,12 @@ void copy_rule_string(char *string, int &state)
 					}
 					break;
 
+				case '$':   // obsolete, replaced by S
+						fprintf(f_log,"%5d: $ now not allowed, use S for suffix",linenum);
+						error_count++;
+					break;
 				case 'P':
 					sxflags |= SUFX_P;   // Prefix, now drop through to Suffix
-				case '$':   // obsolete, replaced by S
 				case 'S':
 					output[ix++] = RULE_ENDING;
 					value = 0;
@@ -846,8 +907,8 @@ void copy_rule_string(char *string, int &state)
 
 
 
-char *compile_rule(char *input)
-{//============================
+static char *compile_rule(char *input)
+{//===================================
 	int ix;
 	unsigned char c;
 	int wc;
@@ -944,7 +1005,7 @@ char *compile_rule(char *input)
 	len_name = strlen(group_name);
 	if((len_name > 0) && (memcmp(rule_match,group_name,len_name) != 0))
 	{
-		utf8_in(&wc,rule_match,0);
+		utf8_in(&wc,rule_match);
 		if((group_name[0] == '9') && IsDigit(wc))
 		{
 			// numeric group, rule_match starts with a digit, so OK
@@ -1034,8 +1095,8 @@ static int __cdecl rgroup_sorter(RGROUP *a, RGROUP *b)
 
 
 #ifdef OUTPUT_FORMAT
-void print_rule_group(FILE *f_out, int n_rules, char **rules, char *name)
-{//======================================================================
+static void print_rule_group(FILE *f_out, int n_rules, char **rules, char *name)
+{//=============================================================================
 	int rule;
 	int ix;
 	unsigned char c;
@@ -1141,8 +1202,8 @@ void print_rule_group(FILE *f_out, int n_rules, char **rules, char *name)
 
 
 //#define LIST_GROUP_INFO
-void output_rule_group(FILE *f_out, int n_rules, char **rules, char *name)
-{//=======================================================================
+static void output_rule_group(FILE *f_out, int n_rules, char **rules, char *name)
+{//==============================================================================
 	int ix;
 	int len1;
 	int len2;
@@ -1210,36 +1271,72 @@ void output_rule_group(FILE *f_out, int n_rules, char **rules, char *name)
 static int compile_lettergroup(char *input, FILE *f_out)
 {//=====================================================
 	char *p;
+	char *p_start;
 	int group;
+	int ix;
+	int n_items;
+	int length;
+	int max_length = 0;
+
+	#define N_LETTERGP_ITEMS 200
+	char *items[N_LETTERGP_ITEMS];
+	char item_length[N_LETTERGP_ITEMS];
 
 	p = input;
 	if(!isdigit(p[0]) || !isdigit(p[1]))
 	{
+		fprintf(f_log,"%5d: Expected 2 digits after '.L'\n",linenum);
+		error_count++;
 		return(1);
 	}
 
-	group = atoi(&p[1]);
+	group = atoi(&p[0]);
 	if(group >= N_LETTER_GROUPS)
+	{
+		fprintf(f_log,"%5d: lettergroup out of range (01-%.2d)\n",linenum,N_LETTER_GROUPS-1);
+		error_count++;
 		return(1);
+	}
 
 	while(!isspace2(*p)) p++;
 
 	fputc(RULE_GROUP_START,f_out);
 	fputc(RULE_LETTERGP2,f_out);
 	fputc(group + 'A', f_out);
+	letterGroupsDefined[group] = 1;
 
-	for(;;)
+	n_items = 0;
+	while(n_items < N_LETTERGP_ITEMS)
 	{
 		while(isspace2(*p)) p++;
 		if(*p == 0)
 			break;
-		
+
+		items[n_items] = p_start = p;
 		while((*p & 0xff) > ' ')
 		{
-			fputc(*p++, f_out);
+			p++;
 		}
-		fputc(0,f_out);
+		*p++ = 0;
+		length = p - p_start;
+		if(length > max_length)
+			max_length = length;
+		item_length[n_items++] = length;
 	}
+
+	// write out the items, longest first
+	while(max_length > 1)
+	{
+		for(ix=0; ix < n_items; ix++)
+		{
+			if(item_length[ix] == max_length)
+			{
+				fwrite(items[ix],1,max_length,f_out);
+			}
+		}
+		max_length--;
+	}
+
 	fputc(RULE_GROUP_END,f_out);
 
 	return(0);
@@ -1312,11 +1409,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 
 			if(memcmp(buf,".L",2)==0)
 			{
-				if(compile_lettergroup(&buf[2], f_out) != 0)
-				{
-					fprintf(f_log,"%5d: Bad lettergroup\n",linenum);
-					error_count++;
-				}
+				compile_lettergroup(&buf[2], f_out);
 				continue;
 			}
 
@@ -1338,7 +1431,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 				p = (unsigned char *)&buf[6];
 				while((p[0]==' ') || (p[0]=='\t')) p++;    // Note: Windows isspace(0xe1) gives TRUE !
 				ix = 0;
-				while((*p > ' ') && (ix<12))
+				while((*p > ' ') && (ix < LEN_GROUP_NAME))
 					group_name[ix++] = *p++;
 				group_name[ix]=0;
 	
@@ -1357,7 +1450,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 	
 				if(strlen(group_name) > 2)
 				{
-					if(utf8_in(&c,group_name,0) < 2)
+					if(utf8_in(&c,group_name) < 2)
 					{
 						fprintf(f_log,"%5d: Group name longer than 2 bytes (UTF8)",linenum);
 						error_count++;
@@ -1393,7 +1486,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 				ix = 0;
 				while((unsigned char)(*p) > 0x20)   // not space or zero-byte
 				{
-					p += utf8_in(&c,p,0);
+					p += utf8_in(&c,p);
 					replace1 += (c << ix);
 					ix += 16;
 				}
@@ -1401,7 +1494,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 				ix = 0;
 				while((unsigned char)(*p) > 0x20)
 				{
-					p += utf8_in(&c,p,0);
+					p += utf8_in(&c,p);
 					replace2 += (c << ix);
 					ix += 16;
 				}
@@ -1459,7 +1552,6 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 
 
 
-
 int CompileDictionary(const char *dsource, const char *dict_name, FILE *log, char *fname_err, int flags)
 {//=====================================================================================================
 // fname:  space to write the filename in case of error
@@ -1475,6 +1567,8 @@ int CompileDictionary(const char *dsource, const char *dict_name, FILE *log, cha
 	char path[sizeof(path_home)+40];       // path_dsource+20
 
 	error_count = 0;
+	memset(letterGroupsDefined,0,sizeof(letterGroupsDefined));
+
 	debug_flag = flags & 1;
 
 	if(dsource == NULL)
@@ -1521,7 +1615,7 @@ int CompileDictionary(const char *dsource, const char *dict_name, FILE *log, cha
 
 	compile_dictlist_start();
 
-	fprintf(f_log,"Using phonemetable: '%s'\n",PhonemeTabName());
+	fprintf(f_log,"Using phonemetable: '%s'\n",phoneme_tab_list[phoneme_tab_number].name);
 	compile_dictlist_file(path,"roots");
 	if(translator->langopts.listx)
 	{
@@ -1547,7 +1641,7 @@ int CompileDictionary(const char *dsource, const char *dict_name, FILE *log, cha
 	Write4Bytes(f_out,offset_rules);
 	fclose(f_out);
 
-	translator->LoadDictionary(dict_name,0);
+	LoadDictionary(translator, dict_name, 0);
 
 	return(error_count);
 }  //  end of compile_dictionary
