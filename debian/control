@@ -45,6 +45,7 @@ Description: A multi-lingual software speech synthesizer: speech data files
  for the espeak program, and the shared library.
 
 Package: espeak-data-udeb
+Section: debian-installer
 Architecture: any
 XC-Package-Type: udeb
 Description: A multi-lingual software speech synthesizer: speech data files
