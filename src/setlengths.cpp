@@ -1,10 +1,10 @@
 /***************************************************************************
- *   Copyright (C) 2005,2006 by Jonathan Duddington                        *
- *   jsd@clara.co.uk                                                       *
+ *   Copyright (C) 2005 to 2007 by Jonathan Duddington                     *
+ *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
@@ -13,67 +13,97 @@
  *   GNU General Public License for more details.                          *
  *                                                                         *
  *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   along with this program; if not, write see:                           *
+ *               <http://www.gnu.org/licenses/>.                           *
  ***************************************************************************/
-// 
+
+#include "StdAfx.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <wctype.h>
 
+#include "speak_lib.h"
 #include "speech.h"
-#include "voice.h"
 #include "phoneme.h"
 #include "synthesize.h"
+#include "voice.h"
 #include "translate.h"
-#include "speak_lib.h"
 
+extern int GetAmplitude(void);
 
-/* amplitudes for syllable stress levels */
-//static int stress_amps[] = {13,13, 16,16, 16,20, 20,20 };
-//static int stress_amps_r[] = {13,13, 15,15, 15,18, 18,20 };
 
 // convert from words-per-minute to internal speed factor
-static unsigned char speed_lookup[241] = {
-	253, 250, 247, 243, 240, 237, 234, 231,   //  80
-   229, 226, 223, 220, 217, 214, 212, 209,   //  88
-   206, 204, 201, 198, 196, 193, 191, 189,   //  96
-   186, 184, 181, 179, 177, 175, 172, 170,   // 104
-   166, 164, 162, 160, 159, 157, 155, 153,   // 112
-   151, 150, 148, 146, 144, 143, 141, 136,   // 120
-   135, 134, 133, 131, 130, 129, 128, 126,   // 128
-   125, 124, 123, 122, 121, 119, 118, 117,   // 136
-   116, 114, 113, 112, 111, 110, 109, 108,   // 144
-   107, 106, 105, 104, 103, 102, 101, 100,   // 152
-    97,  96,  95,  95,  94,  93,  92,  92,   // 160
-    91,  90,  89,  89,  88,  87,  86,  86,   // 168
-    85,  84,  84,  83,  82,  81,  81,  80,   // 176
-    78,  77,  77,  76,  75,  75,  74,  74,   // 184
-    73,  73,  72,  71,  71,  70,  70,  69,   // 192
-    69,  68,  68,  67,  66,  66,  65,  65,   // 200
-    64,  64,  63,  63,  62,  62,  61,  61,   // 208
-    60,  60,  58,  57,  57,  56,  56,  56,   // 216
-    55,  55,  54,  54,  54,  53,  53,  53,   // 224
-    52,  52,  51,  51,  51,  50,  50,  44,   // 232
-    44,  44,  44,  44,  44,  44,  43,  43,   // 240
-    43,  43,  43,  43,  42,  42,  42,  42,   // 248
-    41,  41,  41,  41,  40,  40,  40,  40,   // 256
-    34,  34,  34,  34,  34,  34,  34,  34,   // 264
-    34,  34,  34,  33,  33,  33,  33,  32,   // 272
-    32,  32,  32,  31,  31,  31,  30,  30,   // 280
-    32,  32,  31,  30,  29,  29,  28,  27,   // 288
-    26,  25,  25,  24,  23,  22,  21,  21,   // 296
-    20,  19,  18,  17,  16,  16,  15,  15,   // 304
-    14,  13,  12,  11,  10,   9,   8,   7,   6,  // 312
+static unsigned char speed_lookup[290] = {
+	 250, 246, 243, 239, 236,	//  80
+	 233, 229, 226, 223, 220,	//  85
+	 217, 214, 211, 208, 205,	//  90
+	 202, 197, 194, 192, 190,	//  95
+	 187, 185, 183, 180, 178,	// 100
+	 176, 174, 172, 170, 168,	// 105
+	 166, 164, 161, 159, 158,	// 110
+	 156, 154, 152, 150, 148,	// 115
+	 146, 145, 143, 141, 137,	// 120
+	 136, 135, 133, 132, 131,	// 125
+	 129, 128, 127, 126, 125,	// 130
+	 124, 122, 121, 120, 119,	// 135
+	 117, 116, 115, 114, 113,	// 140
+	 112, 111, 110, 108, 107,	// 145
+	 106, 105, 104, 103, 102,	// 150
+	 101, 100,  99,  98,  97,	// 155
+	  96,  95,  93,  92,  92,	// 160
+	  91,  90,  89,  89,  88,	// 165
+	  87,  87,  86,  85,  85,	// 170
+	  84,  83,  83,  82,  81,	// 175
+	  80,  80,  79,  78,  78,	// 180
+	  77,  76,  76,  75,  73,	// 185
+	  72,  72,  71,  71,  70,	// 190
+	  70,  69,  69,  68,  67,	// 195
+	  67,  66,  66,  65,  65,	// 200
+	  64,  64,  63,  63,  62,	// 205
+	  62,  61,  60,  60,  59,	// 210
+	  59,  58,  58,  57,  57,	// 215
+	  56,  56,  55,  55,  55,	// 220
+	  54,  54,  53,  53,  52,	// 225
+	  52,  51,  51,  50,  50,	// 230
+	  49,  49,  49,  48,  48,	// 235
+	  47,  47,  46,  46,  46,	// 240
+	  45,  45,  44,  44,  43,	// 245
+	  43,  43,  42,  42,  41,	// 250
+	  41,  41,  40,  40,  39,	// 255
+	  39,  39,  38,  38,  38,	// 260
+	  37,  37,  37,  36,  36,	// 265
+	  35,  35,  35,  34,  34,	// 270
+	  34,  33,  33,  33,  32,	// 275
+	  32,  32,  32,  31,  31,	// 280
+	  31,  30,  30,  30,  29,	// 285
+	  29,  29,  29,  28,  28,	// 290
+	  28,  28,  27,  27,  27,	// 295
+	  26,  26,  26,  26,  25,	// 300
+	  25,  25,  22,  22,  22,	// 305
+	  22,  22,  22,  22,  22,	// 310
+	  21,  21,  21,  21,  21,	// 315
+	  21,  20,  20,  20,  20,	// 320
+	  20,  15,  15,  15,  15,	// 325
+	  15,  15,  15,  15,  16,	// 330
+	  16,  16,  16,  15,  15,	// 335
+	  15,  15,  15,  15,  15,	// 340
+	  15,  17,  17,  16,  16,	// 345
+	  15,  15,  14,  14,  13,	// 350
+	  13,  12,  12,  11,  11,	// 355
+	  10,  10,   9,   8,   8,	// 360
+	   7,   6,   5,   5,   4,	// 365
 };
+
+// speed_factor2 adjustments for speeds 370 to 390
+static unsigned char faster[] = {
+114,112,110,109,107,105,104,102,100,98, // 370-379
+96,94,92,90,88,85,83,80,78,75,72 }; //380-390
 
 static int speed1 = 130;
 static int speed2 = 121;
 static int speed3 = 118;
 
-extern int speed_factor1;
-extern int speed_factor2;
 
 
 void SetSpeed(int control)
@@ -81,9 +111,10 @@ void SetSpeed(int control)
 	int x;
 	int s1;
 	int wpm;
+	int wpm2;
 
-	wpm = embedded_value[EMBED_S];
-	if(wpm > 320) wpm = 320;
+	wpm2 = wpm = embedded_value[EMBED_S];
+	if(wpm > 369) wpm = 369;
 	if(wpm < 80) wpm = 80;
 
 	x = speed_lookup[wpm-80];
@@ -102,12 +133,23 @@ void SetSpeed(int control)
 		// these are used in synthesis file
 		s1 = (x * voice->speedf1)/256;
 		speed_factor1 = (256 * s1)/115;      // full speed adjustment, used for pause length
-if(speed_factor1 < 18)
-	speed_factor1 = 18;
-		speed_factor2 = 120 + (137*s1)/128;  // reduced speed adjustment, used for playing recorded sounds
-//		speed_factor2 = 128 + (128*s1)/130;  // reduced speed adjustment
+if(speed_factor1 < 15)
+	speed_factor1 = 15;
+		if(wpm >= 170)
+//			speed_factor2 = 100 + (166*s1)/128;  // reduced speed adjustment, used for playing recorded sounds
+			speed_factor2 = 110 + (150*s1)/128;  // reduced speed adjustment, used for playing recorded sounds
+		else
+			speed_factor2 = 128 + (128*s1)/130;  // = 215 at 170 wpm
+
+		if(wpm2 > 369)
+		{
+			if(wpm2 > 390)
+				wpm2 = 390;
+			speed_factor2 = faster[wpm2 - 370];
+		}
 	}
 
+	speed_min_sample_len = 450;
 }  //  end of SetSpeed
 
 
@@ -125,10 +167,8 @@ void SetAmplitude(int amp)
 
 
 
-#pragma GCC visibility push(default)
-
-void espeak_SetParameter(int parameter, int value, int relative)
-{//=============================================================
+void SetParameter(int parameter, int value, int relative)
+{//======================================================
 // parameter: reset-all, amp, pitch, speed, linelength, expression, capitals, number grouping
 // relative 0=absolute  1=relative
 
@@ -155,48 +195,39 @@ void espeak_SetParameter(int parameter, int value, int relative)
 
 	case espeakVOLUME:
 		embedded_value[EMBED_A] = new_value;
+		GetAmplitude();
+		break;
+
+	case espeakPITCH:
+		if(new_value > 99) new_value = 99;
+		if(new_value < 0) new_value = 0;
+		embedded_value[EMBED_P] = new_value;
+		break;
+
+	case espeakRANGE:
+		if(new_value > 99) new_value = 99;
+		embedded_value[EMBED_R] = new_value;
+		break;
+
+	case espeakLINELENGTH:
+		option_linelength = new_value;
+		break;
+
+	case espeakWORDGAP:
+		option_wordgap = new_value;
+		break;
+
+	case espeakINTONATION:
+		if((new_value & 0xff) != 0)
+			translator->langopts.intonation_group = new_value & 0xff;
+		option_tone_flags = new_value;
+		break;
+
+	default:
 		break;
 	}
-}  // end of espeak_SetParameter
-#pragma GCC visibility pop
+}  // end of SetParameter
 
-
-
-
-#ifdef deleted
-// used to set up the presets in the speed_lookup table
-// interpolate between a set of measured wpm values
-void SetSpeedTab(void)
-{//===================
-#define N_WPM   13
-
-	// Interpolation table to translate from words-per-minute to internal speed
-	// words-per-minute values (measured)
-	static float wpm1[N_WPM] =
-			{0, 99.0, 111.3, 127.0, 140.9, 160.0, 183.9, 217.3, 238.5, 263.2, 287.5, 304.4, 316 };
-	// corresponding internal speed values
-	static float wpm2[N_WPM] = 
-			{0, 200,  170,   140,   120,   100,    80,    60,    50,    40,    30,    20,  10};
-
-
-	int ix;
-	float x;
-
-
-	// convert from word-per-minute to internal speed code
-	for(speed_wpm=80; speed_wpm<320; speed_wpm++)
-	{
-		for(ix=2; ix<N_WPM-2; ix++)
-		{
-			if(speed_wpm < wpm1[ix])
-				break;
-		}
-		x = polint(&wpm1[ix-1], &wpm2[ix-1], 3, speed);
-
-		speed_lookup[speed_wpm-80] = x;
-	}
-}	// end of SetSpeedTab
-#endif
 
 
 static void DoEmbedded2(int &embix)
@@ -237,16 +268,20 @@ void Translator::CalcLengths()
 	int  last_pitch = 0;
 	int  pitch_start;
 	int  length_mod;
+	int  len;
 	int  env2;
 	int  end_of_clause;
 	int  embedded_ix = 0;
 	int  min_drop;
+	int emphasized;
+	unsigned char *pitch_env=NULL;
 
 	for(ix=1; ix<n_phoneme_list; ix++)
 	{
 		prev = &phoneme_list[ix-1];
 		p = &phoneme_list[ix];
-		stress = p->tone & 0xf;
+		stress = p->tone & 0x7;
+		emphasized = p->tone & 0x8;
 
 		next = &phoneme_list[ix+1];
 
@@ -267,7 +302,7 @@ void Translator::CalcLengths()
 			
 		case phSTOP:
 			last_pitch = 0;
-			if(prev->type == phSTOP || prev->type == phFRICATIVE)
+			if(prev->type == phFRICATIVE)
 				p->prepause = 20;
 			else
 			if((more_syllables > 0) || (stress < 4))
@@ -275,24 +310,30 @@ void Translator::CalcLengths()
 			else
 				p->prepause = 60;
 
-			if((langopts.word_gap==3) && (p->newword))
+			if(prev->type == phSTOP)
+				p->prepause = 60;
+
+			if((langopts.word_gap & 0x10) && (p->newword))
 				p->prepause = 60;
 
 			if(p->synthflags & SFLAG_LENGTHEN)
-				p->prepause += 80;
+				p->prepause += langopts.long_stop;
 			break;
 
 		case phVFRICATIVE:
 			if(next->type==phVOWEL)
 			{
 				pre_voiced = 1;
-			}
+			}   // drop through
 		case phFRICATIVE:
 			if(p->newword)
 				p->prepause = 15;
 
 			if(next->type==phPAUSE && prev->type==phNASAL && !(p->ph->phflags&phFORTIS))
 				p->prepause = 25;
+
+			if(prev->ph->phflags & phBRKAFTER)
+				p->prepause = 30;
 
 			if((p->ph->phflags & phSIBILANT) && next->type==phSTOP && !next->newword)
 			{
@@ -304,8 +345,9 @@ void Translator::CalcLengths()
 			else
 				p->length = 256;
 
-			if((langopts.word_gap==3) && (p->newword))
+			if((langopts.word_gap & 0x10) && (p->newword))
 				p->prepause = 30;
+
 			break;
 
 		case phVSTOP:
@@ -319,7 +361,7 @@ void Translator::CalcLengths()
 
 				p->prepause = 40;
 
-				if((prev->type == phPAUSE) || (prev->type == phVOWEL) || (prev->ph->mnemonic == ('/'*256+'r')))
+				if((prev->type == phPAUSE) || (prev->type == phVOWEL)) // || (prev->ph->mnemonic == ('/'*256+'r')))
 					p->prepause = 0;
 				else
 				if(p->newword==0)
@@ -333,7 +375,7 @@ void Translator::CalcLengths()
 						p->prepause = 0;
 				}
 			}
-			if((langopts.word_gap==3) && (p->newword) && (p->prepause < 20))
+			if((langopts.word_gap & 0x10) && (p->newword) && (p->prepause < 20))
 				p->prepause = 20;
 
 			break;
@@ -370,7 +412,7 @@ void Translator::CalcLengths()
 				if(p->type == phLIQUID)
 				{
 					p->length = speed1;
-p->pitch1 = p->pitch2 - 20;   // post vocalic [r/]
+//p->pitch1 = p->pitch2 - 20;   // post vocalic [r/]
 				}
 
 				if(next->type == phVSTOP)
@@ -411,6 +453,9 @@ p->pitch1 = p->pitch2 - 20;   // post vocalic [r/]
 			else
 				p->amp = stress_amps[stress];
 
+			if(emphasized)
+				p->amp = 25;
+
 			if(ix >= (n_phoneme_list-3))
 			{
 				// last phoneme of a clause, limit its amplitude
@@ -423,9 +468,15 @@ p->pitch1 = p->pitch2 - 20;   // post vocalic [r/]
 			end_of_clause = 0;
 			for(p2 = p+1; p2->newword== 0; p2++)
 			{
-				if(p2->type == phVOWEL)
+				if((p2->type == phVOWEL) && !(p2->ph->phflags & phNONSYLLABIC))
 					more_syllables++;
+
+				if(p2->ph->code == phonPAUSE_CLAUSE)
+					end_of_clause = 2;
 			}
+			if(p2->ph->code == phonPAUSE_CLAUSE)
+				end_of_clause = 2;
+
 			if((p2->newword & 2) && (more_syllables==0))
 			{
 				end_of_clause = 2;
@@ -433,7 +484,17 @@ p->pitch1 = p->pitch2 - 20;   // post vocalic [r/]
 
 			// calc length modifier
 			if(more_syllables==0)
-				length_mod = langopts.length_mods0[next2->ph->length_mod *10+ next->ph->length_mod];
+			{
+				len = langopts.length_mods0[next2->ph->length_mod *10+ next->ph->length_mod];
+
+				if((next->newword) && (langopts.word_gap & 0x20))
+				{
+					// consider as a pause + first phoneme of the next word
+					length_mod = (len + langopts.length_mods0[next->ph->length_mod *10+ 1])/2;
+				}
+				else
+					length_mod = len;
+			}
 			else
 			{
 				length_mod = langopts.length_mods[next2->ph->length_mod *10+ next->ph->length_mod];
@@ -451,16 +512,28 @@ p->pitch1 = p->pitch2 - 20;   // post vocalic [r/]
 				length_mod *= speed3;
 
 			length_mod = length_mod / 128;
-			if(length_mod < 24)
-				length_mod = 24;     // restrict how much lengths can be reduced
+//			if(length_mod < 9)
+//				length_mod = 9;     // restrict how much lengths can be reduced
+			if(length_mod < 8)
+				length_mod = 8;     // restrict how much lengths can be reduced
 
 			if(stress >= 7)
 			{
 				// tonic syllable, include a constant component so it doesn't decrease directly with speed
 				length_mod += 20;
+				if(emphasized)
+					length_mod += 10;
+			}
+			else
+			if(emphasized)
+			{
+				length_mod += 20;
 			}
 			
-			length_mod = (length_mod * stress_lengths[stress])/128;
+			if((len = stress_lengths[stress]) == 0)
+				len = stress_lengths[6];
+
+			length_mod = (length_mod * len)/128;
 
 			if(end_of_clause == 2)
 			{
@@ -479,13 +552,24 @@ if(p->type != phVOWEL)
 			// set last-pitch
 			env2 = p->env;
 			if(env2 > 1) env2++;   // version for use with preceding semi-vowel
-			pitch_start = p->pitch1 + ((p->pitch2-p->pitch1)*envelope_data[env2][0])/256;
+
+			if(p->tone_ph != 0)
+			{
+				pitch_env = LookupEnvelope(phoneme_tab[p->tone_ph]->spect);
+			}
+			else
+			{
+				pitch_env = envelope_data[env2];
+			}
+
+			pitch_start = p->pitch1 + ((p->pitch2-p->pitch1)*pitch_env[0])/256;
 
 			if(pre_sonorant || pre_voiced)
 			{
 				// set pitch for pre-vocalic part
-				if(pitch_start - last_pitch > 9)
-					last_pitch = pitch_start - 9;
+				if(pitch_start - last_pitch > 8)   // was 9
+					last_pitch = pitch_start - 8;
+
 				prev->pitch1 = last_pitch;
 				prev->pitch2 = pitch_start;
 				if(last_pitch < pitch_start)
@@ -512,8 +596,7 @@ if(p->type != phVOWEL)
 				
 			if(next->type == phLIQUID)
 			{
-//				if(next2->prepause == 0)    // what was this for?  caused discon. for [er]
-					next->synthflags |= SFLAG_SEQCONTINUE;
+				next->synthflags |= SFLAG_SEQCONTINUE;
 					
 				if(next2->type == phVOWEL)
 				{

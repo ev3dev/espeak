@@ -10,56 +10,56 @@
 //   speak --compile=ru 
 
 
-// Letters
-// If a letter has a "word" pronunciation which is different from its
-// "letter" name, then include the letter name here, with the letter
-// prefixed by a _ character.
-_в	vE
-_с	Es
-
 
 // Numbers
-_0	n'ol
-_1	Vd;'in
-_2	dv'a
-_3	t;r'i
-_4	ts;It'yrI
-_5	p;'&t;
+_0	n'ojl^
+_1	ojd;'in
+_1f	odn'a
+_2	dv'A
+_2f	dv;'e
+_3	tR;'i
+_4	tS;It'yR;I
+_5	p;'jat;
 _6	S'Es;t;
-_7	s;'em
-_8	v'os;Im
-_9	d;'ev;@t
-_10	d;'es;@t
-_11	Vd;inn@tts,@t;
-_12	dv;In'atts@t;
-_13	t;rIn'atts@t;
-_14	ts;It'yrn@tts,@t;
-_15	p;Vtn'atts@t;
-_16	SIsn'atts@t;
-_17	s;Imn'atts@t;
-_18	v,Vs;Imn'atts@t;
-_19	d;,Iv;Vtn'atts@t;
-_20	dv'atts@t;
-_30	t;r'itts@t;
-_40	s'or@k
-_50	p;,Vdd;Is;'at
-_60	S,Iz;dd;Is;'at
-_70	s;'emd;Is;,@t
-_80	v'os;Imd;,Is;@t
-_90	d;,Iv;Vn'ost@
-_0H	st'o
-_2H	dv;'es;t;I
-_3H	t;r'ist@
-_4H	ts;It'yrIst,@
-_5H	p;Vt;s'ot
-_6H	SIs;t;s'ot
-_7H	s;Ims'ot
-_8H	v,Vs;Im-s'ot
-_9H	d;,Iv;Vt;s'ot
-_0T1	t'ys;@ts;,@
-_1T1	t'ys;@ts;,@     // no '1' before thousand
-_0T2	m;,IlI;'on
-_0T3	m;,IlI;'art
+_7	s;'ejm
+_8	v'os;E2m
+_9	d;'evI3t;
+_10	d;'es;It;
+_11	Od;'innVttsVt;
+_12	dv;In'AttsVt;
+_13	tR;In'AttsVt;
+_14	ts;It'y@-*nVttsVt;
+_15	p;Itn'AttsVt;
+_16	SE#stn'AttsVt;
+_17	s;Imn'AttsVt;
+_18	vOs;Imn'AttsVt;
+_19	d;E2v;Itn'AttsVt;
+_2X	dv'AttsVt;
+_3X	tr;'ittsVt;
+_4X	s'o@-*Ok
+_5X	p;Vd;d;Is;'jat
+_6X	SE2z;d;d;Is;'jat
+_7X	s;'emd;E2s;Vt
+_8X	v'os;E2md;E2s;Vt
+_9X	d;E2v;In'ostO
+_0C	st'o
+_2C	dv;'es;t;I
+_3C	tr;'ista
+_4C	ts;It'yr;E2sta
+_5C	p;,It;s'ot
+_6C	S,E#s;t;s'ot
+_7C	s;,Ims'ot
+_8C	vOs;Ims'ot
+_9C	dev;Vn'ostO
+_1MA1	t'ys;Its;V     // no '1' before thousand
+_0MA1	t'ys;Its;i
+_0M1	t'ys;Vts;
+_1MA2	m;,IlI;'on
+_0MA2	m;,IlI;'ona
+_0M2	m;,IlI;'onof
+_1MA3	m;,IlI;'art
+_0MA3	m;,IlI;'arda
+_0M3	m;,IlI;'artof
 _dpt	_:'i_:        // start of decimal fraction
 _dpt2	_d;Is;'atYx   // end of decimal fraction
 
@@ -74,7 +74,8 @@ _dpt2	_d;Is;'atYx   // end of decimal fraction
 
 // conjunctions
 и	i $u $pause    // and
-а	a $u $pause    // and
+а	 $u $pause    // and
+а	 $atend
 но	$u $pause    // but
 ибо	$u $pause    // for
 
@@ -152,6 +153,15 @@ _dpt2	_d;Is;'atYx   // end of decimal fraction
 сможем	$u1
 сможете	$u1
 смогут	$u1
+
+// Letters
+// If a letter has a "word" pronunciation which is different from its
+// "letter" name, then include the letter name here, with the letter
+// prefixed by a _ character.
+_в	vE
+в       vE  $atend
+_с	Es
+с       Es  $atend
 
 
 // exceptions
