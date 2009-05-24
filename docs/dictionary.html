@@ -2,8 +2,7 @@
 <html>
 
 <head>
-  <title>Speak</title>
-  <meta name="GENERATOR" content="Quanta Plus">
+  <title>eSpeak: Pronunciation Dictionaries</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 <body>
@@ -74,7 +73,7 @@ The utility 'phonemes' are:
 
 It is not necessary to specify the stress of every syllable.  Stress markers are only needed in order to change the effect of the language's default stress rule.
 <p>
-The phonemes which are used to represent a language's sounds are based on the Kirschenbaum ascii character representation of the International Phonetic Alphabet <a href="http://www.kirschenbaum.net/IPA/ascii-ipa.pdf">www.kirschenbaum.net/IPA/ascii-ipa.pdf</a>
+The phonemes which are used to represent a language's sounds are based on the Kirshenbaum ascii character representation of the International Phonetic Alphabet <a href="http://www.kirshenbaum.net/IPA/ascii-ipa.pdf">www.kirshenbaum.net/IPA/ascii-ipa.pdf</a>
 
 <p>&nbsp;<hr>
 <h3>4.3  Pronunciation Rules</h3>
@@ -91,11 +90,15 @@ The rules are organized in groups, each starting with a ".group" line:
 <dt><strong>.group &lt;2 characters&gt;</strong><br><dd>
 	Optional groups for some common 2 letter combinations.  This is only needed, for efficiency, in cases where there are many rules for a particular letter.  They would not be needed for a language which has regular spelling rules.
 <p>
-<dt><strong>.group 9</strong><br><dd>
-	A group for numbers.
-<p>
 <dt><strong>.group</strong><br><dd>
 	A group for other characters which don't have their own group.
+<p>
+<dt><strong>.L&lt;nn&gt;</strong><br><dd>
+	Defines a group of letter sequences, any of which can match with <strong>Lnn</strong> in a <strong>post</strong> rule (see below).  <strong>nn</strong> is a 2 digit decimal number in the range 01 to 20.  eg:<p>
+	<code>.L01  b bl br pl pr</code>
+<p>
+<dt><strong>.replace</strong><br><dd>
+	See section 4.7 Character Substitution, below.
 </dl>
 </ul>When matching a word, firstly the 2-letter group for the two letters at the current position in the word (if such a group exists) is searched, and then the single-letter group.  The highest scoring rule in either of those two groups is used.
 
@@ -138,44 +141,54 @@ indicates that a word which ends in "th" is translated using the English transla
   <tbody>
     <tr>
       <td><strong>_</strong></td>
-      <td>beginning or end of a word</td>
+      <td>Beginning or end of a word (or a hyphen).</td>
+    </tr>
+    <tr>
+      <td><strong>-</strong></td>
+      <td>Hyphen.</td>
     </tr>
     <tr>
       <td><strong>A</strong></td>
-      <td>any vowel (set set of vowel characters may be defined for a particular language)</td>
+      <td>Any vowel (the set of vowel characters may be defined for a particular language).</td>
     </tr>
     <tr>
       <td><strong>C</strong></td>
-      <td>any consonant</td>
+      <td>Any consonant.</td>
     </tr>
     <tr>
       <td><strong>B&nbsp;H&nbsp;F&nbsp;G&nbsp;Y&nbsp;</strong></td>
-      <td>may indicate other sets of characters (defined for a particular language)</td>
+      <td>These may indicate other sets of characters (defined for a particular language).</td>
     </tr>
     <tr>
       <td><strong>D</strong></td>
-      <td>any digit</td>
+      <td>Any digit.</td>
     </tr>
     <tr>
       <td><strong>K</strong></td>
-      <td>not a vowel (i.e. a consonant or pause or non-alphabetic character)</td>
+      <td>Not a vowel (i.e. a consonant or word boundary or non-alphabetic character).</td>
+    </tr>
+    <tr>
+      <td><strong>X</strong></td>
+      <td>There is no vowel until the word boundary.</td>
     </tr>
     <tr>
       <td><strong>Z</strong></td>
-      <td>a non-alphabetic character</td>
+      <td>A non-alphabetic character.</td>
     </tr>
     <tr>
       <td><strong>%</strong></td>
-      <td>doubled (placed before a character in &lt;pre&gt; and after it in &lt;post&gt;</td>
+      <td>Doubled (placed before a character in &lt;pre&gt; and after it in &lt;post&gt;.</td>
     </tr>
     <tr>
       <td><strong>/</strong></td>
-      <td>following character is treated literally</td>
+      <td>The following character is treated literally.</td>
     </tr>
   </tbody>
 </table>
 </ul>
 The sets of letters indicated by A, B, C, E, F G may be defined differently for each language.
+<p>
+Examples of rules:
 <pre>     _)  a         // "a" at the start of a word
          a (CC     // "a" followed by two consonants
          a (C%     // "a" followed by a double consonant (the same letter twice)
@@ -187,11 +200,15 @@ The sets of letters indicated by A, B, C, E, F G may be defined differently for 
   <tbody>
     <tr>
       <td><strong>@&nbsp;&nbsp;&nbsp;</strong></td>
-      <td>any syllable</td>
+      <td>Any syllable.</td>
     </tr>
     <tr>
       <td><strong>&#038;</strong></td>
-      <td>a syllable which may be stressed (i.e. is not defined as unstressed)</td>
+      <td>A syllable which may be stressed (i.e. is not defined as unstressed).</td>
+    </tr>
+    <tr>
+      <td><strong>V</strong></td>
+      <td>Matches only if a previous word has indicated that a verb form is expected.</td>
     </tr>
   </tbody>
 </table>
@@ -207,23 +224,32 @@ Note, that matching characters in the &lt;pre&gt; part do not affect the syllabl
   <tbody>
     <tr>
       <td><strong>@</strong></td>
-      <td>a vowel follows somewhere in the word</td>
+      <td>A vowel follows somewhere in the word.</td>
     </tr>
     <tr>
       <td><strong>+</strong></td>
-      <td>force an increase in the score in this rule (may be repeated for more effect)</td>
+      <td>Force an increase in the score in this rule (may be repeated for more effect).</td>
     </tr>
     <tr>
       <td><strong>S&lt;number&gt;&nbsp;&nbsp;</strong></td>
-      <td>this number of matching characters are a standard suffix, remove them and retranslate the word.</td>
+      <td>This number of matching characters are a standard suffix, remove them and retranslate the word.</td>
     </tr>
     <tr>
       <td><strong>P&lt;number&gt;</strong></td>
-      <td>this number of matching characters are a standard prefix, remove them and retranslate the word.</td>
+      <td>This number of matching characters are a standard prefix, remove them and retranslate the word.</td>
+    </tr>
+    <tr>
+      <td><strong>Lnn</strong></td>
+      <td><strong>nn</strong> is a 2-digit decimal number in the range 01 to 20<br>
+          Matches with any of the letter sequences which have been defined for letter group <strong>nn</strong></td>
     </tr>
     <tr>
       <td><strong>N</strong></td>
-      <td>only use this rule if the word is not a retranslation after removing a suffix</td>
+      <td>Only use this rule if the word is not a retranslation after removing a suffix.</td>
+    </tr>
+    <tr>
+      <td><strong>T</strong></td>
+      <td>Only use this rule if the word in found in the *_list file with the <b>$alt1</b> attribute.</td>
     </tr>
     <tr>
       <td><strong>#</strong></td>
@@ -254,6 +280,10 @@ S&lt;number&gt; may be followed by additonal letters (eg. S2ei ).  Some of these
       <td>query the _list file to find stress position or other attributes for the stem, but don't re-translate the word with the suffix removed.</td>
     </tr>
     <tr>
+      <td><strong>t</strong></td>
+      <td>determine the stress pattern of the word <strong>before</strong> adding the suffix</td>
+    </tr>
+    <tr>
       <td><strong>d&nbsp;&nbsp;&nbsp;</strong></td>
       <td>the previous letter may have been doubled when the suffix was added.</td>
     </tr>
@@ -272,6 +302,22 @@ S&lt;number&gt; may be followed by additonal letters (eg. S2ei ).  Some of these
     <tr>
       <td><strong>f</strong></td>
       <td>the suffix means the next word is likely to be a verb.</td>
+    </tr>
+  </tbody>
+</table>
+</ul>
+<p>
+P&lt;number&gt; may be followed by additonal letters (eg. P3v ).
+
+<ul><table>
+  <tbody>
+    <tr>
+      <td><strong>t&nbsp;&nbsp;&nbsp;</strong></td>
+      <td>determine the stress pattern of the word <strong>before</strong> adding the prefix</td>
+    </tr>
+    <tr>
+      <td><strong>v</strong></td>
+      <td>the suffix means the verb form of pronunciation should be used.</td>
     </tr>
   </tbody>
 </table>
@@ -320,7 +366,7 @@ or to give them a flag when they occur together
 A word (or group of words) may be given one or more flags, either instead of, or as well as, the phonetic translation.
 
 <ul><table>
-  <tbody>
+  <tbody valign="top">
     <tr>
       <td>$u</td>
       <td>The word is unstressed. In the case of a multi-syllable word, a slight stress is applied according to the default stress rules.</td>
@@ -342,7 +388,15 @@ A word (or group of words) may be given one or more flags, either instead of, or
       <td>&nbsp;</td>
     </tr>
     <tr>
-      <td>$1</>
+      <td>$u+ $u1+ $u2+ $u3+</td>
+      <td>As above, but the word has full stress if it's at the end of a clause.</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>$1</td>
       <td>Primary stress on the 1st syllable.</td>
     </tr>
     <tr>
@@ -378,6 +432,10 @@ A word (or group of words) may be given one or more flags, either instead of, or
       <td>Ensure a short pause before this word (eg. for conjunctions such as "and", some prepositions, etc).</td>
     </tr>
     <tr>
+      <td>$brk</td>
+      <td>Ensure a very short pause before this word, shorter than $pause (eg. for some prepositions, etc).</td>
+    </tr>
+    <tr>
       <td>$only</td>
       <td>The rule does not apply if a prefix or suffix has already been removed.</td>
     </tr>
@@ -406,8 +464,16 @@ A word (or group of words) may be given one or more flags, either instead of, or
       <td>Use this pronunciation if it's at the end of a clause.</td>
     </tr>
     <tr>
+      <td>$double</td>
+      <td>Cause a doubling of the initial consonant of the following word (used for Italian).</td>
+    </tr>
+    <tr>
       <td>$capital</td>
-      <td>Use this pronunciation if word has initial capital letter (eg. polish v Polish).</td>
+      <td>Use this pronunciation if the word has initial capital letter (eg. polish v Polish).</td>
+    </tr>
+    <tr>
+      <td>$allcaps</td>
+      <td>Use this pronunciation if the word is all capitals.</td>
     </tr>
     <tr>
       <td>$dot</td>
@@ -415,8 +481,21 @@ A word (or group of words) may be given one or more flags, either instead of, or
     </tr>
     <tr>
       <td>$abbrev</td>
-      <td>Never speak this word as individual letters (eg, Roman numerals III, IV ).</td>
+      <td>This has two meanings.<br> 1. If there is no phoneme string: Speak the word as individual letters, even if it contains a vowel (eg. "abc" should be spoken as "a" "b" "c").<br>2. If there is a phoneme string: This word is capitalized because it is an abbreviation and capitalization does indicate emphasis (if the "emphasize all-caps" is on).</td>
     </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>$accent</td>
+      <td>Used for the pronunciation of a single alphabetic character.  The character name is spoken as the base-letter name plus the accent (diacritic) name.  eg. It can be used to specify that "&#xe2;" is spoken as "a" "circumflex".</td>
+    </tr>
+     <tr>
+      <td>$alt &nbsp; $alt2</td>
+      <td>These are language specific.  Their use should be described in the language's **_list file</td>
+    </tr>
+   <tr>
     <tr>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
@@ -424,6 +503,10 @@ A word (or group of words) may be given one or more flags, either instead of, or
     <tr>
       <td>$verb</td>
       <td>Use this pronunciation if it's a verb.</td>
+    </tr>
+    <tr>
+      <td>$noun</td>
+      <td>Use this pronunciation if it's a noun.</td>
     </tr>
     <tr>
       <td>$past</td>
@@ -460,15 +543,40 @@ The dictionary list is searched from bottom to top.  The first match that satisf
 </pre>
 then if "to" is at the end of the clause, we get [tu:], if not then we get [t@].
 
+<p>
+<h4>4.4.4  Translating a Word to another Word</h4>
+Rather than specifying the pronunciation of a word by a phoneme string, you can specify another "sounds like" word.<p>Use the attribute <b>$text</b>  eg.<p>
+<pre>
+    cough    coff   $text
+</pre>
+Alternatively, use the command <b>$textmode</b> on a line by itself to turn this on for all subsequent entries in the file, until it's turned off by <b>$phonememode</b>. eg.<p>
+<pre>
+    $textmode
+    cough     coff
+    through   threw
+    $phonememode
+</pre>
+This feature cannot be used for the special entries in the <b>_list</b> files which start with an underscore, such as numbers.<p>
+Currently "textmode" entries are only recognized for complete words, and not for for stems from which a prefix or suffix has been removed (eg. the word "coughs" would not match the example above).
+<p>
+
 <p>&nbsp;<hr>
-<h3>4.5  Numbers and Character Names</h3>
-<h4>4.5.1 Letter names</h4>
+<h3>4.5  Conditional Rules</h3>
+Rules in a <b>_rules</b> file and entries in a <b>_list</b> file can be made conditional.  They apply only to some voices.  This can be useful to specify different pronunciations for different variants of a language (dialects or accents).<p>
+Conditional rules have &nbsp; <b>?</b> &nbsp; and a condition number at the start if the line in the <b>_rules</b> or <b>_list</b> file.  This means that the rule only applies of that condition number is specified in a <b>dictrules</b> line in the <a href="voices.html">voice file</a>.<p>
+If the rule starts with &nbsp; <b>?!</b> &nbsp; then the rule only applies if the condition number is <b>not</b> specified in the voice file. eg.<p>
+<pre>
+   ?3     can't     kant    // only use this if the voice has:  dictrules 3
+   ?!3    rather    rA:D3   // only use if the voice doesn't have:  dictrules 3
+</pre>
+
+<p>&nbsp;<hr>
+<h3>4.6  Numbers and Character Names</h3>
+<h4>4.6.1 Letter names</h4>
 The names of individual letters can be given either in the <b>_rules</b> or <b>_list</b> file.  Sometimes an individual letter is also used as a word in the language and its pronunciation as a word differs from its letter name.  If so, it should be listed in the <b>_list</b> file, preceded by an underscore, to give the letter name (as distinct from its pronunciation as a word).  eg. in English:
 <pre>   _a   eI</pre>
-<h4>4.5.2 Numbers</h4>
-A simple method is to just list the digits 0 to 9 in the <code>.group 9</code> section of the <b>_rules</b> file.  Numbers will be spoken as a sequence of individual digits.
-<p>
-The better method is to use the TranslateNumber() function which is controlled by the language's <code>langopts.numbers</code> option.  This constructs spoken numbers from fragments according to various options which can be set for each language.  The number fragments are listed in the <b>_list</b> file.
+<h4>4.6.2 Numbers</h4>
+The operation the TranslateNumber() function is controlled by the language's <code>langopts.numbers</code> option.  This constructs spoken numbers from fragments according to various options which can be set for each language.  The number fragments are given in the <b>_list</b> file.
 <p>
 <ul>
 <table><tbody align="left">
@@ -478,24 +586,38 @@ _0 to _9 &nbsp;
 <td>The numbers 0 to 9
 </tr>
 <tr>
-<td>_20 &nbsp;_30<td>etc &nbsp;
+<td>_13<td>etc. Any pronunciations which are needed for specific numbers in the range _11 to _99 &nbsp;
 </tr>
 <tr>
-<td>_nn<td>Any two digit numbers with a special pronunciation (eg. "seventeen").
+<td>_2X &nbsp;_3X<td>Twenty, thirty, etc., used to make numbers 10 to 99 &nbsp;
 </tr>
-<tr><TD>_0H<td>The word for "hundred"</td>
-<tr><TD>_1H &nbsp;_2H<td>Special pronunciation for one hundred, two hundred, etc., if needed.</tr>
-<tr><TD>_1H0<td>Special pronunciation (if needed) for 100 exactly</td>
-<tr><TD>_0T1<td>The word for "thousand"</tr>
-<tr><TD>_0T2<td>The word for "million"</tr>
-<tr><TD>_0T3<td>The word for 1000000000</tr>
-<tr><TD>_1T1 &nbsp;_2T1<td>Special pronunciation for one thousand, two thousand, tc, if needed</td>
+<tr>
+<td>_nn<td>Any two digit numbers with a special pronunciation (eg. _15 "fifteen").
+</tr>
+<tr><TD>_0C<td>The word for "hundred"</td>
+<tr><TD>_1C &nbsp;_2C<td>Special pronunciation for one hundred, two hundred, etc., if needed.</tr>
+<tr><TD>_1C0<td>Special pronunciation (if needed) for 100 exactly</td>
+<tr><TD>_0M1<td>The word for "thousand"</tr>
+<tr><TD>_0M2<td>The word for "million"</tr>
+<tr><TD>_0M3<td>The word for 1000000000</tr>
+<tr><TD>_1M1 &nbsp;_2T1<td>Special pronunciation for one thousand, two thousand, tc, if needed</td>
 <tr><TD>_0and<td>Word for "and" when speaking numbers (eg. "two hundred and twenty").</tr>
 <tr><TD>_dpt<td>Word spoken for the decimnal point/comma</tr>
 <tr><TD>_dpt2<td>Word spoken (if any) at the end of all the digits after a decimal point.</tr>
 </tbody></table>
 </ul>
-<hr>
+
+<p>&nbsp;<hr>
+<h3>4.7  Character Substitution</h3>
+Character substitutions can be specified by using a <b> .replace </b> section at the start of the <b> _rules </b> file.  Each line specified either one or two alphabetic characters to be replaced by another one or two alphabetic characters.  This substitution is done to a word before it is translated using the spelling-to-phoneme rules.  Only the lower-case version of the characters needs to be specified.  eg.<p>
+ &nbsp; .replace<br>
+&nbsp; &nbsp; &#xf4; &nbsp; &#x151; &nbsp; // (Hungarian) allow the use of o-circumflex instead of o-double-accute<br>
+&nbsp; &nbsp; &#xfb; &nbsp; &#x171;<p>
+&nbsp; &nbsp; cx &nbsp; &#x109; &nbsp; // (Esperanto) allow "cx" as an alternative to c-circumflex<p>
+
+&nbsp; &nbsp; &#xfb01; &nbsp; fi &nbsp; // replace a single character ligature by two characters
+<p>
+
 
 </body>
 </html>

@@ -1,0 +1,680 @@
+/
+
+
+// This file in UTF8 encoded
+
+// 2006-11-18  Gilles Casse  <gcasse@oralux.org>
+//
+// Updated 2008-03-19 Michel Such  <michel.such@free.fr>
+//
+//	* Numbers, a few abbreviations and exceptions.
+//
+
+
+// Letters names
+// If a letter has a "word" pronunciation which is different from its
+// "letter" name, then include the letter name here, with the letter
+// prefixed by a _ character.
+
+_à	$accent  // speak as base-letter name + accent name
+â       $accent
+ä       $accent
+b	be
+c	se
+ç	$accent
+d	de
+e	@
+ë	$accent
+é	$accent
+è	$accent
+ê	$accent
+ë	$accent
+f	Ef
+g	Ze
+h	aS
+i	i
+ï	$accent
+î	$accent
+j	Zi
+k	ka
+l	El
+m	Em
+//n	En   // in fr_rules
+ñ	$accent
+o	o
+_ô	$accent
+ö       $accent
+p	pe
+q	ky
+r	ER
+s	Es
+u	y
+ù       $accent
+û	$accent
+ü	$accent
+v	ve
+w	dubl@v'e
+x	iks
+_y      i:gR'Ek
+z	zEd
+
+
+
+// accent names
+_lig	ligat'yr
+_acu	aksA~tEg'y
+_ac2	dublaksA~tEg'y
+_brv	br'Ev
+_ced	sed'ij
+_cir	aksA~siRkO~fl'Eks
+_dia	tRem'a
+_dot	pw'E~syskr'i
+_grv	aksA~gR'av
+_hac	kar'O~
+_mcn	makr'O~
+_ogo	OgOn'Ek
+_rng	rO~t2A~S'Ef
+_stk	b'aR
+_tld	t'ild
+
+
+// character names
+
+_cap	maZysk'yl
+_?A	l'Etr
+_??	sE~b'Oll
+_#9	tabylasjO~
+_#32	Espas
+
+
+_"   gijmE
+_#   djEz
+_'   apOstROf
+_(   'uvR@-paRA~t'Ez
+_)   f'ERm paRA~t'Ez
+_*   astERisk:
+_,   viRgyl
+_-   tiRE
+_.   pwE~
+_/   slaS
+_:   d'Ypw'E~
+_;   pw'E~viRg'yl
+_<   E~feRjWR
+_=   egal
+_>   sypeRjWR
+_?   pwE~dE~terogasj'O~
+_[   uvR@-_kRoSE
+_\   b'aksl'aS
+_]   f'ERm_kRoS'E
+_^   siRkOnflEks
+__   sulin^e
+_`   aks'A~_gR'av
+_{   uvR_akOlad
+_|   baR
+_}   f'ERm_akOl'ad
+²    pw^is'A~s||d'Y
+
+
+// numeric
+
+_0	zeR'o
+_1	W~
+_2	d'Y
+_3	tRw'a
+_4	k'atR
+_5	s'E~c
+_6	s'iz3
+_7	s'Et
+_8	_|'w^it
+_9	n'@f
+_10	d'iz3
+_11	O~z
+_12	d'uz
+_13	tR'Ez
+_14	kat'ORz
+_15	k'E~z
+_16	s'Ez
+_17	d'is:'Et
+_18	d'iz'w^it
+_19	d'izn'@f
+_20	v'E~
+_21	v'E~te:E~
+_22	v'E~td'Y
+_23	v'E~t:tRw'a
+_24	v'E~tk'atR
+_25	v'E~ts'E~c
+_26	v'E~ts'iz3
+_27	v'E~ts'Et
+_28	v'E~tw^it
+_29	v'E~tn'@f
+_3X	tR'A~t
+_31	tR'A~te:E~
+_4X	kaR'A~t
+_41	kaR'A~te:E~
+_5X	sE~k'A~t
+_51	sE~k'A~te:E~
+_6X	swas'A~t
+_61	swas'A~te:E~
+_7X	swas'A~t:d'iz3
+_71	swas'A~te:O~z
+_72	swas'A~t:d'uz
+_73	swas'A~t:tR'Ez
+_74	swas'A~t:kat'ORz
+_75	swas'A~t:k'E~z
+_76	swas'A~t:s'Ez
+_77	swas'A~t:d'is:'Et
+_78	swas'A~t:d'iz'w^it
+_79	swas'A~t:d'izn'@f
+_8X	k'atR@v'E~
+_80	k'atR@v'E~z2
+_9X	k'atR@v'E~d'iz3
+_91	k'atR@v'E~:O~z
+_92	k'atR@v'E~:d'uz
+_93	k'atR@v'E~:tR'Ez
+_94	k'atR@v'E~:kat'ORz
+_95	k'atR@v'E~:k'E~z
+_96	k'atR@v'E~:s'Ez
+_97	k'atR@v'E~:d'is:'Et
+_98	k'atR@v'E~:d'iz'w^it
+_99	k'atR@v'E~:d'izn'@f
+_0C	s'A~
+_1C0	s'A~t2
+_0M1	m'il
+_1M1	m'il
+_0M2	milj'O~
+_0M3	milj'aR
+_0and	e
+_dpt	virg'yl
+
+
+// ABBREVIATIONS
+//**************
+
+(http ://)	aSt,et,ep'e
+abc		$abbrev
+ac		$abbrev
+adsl		$abbrev
+alt $pause
+amd		$abbrev
+anpe             $abbrev
+api		$abbrev
+avh		$abbrev
+cci              $abbrev
+cio		$abbrev
+ctrl		kO~tRol $pause
+dept		depaRt@mA~
+etc		etseteRa
+hmm		h@m
+ibm		$abbrev
+ide		$abbrev
+ip		$abbrev
+jaws		Z'owz
+kde		$abbrev
+m.		m@sjY
+mbrola		Em'bRola
+mlle		mad@mwazEl
+mme		madam
+mr		m@sjY
+nsi             $abbrev
+nsis             $abbrev
+nti             $abbrev
+nvda             $abbrev
+ong             $abbrev
+pci             $abbrev
+pda             $abbrev
+p.s		postskRiptOm
+ratp		$abbrev
+scsi		$abbrev
+s.t.p		s'il:t'@:pl'E
+s.v.p		s'il:v'u:pl'E
+st		s'E~
+ste		s'E~t
+stp		s'il:t'@:pl'E
+svp		s'il:v'u:pl'E
+url		$abbrev
+usb		$abbrev
+utf		$abbrev
+wma		$abbrev
+xfce		iksEfse@
+xy		$abbrev
+
+
+dr               dOkt WR       $dot $capital
+prof                           $dot
+
+
+
+
+// articles
+le	$u $nounf
+le	$u $verb $verbextend
+la	$u $nounf
+la	$u $verb $verbextend
+les	lez2 $u $nounf
+les	lez2 $u $verb $verbextend
+un	$u $nounf
+une	$u $nounf
+
+
+// conjonctions
+mais	$u
+ou	u $u $brk
+et	e $u $brk
+donc	$u
+or	$u $brk
+ni	$u
+car	$u
+soit	$u
+cependant  $u
+néanmoins  $u
+toutefois  $u
+
+
+comme	   $u
+dont	   dO~t2 $u
+lorsque	   $u
+(parce que)	      parsk@ $u
+puisque	   $u
+quand	   $u
+que	   $u $verbf
+qui	   $u $verbf
+quoique	   $u
+si	   $u
+
+// pronouns
+je	$u $verbf
+tu	$u $verbf
+elle	$u $verbf
+y	$u $verbf
+il 	$u $verbf
+nous	$u+ $verbf
+vous	$u+ $verbf
+elles	$u+ $verbf
+ils	$u+ $verbf
+on	O~n2 $u $verbf
+me	$u $verbf
+te	$u $verbf
+se	$u $verbf
+lui	$u $verbf
+ça	$u $verbf
+
+ce	$u $nounf
+cette	$u $nounf
+ces	sez2 $u $nounf
+ceci	$verbf
+cela	$verbf
+(celle ci)	sEl||si $verbf
+(celle là)	sEl||la $verbf
+(ceux ci)	sY||si $verbf
+(ceux là)	sY||la $verbf
+(celles ci)	sEl||si $verbf
+(celles là)	sEl||la $verbf
+
+// possessives
+ma	$u+ $nounf
+mon	$u+ $nounf
+mes	mez2 $u+ $nounf
+ta	$u+ $nounf
+ton	$u+ $nounf
+tes	tez2 $u+ $nounf
+sa	$u+ $nounf
+son	$u+ $nounf
+ses	sez2 $u+ $nounf
+notre	$u+ $nounf
+votre	$u+ $nounf
+leur	$u+ $nounf
+leur	$u+ $verb $verbextend
+(la leur)	la||l@r $u+ $verbf
+(le leur)	l@||l@r $u+ $verbf
+nos	$u+ $nounf
+vos	$u+ $nounf
+leurs	$u+ $nounf
+leurs	$u+ $verb $verbextend
+(les leur)	le||l@r $u+ $verbf
+(les leurs)	le||l@r $u+ $verbf
+
+// prepositions
+de $u $nounf
+du	$u+ $nounf
+des	dez2 $u $nounf
+
+
+à	$u a
+au	$u $brk
+aux	$u $brk
+
+dans	$u
+sur	$u
+par	$u
+pour	$u
+en	$u
+en	$u $verb $verbextend
+(en suspens) A~||sysp'A~
+
+vers	$u
+avec	$u
+sans	$u
+sous	$u
+entre	$u $brk
+contre	$u
+
+durant	$brk
+
+// negative
+ne	$u $verbf
+
+// questions
+où	$brk
+
+// auxillary verbs  (be, have, can, etc)
+suis	$u+  $verb
+es	Ez2 $u+  $verb
+est	Et2  $u+
+ès	Es $u
+d'est	d'Est
+sommes  $u+
+êtes	$u+
+sont	$u+ $verb
+
+étais	$u+ $verb
+était	$u+ $verb
+étions	$u+ $verb
+étiez	$u+ $verb
+étaient	$u+ $verb
+
+serai	$u+ $verb
+seras	$u+ $verb
+sera	$u+ $verb
+serons	$u+ $verb
+serez	$u+ $verb
+seront	$u+ $verb
+
+eu	y $u+
+eue	y $u+
+eues	yz2 $u+
+eus	yz2 $u+
+eut	yt2 $u+ $verb
+
+// some common adjectives and adverbs
+
+quelque	$u
+tout	t'ut2 $u
+
+
+// Letters which can be words
+//===========================
+à	$atend $accent
+y       igr'Ek $atend
+ô	$atend $accent
+
+
+
+
+// pronunciation exceptions
+
+consent          kO~s'A~t2
+scient           si
+coing     kwE~
+convent       kO~vA~
+dessous          d@su
+divers          divErz2
+hareng          _!arA~
+pastis     pastis
+poing     pwE~
+ressent          r@s'A~t2
+riz       ri
+sphincter           sfE~ktEr
+tunis           tynis
+
+
+// MAIN WORD DICTIONARY
+//*********************
+
+monsieur         m@sjY
+montréal         mO~Real
+(n'est ce pas)   n'Es@-||p'az2
+(qu'est ce que)  kEsk@ $u
+(quelque chose)  kElk@S'oz
+(cent un)        s'A~||W~
+(cent unième)    s'A~||ynj'Em
+(cent une)       s'A~||yn
+(cent onzième)   s'A~||O~zj'Em
+(cent onze)      s'A~||O~z
+absent        absA~
+airbus	      Erbys
+anus     anys
+auvent     ovA~
+bissus    bisys
+bonus     bonys
+bus	      bys
+bus	      by  $verb
+campus   kA~pys
+casus    kazys
+choeur        k@r
+cocus     coky
+estomac     Estoma
+éloquent     ElokA~t2
+fils	      fis
+gars	      ga
+iris	      iris
+juin	      ZyE~
+laser	      lazEr
+malus      malys
+mars	      maRs
+minus      minys
+paravent        paravA~
+pays	      pEi
+phallus    falys
+polder    pOldEr
+souris       suri
+sus       sys
+sus       sy $verb
+tuttiquanti       tutikw'anti
+vénus       venys
+
+
+gens	      ZA~
+mens	      mA~z2
+sens	      sA~s
+sens	      sA~z2 $verb
+c'est         sEt2 $u+
+qu'à          ka
+m'y              mi $verbf
+t'y              ti $verbf
+s'y              si $verbf
+n'y              ni $verbf
+l'y              li $verbf
+qu'y          ki $verbf
+(sud est)       sydEst
+(nord est)      nOREst
+tiomètre   pOtA~sjOmEtR@-
+
+processus	pROsEsys
+
+// ut (t is said)
+août		ut
+azimut		azim'yt
+brut		bR'yt
+bouse		buz
+but		by $verb
+but		byt
+club		kl@b
+(le pub)		l@||p'@b
+(un pub)		W~||p'@b
+(du pub)		dy||p'@b
+cut	cWt
+helmut		Elmut
+hub	_|@b
+mazout		mazut
+michael		mikaEl
+out		aut
+rut		Ryt
+scorbut		skORbyt
+scout		skut
+stout		staut
+uppercut	ypERkyt
+ut		yt
+zut		zyt
+
+
+// et (t is said)
+
+exocet		EgzOsEt
+fret		fR'Et
+budget		bydZE
+hamlet		amlEt
+knesset		knEsEt
+lazaret		lazaREt
+margaret	maRgaREt
+net		nEt
+offset		OfsEt
+set		sEt
+soviet		sOvjEt
+
+// urt (t is said)
+kurt		kuRt
+yaourt		jauRt
+yoghourt	yoguRt
+yogourt		yoguRt
+
+// ort (t said)
+short		SORt
+
+// art (t said)
+steward		stiwaRt
+stuttgart	StutgaRt
+hart		aRt
+kart		kaRt
+smart		smaRt
+
+// irt
+flirt		fl@Rt
+(sweat shirt)	swEtS@Rt
+(tee shirt)	tiS@Rt
+
+
+// words from other languages
+about		_^_en
+acer             asEr
+and             _^_en
+amazon		amaz'On
+apple		_^_en
+at		_^_en
+(audible manager) odibl||manadZ@r
+bit		_^_en
+bluetooth 		blut'us
+computer		_^_en
+(cyber link) 		_^_en
+debian		dEbjAn
+driver		_^_en
+emacs		Emaks
+emacspeak	Emakspi:k
+end             _^_en
+epson		EpsOn
+espeak		@spi:k
+ethernet	etERnEt
+exit	egzit
+eye	      _^_en
+eyes	      _^_en
+(file zilla)		fajl||zija
+get		_^_en
+google		gu:g@l
+gnome		gnom
+gnu		gnu
+hamburger		_!A~b@rg@r
+help		_^_en
+hot		_^_en
+in		_^_en
+inside		_^_en
+internet	E~tERnEt
+(internet explorer) E~tErn'Et||EksplOr'@r
+klaxon          klaksOn
+layer    		_^_en
+let 		_^_en
+liszt 		list
+lite 		_^_en
+login 		_^_en
+logon 		_^_en
+(mac os x)	makoEsiks
+made	_^_en
+media     		medja
+messenger 		_^_en
+my		_^_en
+not		_^_en
+null	_^_en
+ok         oke
+open            Op'@n
+outlook         autluk
+paint    		_^_en
+paper    		_^_en
+player    		_^_en
+redhat		REdat
+same		_^_en
+sametime	_^_en
+schubert	SubER
+sun		_^_en
+(text aloud) tEkst||@lawd
+ubuntu		ubuntu
+up		_^_en
+yacht		jot
+yes		_^_en
+
+
+// tions (tjO~ instead of sjO~)
+achetions	aS@tjO~z2
+apportions	apORtjO~z2
+apprêtions	apREtjO~z2
+arrêtions	aREtjO~z2
+chantions	SA~tjO~z2
+comptions	kO~tjO~z2
+constations	kO~statjO~z2
+contentions	kO~tA~tjO~z2
+dations		datjO~z2
+discutions	diskytjO~z2
+débutions	debytjO~z2
+désertions	dezERtjO~z2 $verb
+détentions	detA~tjO~z2
+escomptions	EskO~tjO~z2
+exploitions	EksplwatjO~z2
+exportions	EkspORtjO~z2
+habitions	abitjO~z2
+heurtions	_!@RtjO~z2
+jetions		Z@tjO~z2
+limitions	limitjO~z2
+méritions	meRitjO~z2
+partions	paRtjO~z2
+pressentions	pREsA~tjO~z2
+présentions	pRezA~tjO~z2
+prêtions	pREtjO~z2
+rations		RatjO~z2 $verb
+représentions	R@pRezA~tjO~z2
+respections	REspEktjO~z2
+ressentions	R@sA~tjO~z2
+répétions	RepetjO~z2
+sentions	sA~tjO~z2
+sortions	sORtjO~z2
+souhaitions	suEtjO~z2
+supportions	sypORtjO~z2
+tentions	tA~tjO~z2
+traitions	tREtjO~z2
+votions		vOtjO~z2 $u
+étions		etjO~z2
+évitions	evitjO~z2
+
+// no liaison
+(quelqu'un)	kElkW~
+pourcent	puRsA~
+vincent		vE~sA~
+
+
+
+
+
+
+
+
+
+
+
+
+

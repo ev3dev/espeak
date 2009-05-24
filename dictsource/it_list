@@ -2,90 +2,142 @@
 
 // Italian:  any [E] or [O] phonemes in unstressed words must be listed explicitly
 
-// Letters
-// If a letter has a "word" pronunciation which is different from its
-// "letter" name, then include the letter name here, with the letter
-// prefixed by a _ character.
-_e	e:
-_i	i:
-_o	O:
 
 // character names
-_cap k'apital
-_??  s'imbolo
+_cap	k'apital
+_??	s'imbolo
+_?A	let:'e:Ra
 
-_!   p'Untoesklamat'ivo
-_"   virgolet:e
+_a	a:
+b	bi
+c	tSi
+d	di
+_e	e:
+f	effe
+g	dZi
+h	ak:a
+_i	i:
+j	dZe:j
+k	kap:a
+l	Elle
+m	Emme
+n	Enne
+_o	O:
+p	pi
+q	ku
+r	ER*e
+s	esse
+t	ti
+_u	u:
+v	vu
+w	d'op:jav'u
+x	'iks
+y	'ipsilon
+z	dze:ta
+
+_à	$accent
+_é	$accent
+_è	$accent
+_ì	$accent
+_ó	$accent
+_ò	$accent
+_ù	$accent
+
+
+
+// accent names
+_lig	l,egat'u:Ra
+_acu	ak'u:to
+_ac2	d'op:i;o_|ak'u:to	
+_brv	b@-*'e:ve
+_ced	tSed'il^a
+_cir	tSi;@-*konfl'esso
+_dia	djeR'e:zI
+_dot	p'unto||s,ov@-*ask@-*'it:o
+_grv	g@-*'a:ve
+//_grv	atS:'entog@-*'a:ve
+_hac	h'atSek
+_mcn	m'ak@-*on
+_ogo	og'o:nek
+_rng	an'ello
+_stk	b'aR*a
+_tld	t'ilde
+
+
+_!   p'untoesklamat'ivo
+_"   viRgolet:e
 _#   kantSellet:o
-_$   dolla:ro
-_%   pertS'ento
+_$   dolla:Ro
+_%   peRtS'ento
 _&   _!e:
-_'   ap'Ostrofo
-_(   ap'ertapar'entezi
-_)   kj,Uzapar'entezi
-_*   asterisko
-_+   pjU
-_,   v'irgola
-_-   trat:ino
-_.   pUnto
+_'   ap'OstRofo
+_(   ap'eRtapaR'entezi
+_)   kj,uzapaR'entezi
+_*   asteRisko
+_+   pju
+_,   v'iRgola
+_-   t@-*at:ino
+_.   punto
 _/   slaS
-_:   d,Uep'Unte
-_;   p'Untoev'irgola
-_<   ap'erta'angolo
-_=   Ugw2ale
-_>   kj,Uza'angolo
-_?   p'UntointeRogat'ivo
+_:   d,uep'unte
+_;   p'untoev'iRgola
+_<   ap'eRta'angolo
+_=   ugwale
+_>   kj,uza'angolo
+_?   p'untointeRogat'ivo
 _@   ki'otS:ola
-_[   ap'ertakw2'adra
+_[   ap'eRtakw2'ad@-*a
 _\   bakslaS
-_]   kj,Uzakw2'adra
-_^   kap:UtS:o
-__   'Underskore
-_`   bakpraIm
-_{   ap'ertagr'af:a
+_]   kj,uzakw2'ad@-*a
+_^   kap:utS:o
+__   'undeRskoRe
+_`   bakp@-*aIm
+_{   ap'eRtag@-*'af:a
 _|   b'aRa
-_}   kj,Uzagr'af:a
+_}   kj,uzag@-*'af:a
 _~   tilde
 
 
 
 // numbers
 _0	dz'eRo
-_1	'Uno
-_2	d'Ue
+_1	'uno
+_2	d'ue
 _3	tR'e
 _4	kw2'at:Ro
 _5	tS'inkw2e
-_6	s'ej
+_6	s'Ej
 _7	s'Et:e
-_8	'Okt:o
+_8	'Ot:o
 _9	n'Ove
 _10     di'etSi
 _11     'unditSi
 _12     d'oditSi
-_13     tr'editSi
-_14     kw2at:'OrditSi
+_13     t@-*'editSi
+_14     kw2at:'ORditSi
 _15     kw2'imditSi
 _16     s'editSi
 _17     ditSas:'Et:e
 _18     ditS'Ot:o
 _19     ditSann'ove
-_20     v'ente
-_30     tr'enta
-_40     kw2ar'anta
-_50     tSinkw2'anta
-_60     sess'anta
-_70     set:'anta
-_80     ot'anta
-_90     nov'anta
-_0H     tS'ento
-_0T1    m'ila
-_1T1	m'ille
-_0T2    mili'oni
-_1T2	unmili'one
-_0T3	mili'ardi
-_1T3	unmili'ardo
-_dpt    _v'irgola
+_2X     v'entj
+_3X     t@-*'enta
+_4X     kw2aR'anta
+_5X     tSinkw2'anta
+_6X     sess'anta
+_7X     set:'anta
+_8X     ot'anta
+_9X     nov'anta
+_0C     tS'ento
+_0M1    m'ila
+_1M1	m'ille
+_0M2    mili'oni
+_1M2	unmili'one
+_0M3	mili'aRdi
+_1M3	unmili'aRdo
+_0M4    bili'oni
+_1M4	unbili'one
+_dpt    _v'iRgola
 _0Z2	tSent'ezimi     // 100ths
 _0Z3	mill'ezimi      // 1000ths
 
@@ -105,31 +157,31 @@ gli	l^i  $u
 
 
 // pronouns
-io	$u $strend
-tu	$u $strend
-lui	$u $strend
-lei	$u $strend
-noi	$u $strend
-voi	$u $strend
-loro	$u $strend
+io	$u+
+tu	$u+
+lui	$u+
+lei	$u+
+noi	$u+
+voi	$u+
+loro	$u+
 
-egli	$u $strend
-ella	$u $strend
-essa	$u $strend
-esse	$u $strend
-essi	$u $strend
+egli	$u+
+ella	$u+
+essa	$u+
+esse	$u+
+essi	$u+
 
-mi	$u $strend
-ti	$u $strend
-si      $u $strend
-ci	$u $strend
-vi	$u $strend
-li	$u $strend
+mi	$u+
+ti	$u+
+si      $u+
+ci	$u+
+vi	vi $u+
+li	li $u+
 
 
 // words that double the following consonant
-qualche  $double
-come     $double
+qualche  // $double
+come     // $double
 
 // possessive adjectives
 mio	$u
@@ -168,9 +220,9 @@ quelle  $u      // those
 
 
 // conjunctions
-e		$u $pause $double  // and
+e		$u $pause // $double  // and
 ed		$u $pause
-o		$u $pause $double  // or
+o		$u $pause // $double  // or
 se		$pause      // if
 ma		$pause      // but
 perché		$pause      // because
@@ -182,12 +234,12 @@ malevolenza	$pause      // despite
 pertanto        $pause      // therefore
 né              $pause      // neither-nor
 
-(in cui)        in||kw,i  $pause   // in which
+(in cui)        in||kw2,i  $pause   // in which
 che             $u $pause   // which
 
 
 // prepositions
-a       $u $double
+a       $u // $double
 al      $u
 allo    $u
 alla    $u
@@ -195,7 +247,9 @@ ai      $u
 agli    $u
 alle    $u
 
-da	$u      // by
+ad      $u $brk
+
+da	$u $brk      // by
 dal	$u
 dallo   $u
 dalla	$u	// by the
@@ -203,7 +257,7 @@ dai     $u
 dagli   $u
 dalle   $u
 
-di	$u	// of
+di	$u $brk	// of
 del	$u
 dello   $u
 della	$u	// of the
@@ -212,16 +266,16 @@ degli   $u
 delle   $u
 de      $u
 
-in	$u	// in
-nel	$u
-nello   $u
-nella	$u	// in the
-nei     $u
-negli   $u
-nelle   $u
-ne      $u
+in	$u $brk	// in
+nel	$u $brk
+nello   $u $brk
+nella	$u $brk	// in the
+nei     $u $brk
+negli   $u $brk
+nelle   $u $brk
+ne      $u $brk
 
-su	$u $double	// on
+su	$u //$double	// on
 sul	$u
 sullo   $u
 sulla	$u	// on the
@@ -229,17 +283,17 @@ sui     $u
 sugli   $u
 sulle   $u
 
-con	$u $pause	// with
+con	$u $pause $only	// with
 col     $u
 coi     $u
 
-attraverso $u $strend	// across, through
-contro     $u $strend   // against
-accanto    $u $strend   // beside
-verso      $u $strend   // toward
-sopra	   $u $strend	// above
-sotto	   $u $strend	// below
-per        $u $pause    // for
+attraverso $u+ $brk	// across, through
+contro     $u+ $brk     // against
+accanto    $u+ $brk     // beside
+verso      $u+ $brk     // toward
+sopra	   $u+ $brk	// above
+sotto	   $u+ $brk	// below
+per        $u $pause $only   // for
 eccetto    $pause       // except
 senza      $pause       // without
 durante    $pause       // during
@@ -248,13 +302,13 @@ durante    $pause       // during
 // aux verb, to be
 sono	$u
 sei	$u
-è	E  $u $double
+è	E  $u //$double
 siamo	$u
 siete	$u
 sono	$u
 fui	$u
 fosti	$u
-fu	$u $double
+fu	$u //$double
 fummo	$u
 foste	$u
 furono	$u
@@ -286,9 +340,9 @@ sareste	$u
 sarebbero	$u
 
 // aux verb, to have
-ho	$u $double
-hai	$u $double
-ha	$u $double
+ho	$u //$double
+hai	$u //$double
+ha	$u //$double
 abbiamo	$u
 avete	$u
 hanno	$u
@@ -314,10 +368,10 @@ avremo	$u
 avrete	$u
 avranno	$u
 
-abbia	$u $strend
-abbiamo	$u $strend
-abbiate	$u $strend
-abbiano	$u $strend
+abbia	$u+
+abbiamo	$u+
+abbiate	$u+
+abbiano	$u+
 avessi	$u
 avesse	$u
 avessimo	$u
@@ -332,20 +386,28 @@ avreste	$u
 avrebbero	$u
 
 // to do/make
-fare	$u $strend
-faccio	$u $strend
-facciamo	$u $strend
-fai	$u $strend
-fate	$u $strend
-fa	$u $strend
-fanno	$u $strend
+fare	$u+
+faccio	$u+
+facciamo	$u+
+fai	$u+
+fate	$u+
+fa	$u+
+fanno	$u+
 
-facevo	$u $strend
-facevi	$u $strend
-faceva	$u $strend
-facevamo	$u $strend
-facevate	$u $strend
-facevano	$u $strend
+facevo	$u+
+facevi	$u+
+faceva	$u+
+facevamo	$u+
+facevate	$u+
+facevano	$u+
+
+// Letters
+// If a letter has a "word" pronunciation which is different from its
+// "letter" name, then include the letter name here
+a	a:  $atend
+e       e:  $atend
+i       i:  $atend
+o       O:  $atend
 
 
 // exceptions
@@ -358,8 +420,9 @@ tavol       $1   $stem
 vent        vEnt $stem
 
 celsius     tsElsj'us
-conoscerla   $1
+conoscerla   $2
 no          nO
 posta       pOsta
-tesser      tess'Er
+tesser      tess'ER
 uomini       $1
+internet     'internet

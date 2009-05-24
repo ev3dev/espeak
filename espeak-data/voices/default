@@ -1,3 +1,6 @@
-language en-uk
+name default
+language en
+gender male
 
 formant 0 100 100 110
+

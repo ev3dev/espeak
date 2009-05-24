@@ -1,10 +1,10 @@
 /***************************************************************************
- *   Copyright (C) 2005,2006 by Jonathan Duddington                        *
- *   jsd@clara.co.uk                                                       *
+ *   Copyright (C) 2005 to 2007 by Jonathan Duddington                     *
+ *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
@@ -13,39 +13,49 @@
  *   GNU General Public License for more details.                          *
  *                                                                         *
  *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   along with this program; if not, write see:                           *
+ *               <http://www.gnu.org/licenses/>.                           *
  ***************************************************************************/
+
+
+#include <sys/types.h>
 
 // conditional compilation options
 
-#ifdef __WIN32__
-#define PATHSEP '\\'
-#else
-#define PLATFORM_POSIX
-#define __cdecl               // define as null, needed for Borland compiler ?
-#define PATHSEP  '/'          // unix style file paths
-#define USE_PORTAUDIO
-#define USE_NANOSLEEP
+#if defined(BYTE_ORDER) && BYTE_ORDER == BIG_ENDIAN
+#define ARCH_BIG
 #endif
 
-// don't use portaudio in the library version
+#define PLATFORM_POSIX
+#define PATHSEP  '/'
+// USE_PORTAUDIO or USE_PULSEAUDIO are now defined in the makefile
+//#define USE_PORTAUDIO
+//#define USE_PULSEAUDIO
+#define USE_NANOSLEEP
+#define __cdecl 
+#define ESPEAK_API  extern "C"
+
 #ifdef LIBRARY
-#undef USE_PORTAUDIO
+#define USE_ASYNC
+//#define USE_MBROLA_LIB
+#endif
+
+#ifdef _ESPEAKEDIT
+#define USE_PORTAUDIO
+#define USE_ASYNC
+#define LOG_FRAMES      // write keyframe info to log-espeakedit
 #endif
 
 // will look for espeak_data directory here, and also in user's home directory
-#define PATH_ESPEAK_DATA  "/usr/share/espeak-data"
+#ifndef PATH_ESPEAK_DATA
+   #define PATH_ESPEAK_DATA  "/usr/share/espeak-data"
+#endif
 
 typedef unsigned short USHORT;
 typedef unsigned char  UCHAR;
 typedef double DOUBLEX;
 
 
-
-#define N_PEAKS   9
-#define N_MARKERS 7
 
 
 typedef struct {
@@ -55,28 +65,16 @@ typedef struct {
 int LookupMnem(MNEM_TAB *table, char *string);
 
 
-typedef struct {
-   short pkfreq;
-   short pkheight;
-   short pkwidth;
-   short pkright;
-}  peak_t;
+#ifdef PLATFORM_WINDOWS
+#define N_PATH_HOME  220
+#else
+#define N_PATH_HOME  150
+#endif
 
-typedef struct {
-	short flags;
-	unsigned char length;
-	unsigned char rms;
-	short ffreq[9];
-	unsigned char fheight[9];
-	unsigned char fwidth[6];          // width/4
-	unsigned char fright[6];          // width/4
-} frame_t;
+extern char path_home[N_PATH_HOME];    // this is the espeak-data directory
 
-
+extern void strncpy0(char *to,const char *from, int size);
 int  GetFileLength(const char *filename);
 char *Alloc(int size);
 void Free(void *ptr);
 
-
-extern void strncpy0(char *to,const char *from, int size);
-extern char path_home[];

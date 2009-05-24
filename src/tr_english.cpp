@@ -1,10 +1,10 @@
 /***************************************************************************
- *   Copyright (C) 2005,2006 by Jonathan Duddington                        *
- *   jsd@clara.co.uk                                                       *
+ *   Copyright (C) 2005 to 2007 by Jonathan Duddington                     *
+ *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
@@ -13,12 +13,11 @@
  *   GNU General Public License for more details.                          *
  *                                                                         *
  *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   along with this program; if not, write see:                           *
+ *               <http://www.gnu.org/licenses/>.                           *
  ***************************************************************************/
 
-
+#include "StdAfx.h"
 
 #include <stdio.h>
 #include <ctype.h>
@@ -27,6 +26,7 @@
 #include <string.h>
 #include <locale.h>
 
+#include "speak_lib.h"
 #include "speech.h"
 #include "phoneme.h"
 #include "synthesize.h"
@@ -37,14 +37,13 @@
 Translator_English::Translator_English() : Translator()
 {//===================================
 //	static int stress_lengths2[8] = {182,140, 220,220, 220,240, 248,270};
-	static int stress_lengths2[8] = {182,140, 220,220, 0,0, 248,275};
+	static const short stress_lengths2[8] = {182,140, 220,220, 0,0, 248,275};
 
 	memcpy(stress_lengths,stress_lengths2,sizeof(stress_lengths));
-	langopts.vowel_pause = 0;
 	langopts.stress_rule = 0;
-	langopts.word_gap = 0;
 
-	langopts.numbers = 0x41;
+	langopts.numbers = 0x841 + NUM_ROMAN;
+	langopts.param[LOPT_COMBINE_WORDS] = 2;       // allow "mc" to cmbine with the following word
 }
 
 
@@ -54,7 +53,7 @@ static unsigned char initials_bitmap[86] = {
  0x20, 0x24, 0x20, 0x80, 0x10, 0x00, 0x00, 0x00,
  0x00, 0x28, 0x08, 0x00, 0x88, 0x22, 0x04, 0x00,  // 16
  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
- 0x00, 0x88, 0x22, 0x04, 0x00, 0x02, 0x00, 0x00,  // 32
+ 0x00, 0x88, 0x22, 0x04, 0x00, 0x02, 0x00, 0x04,  // 32
  0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
  0x00, 0x28, 0x8a, 0x03, 0x00, 0x00, 0x40, 0x00,  // 48
  0x02, 0x00, 0x41, 0xca, 0x9b, 0x06, 0x20, 0x80,
@@ -72,9 +71,10 @@ int Translator_English::Unpronouncable(char *word)
 	This function is language specific.
 */
 
-	unsigned char  c;
+	int  c;
 	int  vowel_posn=9;
 	int  index;
+	int  count;
 	int  ix;
 	int  apostrophe=0;
 
@@ -93,19 +93,26 @@ int Translator_English::Unpronouncable(char *word)
 	}
 
 	index=0;
-	while(((c = word[index++]) != 0) && !isspace(c))
+	count=0;
+	for(;;)
 	{
+		index += utf8_in(&c,&word[index],0);
+		count++;
+
+		if((c==0) || (c==' '))
+			break;
+
 		if(IsVowel(c) || (c == 'y'))
 		{
-			vowel_posn = index;
+			vowel_posn = count;
 			break;
 		}
 
 		if(c == '\'')
 			apostrophe = 1;
 		else
-		if((c < 'a') || (c > 'z'))
-			return(0);        // letter (not vowel) outside a-z range or apostrophe, abort test
+		if(!IsAlpha(c))
+			return(0);        // letter (not vowel) outside Latin character range or apostrophe, abort test
 	}
 	if((vowel_posn > 5) || ((word[0]!='s') && (vowel_posn > 4)))
 		return(1);  // no vowel, or no vowel in first four letters
@@ -127,94 +134,5 @@ int Translator_English::Unpronouncable(char *word)
 
 
 
-
-
-//============================================================================================
-// Experimental, for tone language
-//============================================================================================
-
-
-
-
-
-Translator_Tone::Translator_Tone() : Translator()
-{//===================================
-	static int stress_lengths2[8] = {248,248, 248,248, 248,248, 248,250};
-
-	memcpy(stress_lengths,stress_lengths2,sizeof(stress_lengths));
-	langopts.stress_rule = 0;
-	langopts.vowel_pause = 1;
-	langopts.word_gap = 3;
-}
-
-
-
-void Translator_Tone::CalcPitches(int clause_tone)
-{//==========================================
-//  clause_tone: 0=. 1=, 2=?, 3=! 4=none
-	PHONEME_LIST *p;
-	int  ix;
-	int  count_stressed=0;
-	int  count_stressed2=0;
-
-	int  tone_ph;
-
-	int  pitch_adjust = 13;     // pitch gradient through the clause - inital value
-	int  pitch_decrement = 3;   //   decrease by this for each stressed syllable
-	int  pitch_low =  0;         //   until it drops to this
-	int  pitch_high = 10;       //   then reset to this
-
-	p = &phoneme_list[0];
-
-	// count number of stressed syllables
-	p = &phoneme_list[0];
-	for(ix=0; ix<n_phoneme_list; ix++, p++)
-	{
-		if((p->type == phVOWEL) && (p->tone >= 4))
-		{
-			count_stressed++;
-		}
-	}
-
-	p = &phoneme_list[0];
-	for(ix=0; ix<n_phoneme_list; ix++, p++)
-	{
-		if(p->type == phVOWEL)
-		{
-			tone_ph = p->tone_ph;
-
-			if(p->tone >= 4)
-			{
-				// a stressed syllable
-				count_stressed2++;
-				if(count_stressed2 == count_stressed)
-				{
-					// the last stressed syllable
-					pitch_adjust = pitch_low;
-				}
-				else
-				{
-					pitch_adjust -= pitch_decrement;
-					if(pitch_adjust <= pitch_low)
-						pitch_adjust = pitch_high;
-				}
-
-				if(tone_ph ==0)
-				{
-					tone_ph = phonDEFAULTTONE;  // no tone specified, use default tone 1
-					p->tone_ph = tone_ph;
-				}
-				p->pitch1 = pitch_adjust + phoneme_tab[tone_ph]->start_type;
-				p->pitch2 = pitch_adjust + phoneme_tab[tone_ph]->end_type;
-			}
-			else
-			{
-				// what to do for unstressed syllables ?
-				p->pitch1 = 10;   // temporary
-				p->pitch2 = 14;
-			}
-		}
-	}
-}  // end of Translator_Tone::CalcPitches
 
 

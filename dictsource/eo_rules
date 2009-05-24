@@ -3,69 +3,77 @@
 
 // includes both accented characters and ascii digraph alternatives (cx, gx, ux, etc)
 
+.replace
+   cx    ĉ
+   gx    ĝ
+   hx    ĥ
+   jx    ĵ
+   sx    ŝ
+   ux    ŭ
+
+
 .group a
 	_)	a(_	a
 		a	a
 		aj	aI
-		a (jx   a
-		aux	aU
 		aŭ	aU
+     D_-_)      a (_    %a    //'a' after a number
+     D_-_)      an (_   %an   //'an' after a number
+       D_)      a (_    %a    //'a' after a number
+       D_)      an (_   %an   //'an' after a number
 		
 .group b
-	_)	b(_	ba
+	_)	b(_	bo
 		b       b
 		
 .group c
 	_)	c(_	tso
 	_)	ch(_	tSo
-	_)	cx(_	tSo
 		c	ts
 		ch (K	tS    // foreign words
 	K)	ch	tS    // foreign words
-		cx	tS
 		
 		
 .group d
-	_)	d(_	da
+	_)	d(_	do
 		d	d
+
+	_)	d (-ro_   dokt'o
+	_)	d (-rino_ d,okto
 
 .group e
 	_)	e(_	e
 		e	e
 		ej	eI
-		e (jx	e
-		eux	eU
 		eŭ	eU
 		
 .group f
 	_)	f(_	fo
 		f	f
+
+	_)	f (-ino_  fR%aUl
+	_)	f (-lo_   fRaU
 		
 .group g
-	_)	g(_	ga
-	_)	gx(_	dZa
+	_)	g(_	go
 		g	g
 		gh (K	dZ
-		gx	dZ
 				
 .group h
-	_)	h(_	ha
-	_)	hx(_	xo
+	_)	h(_	ho
 		h	h
 		hh	x
-		hx	x
 		
 		
 .group i
 	_)	i(_	i
 		i	i
+
 		
 .group j
 	_)	j(_	jo
-	_)	jx(_	Za
 		j	j
 		jh (C	Z
-		jx	Z
 		
 .group k
 	_)	k(_	ko
@@ -74,20 +82,27 @@
 .group l
 	_)	l(_	lo
 		l	l
+		ll (_	l
+
+	-)	lo (_	l%o
+
 		
 .group m
 	_)	m(_	mo
 		m	m
 		
 .group n
-	_)	n(_	na
+	_)	n(_	no
 		n	n
+		n (_S1	n
+
+        _)	n (-ro_  num'e
+
 		
 .group o
 	_)	o(_	o
 		o	o
 		oj	OI
-		o (jx   o
 		
 .group p
 	_)	p(_	po
@@ -97,20 +112,27 @@
 		
 .group q
 	_)	q(_	kwo
-		q	kw
+		q	k
+		qu	kv
 		
 .group r
-	_)	r(_	ra
-		r	r
+	_)	r(_	Ro
+		r	R
+	A)	r (A	R
+	K)	r (A	@-*
+                rr      RR
+
+       -)	ro (_   R%o   // d-ro, n-ro
 		
 .group s
 	_)	s(_	so
 	_)	sh(_	So
-	_)	sx(_	So
 		s	s
-		sx	S
 		sh (K	S    // foreign words
 	K)	sh	S    // foreign words
+
+	_)	s (-ino_   s,injoR
+	_)	s (-ro_    sinj'o
 		
 		
 .group t
@@ -121,19 +143,16 @@
 		
 .group u
 	_)	u(_	u
-	_)	ux(_	wa
 		u	u
 		uj	uI
-		u (jx   u
-		ux	w
 		
 		
 .group v
-	_)	v(_	va
+	_)	v(_	vo
 		v	v
 		
 .group w
-	_)	w(_	wa
+	_)	w(_	du'oblav,o
 		w	w
 	K)	wh	w    // foreign words
 		
@@ -144,11 +163,11 @@
 .group y
 	_)	y(_	ipsilono
 		y	j
-		y (_	i        // foreign words
+	K)	y (K	i
 	
 		
 .group z
-	_)	z(_	za
+	_)	z(_	zo
 		z	z
 			
 		
@@ -156,13 +175,13 @@
 	_)	ĉ (_	tSo
 		ĉ	tS
 
-	_)	ĝ (_	dZa
+	_)	ĝ (_	dZo
 		ĝ	dZ
 
 	_)	ĥ (_	xo
 		ĥ	x
 
-	_)	ĵ (_	Za
+	_)	ĵ (_	Zo
 		ĵ	Z
 
 	_)	ŝ (_	So
@@ -173,75 +192,29 @@
 
 		
 		=	,,egala,
-		\	malantaIstreko
-		/	streko
+		\	malantaIst@-*eko
+		/	st@-*eko
 		'	
 		+	plus
 	_)	++ (_	plusplus
 
 		.	punkto
+		. (.     _:
+	\.)     .
+
+
 		. (D	_:k'omo_
-		*	asterisko
+		*	asteRisko
 			pundo
 		 (D	_pundOI_:
-	        !	,ekkrio,
+	        !	,ekk@-*io,
 		:	dupunkto
 		-	_
-		$	dolaro
-		$ (D	_dolarOI_:
-		%	protsento
+		- (_a	
+		$	dolaRo
+		$ (D	_dolaROI_:
+		%	p@-*otsento
 		@	po
 		&	%kaI
 			
-          D) , (_DDD      mil_:_:
-      ,_000) , (_DDD
-      ,_000) , (_DDD,_DDD  miliono_:_:
-          D) , (_DDD,_DDD  miliono_:_:
-          D) , (_DDD,_DDD,_DDD mil_:_:
 
-
-.group 9
-     _) 0 (_		nul
-     _) 00 (D		_:
-	0 (D_		_
-     D) 0
-
-	1		'unu
-	2		d'u
-	3		tr'i
-	4		kv'ar
-	5		kv'in
-	6		s'es
-	7		s'ep
-	8		'ok
-	9		n'aU
-	
-	1 (D		d'ek
-	2 (D		d'udek
-	3 (D		tr'idek
-	4 (D		kv'ardek
-	5 (D		kv'indek
-	6 (D		s'esdek
-	7 (D		s'epdek
-	8 (D		'okdek
-	9 (D		n'aUdek
-
-	1 (DD		ts'ent_
-	2 (DD		d'utsent_
-	3 (DD		tr'itsent_
-	4 (DD		kv'artsent_
-	5 (DD		kv'intsent_
-	6 (DD		s'estsent_
-	7 (DD		s'eptsent_
-	8 (DD		'oktsent_
-	9 (DD		n'aUtsent_
-
-	1 (DDD_		m'il_:
-	2 (DDD_		d'um,il_:
-	3 (DDD_		tr'im,il_:
-	4 (DDD_		kv'arm,il_:
-	5 (DDD_		kv'inm,il_:
-	6 (DDD_		s'esm,il_:
-	7 (DDD_		s'epm,il_:
-	8 (DDD_		'okm,il_:
-	9 (DDD_		n'aUm,il_:
