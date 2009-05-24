@@ -1,14 +1,20 @@
 Using phonemetable: 'af'
 Compiling: '/home/jsd1/speechdata/dictsource/af_list'
-	787 entries
+	948 entries
 Compiling: '/home/jsd1/speechdata/dictsource/af_rules'
-	3872 rules, 39 groups
+	4690 rules, 41 groups
+
+Using phonemetable: 'ca'
+Compiling: '/home/jsd1/speechdata/dictsource/ca_list'
+	194 entries
+Compiling: '/home/jsd1/speechdata/dictsource/ca_rules'
+	133 rules, 28 groups
 
 Using phonemetable: 'cs'
 Compiling: '/home/jsd1/speechdata/dictsource/cs_list'
-	354 entries
+	357 entries
 Compiling: '/home/jsd1/speechdata/dictsource/cs_rules'
-	514 rules, 48 groups
+	506 rules, 48 groups
 
 Using phonemetable: 'cy'
 Compiling: '/home/jsd1/speechdata/dictsource/cy_list'
@@ -18,69 +24,129 @@ Compiling: '/home/jsd1/speechdata/dictsource/cy_rules'
 
 Using phonemetable: 'de'
 Compiling: '/home/jsd1/speechdata/dictsource/de_list'
-	566 entries
+	584 entries
 Compiling: '/home/jsd1/speechdata/dictsource/de_rules'
-	974 rules, 32 groups
+	968 rules, 32 groups
 
 Using phonemetable: 'el'
 Compiling: '/home/jsd1/speechdata/dictsource/el_list'
 	184 entries
 Compiling: '/home/jsd1/speechdata/dictsource/el_rules'
-	195 rules, 52 groups
+	169 rules, 26 groups
 
 Using phonemetable: 'en'
 Compiling: '/home/jsd1/speechdata/dictsource/en_list'
-	2695 entries
+	2902 entries
 Compiling: '/home/jsd1/speechdata/dictsource/en_rules'
-	4988 rules, 95 groups
+	5107 rules, 95 groups
 
 Using phonemetable: 'eo'
 Compiling: '/home/jsd1/speechdata/dictsource/eo_list'
-	160 entries
+	232 entries
 Compiling: '/home/jsd1/speechdata/dictsource/eo_rules'
-	124 rules, 27 groups
+	133 rules, 27 groups
 
 Using phonemetable: 'es'
 Compiling: '/home/jsd1/speechdata/dictsource/es_list'
-	306 entries
+	329 entries
 Compiling: '/home/jsd1/speechdata/dictsource/es_rules'
-	168 rules, 27 groups
+	128 rules, 27 groups
 
 Using phonemetable: 'fi'
 Compiling: '/home/jsd1/speechdata/dictsource/fi_list'
-	206 entries
+	271 entries
 Compiling: '/home/jsd1/speechdata/dictsource/fi_rules'
-	133 rules, 29 groups
+	105 rules, 29 groups
 
 Using phonemetable: 'fr'
 Compiling: '/home/jsd1/speechdata/dictsource/fr_list'
-	554 entries
+	677 entries
 Compiling: '/home/jsd1/speechdata/dictsource/fr_rules'
-	942 rules, 32 groups
+	1057 rules, 34 groups
+
+Using phonemetable: 'grc'
+Compiling: '/home/jsd1/speechdata/dictsource/grc_list'
+	22 entries
+Compiling: '/home/jsd1/speechdata/dictsource/grc_rules'
+	134 rules, 54 groups
+
+Using phonemetable: 'hr'
+Compiling: '/home/jsd1/speechdata/dictsource/hbs_list'
+	569 entries
+Compiling: '/home/jsd1/speechdata/dictsource/hbs_rules'
+	102 rules, 34 groups
 
 Using phonemetable: 'hi'
 Compiling: '/home/jsd1/speechdata/dictsource/hi_list'
-	225 entries
+	227 entries
 Compiling: '/home/jsd1/speechdata/dictsource/hi_rules'
-	289 rules, 112 groups
+	267 rules, 88 groups
 
 Using phonemetable: 'hu'
 Compiling: '/home/jsd1/speechdata/dictsource/hu_list'
-	262 entries
+	302 entries
 Compiling: '/home/jsd1/speechdata/dictsource/hu_rules'
-	221 rules, 37 groups
+	209 rules, 37 groups
+
+Using phonemetable: 'hy'
+Compiling: '/home/jsd1/speechdata/dictsource/hy_list'
+	70 entries
+Compiling: '/home/jsd1/speechdata/dictsource/hy_rules'
+	93 rules, 39 groups
+
+Using phonemetable: 'id'
+Compiling: '/home/jsd1/speechdata/dictsource/id_list'
+	132 entries
+Compiling: '/home/jsd1/speechdata/dictsource/id_rules'
+	71 rules, 27 groups
+
+Using phonemetable: 'is'
+Compiling: '/home/jsd1/speechdata/dictsource/is_list'
+	327 entries
+Compiling: '/home/jsd1/speechdata/dictsource/is_rules'
+	202 rules, 37 groups
 
 Using phonemetable: 'it'
 Compiling: '/home/jsd1/speechdata/dictsource/it_list'
-	354 entries
+	393 entries
 Compiling: '/home/jsd1/speechdata/dictsource/it_rules'
-	255 rules, 27 groups
+	217 rules, 27 groups
+
+Using phonemetable: 'jbo'
+Compiling: '/home/jsd1/speechdata/dictsource/jbo_list'
+	68 entries
+Compiling: '/home/jsd1/speechdata/dictsource/jbo_rules'
+	61 rules, 27 groups
+
+Using phonemetable: 'ku'
+Compiling: '/home/jsd1/speechdata/dictsource/ku_list'
+	106 entries
+Compiling: '/home/jsd1/speechdata/dictsource/ku_rules'
+	46 rules, 32 groups
+
+Using phonemetable: 'la'
+Compiling: '/home/jsd1/speechdata/dictsource/la_list'
+	215 entries
+Compiling: '/home/jsd1/speechdata/dictsource/la_rules'
+	113 rules, 31 groups
+
+Using phonemetable: 'lv'
+Compiling: '/home/jsd1/speechdata/dictsource/lv_list'
+	282 entries
+Compiling: '/home/jsd1/speechdata/dictsource/lv_rules'
+	740 rules, 40 groups
+
+Using phonemetable: 'mk'
+Compiling: '/home/jsd1/speechdata/dictsource/mk_list'
+	188 entries
+Compiling: '/home/jsd1/speechdata/dictsource/mk_rules'
+	150 rules, 65 groups
 
 Using phonemetable: 'nl'
 Compiling: '/home/jsd1/speechdata/dictsource/nl_list'
-	197 entries
+	202 entries
 Compiling: '/home/jsd1/speechdata/dictsource/nl_rules'
-	153 rules, 27 groups
+	156 rules, 27 groups
 
 Using phonemetable: 'no'
 Compiling: '/home/jsd1/speechdata/dictsource/no_list'
@@ -90,21 +156,39 @@ Compiling: '/home/jsd1/speechdata/dictsource/no_rules'
 
 Using phonemetable: 'pl'
 Compiling: '/home/jsd1/speechdata/dictsource/pl_list'
-	2945 entries
+	2957 entries
 Compiling: '/home/jsd1/speechdata/dictsource/pl_rules'
-	936 rules, 55 groups
+	942 rules, 55 groups
+
+Using phonemetable: 'pt'
+Compiling: '/home/jsd1/speechdata/dictsource/pt_list'
+	701 entries
+Compiling: '/home/jsd1/speechdata/dictsource/pt_rules'
+	647 rules, 38 groups
+
+Using phonemetable: 'ro'
+Compiling: '/home/jsd1/speechdata/dictsource/ro_list'
+	1909 entries
+Compiling: '/home/jsd1/speechdata/dictsource/ro_rules'
+	326 rules, 32 groups
 
 Using phonemetable: 'ru'
 Compiling: '/home/jsd1/speechdata/dictsource/ru_list'
 	121 entries
 Compiling: '/home/jsd1/speechdata/dictsource/ru_rules'
-	534 rules, 60 groups
+	508 rules, 34 groups
 
 Using phonemetable: 'sk'
 Compiling: '/home/jsd1/speechdata/dictsource/sk_list'
-	304 entries
+	314 entries
 Compiling: '/home/jsd1/speechdata/dictsource/sk_rules'
 	528 rules, 46 groups
+
+Using phonemetable: 'sq'
+Compiling: '/home/jsd1/speechdata/dictsource/sq_list'
+	132 entries
+Compiling: '/home/jsd1/speechdata/dictsource/sq_rules'
+	100 rules, 29 groups
 
 Using phonemetable: 'sv'
 Compiling: '/home/jsd1/speechdata/dictsource/sv_list'
@@ -114,184 +198,35 @@ Compiling: '/home/jsd1/speechdata/dictsource/sv_rules'
 
 Using phonemetable: 'sw'
 Compiling: '/home/jsd1/speechdata/dictsource/sw_list'
-	166 entries
+	167 entries
 Compiling: '/home/jsd1/speechdata/dictsource/sw_rules'
 	66 rules, 27 groups
-
-Using phonemetable: 'vi'
-Compiling: '/home/jsd1/speechdata/dictsource/vi_list'
-	72 entries
-Compiling: '/home/jsd1/speechdata/dictsource/vi_rules'
-	353 rules, 95 groups
-
-Using phonemetable: 'zhy'
-Compiling: '/home/jsd1/speechdata/dictsource/zhy_rules'
-	81 rules, 27 groups
 
 Using phonemetable: 'ta'
 Compiling: '/home/jsd1/speechdata/dictsource/ta_list'
 	74 entries
 Compiling: '/home/jsd1/speechdata/dictsource/ta_rules'
-	129 rules, 5 groups
+	103 rules, 5 groups
 
-Using phonemetable: 'pt'
-Compiling: '/home/jsd1/speechdata/dictsource/pt_list'
-	663 entries
-Compiling: '/home/jsd1/speechdata/dictsource/pt_rules'
-	557 rules, 38 groups
+Using phonemetable: 'tr'
+Compiling: '/home/jsd1/speechdata/dictsource/tr_list'
+	129 entries
+Compiling: '/home/jsd1/speechdata/dictsource/tr_rules'
+	193 rules, 33 groups
 
-Using phonemetable: 'ro'
-Compiling: '/home/jsd1/speechdata/dictsource/ro_list'
-	1905 entries
-Compiling: '/home/jsd1/speechdata/dictsource/ro_rules'
-	334 rules, 32 groups
-
-Using phonemetable: 'is'
-Compiling: '/home/jsd1/speechdata/dictsource/is_list'
-	327 entries
-Compiling: '/home/jsd1/speechdata/dictsource/is_rules'
-	202 rules, 37 groups
-
-Using phonemetable: 'la'
-Compiling: '/home/jsd1/speechdata/dictsource/la_list'
-	215 entries
-Compiling: '/home/jsd1/speechdata/dictsource/la_rules'
-	113 rules, 31 groups
-
-Using phonemetable: 'grc'
-Compiling: '/home/jsd1/speechdata/dictsource/grc_list'
-	22 entries
-Compiling: '/home/jsd1/speechdata/dictsource/grc_rules'
-	134 rules, 54 groups
-
-Using phonemetable: 'mk'
-Compiling: '/home/jsd1/speechdata/dictsource/mk_list'
-	188 entries
-Compiling: '/home/jsd1/speechdata/dictsource/mk_rules'
-	150 rules, 65 groups
+Using phonemetable: 'vi'
+Compiling: '/home/jsd1/speechdata/dictsource/vi_list'
+	104 entries
+Compiling: '/home/jsd1/speechdata/dictsource/vi_rules'
+	354 rules, 95 groups
 
 Using phonemetable: 'zh'
 Compiling: '/home/jsd1/speechdata/dictsource/zh_list'
 	3873 entries
 Compiling: '/home/jsd1/speechdata/dictsource/zh_rules'
-	172 rules, 28 groups
+	176 rules, 28 groups
 
-Using phonemetable: 'jbo'
-Compiling: '/home/jsd1/speechdata/dictsource/jbo_list'
-	68 entries
-Compiling: '/home/jsd1/speechdata/dictsource/jbo_rules'
-	58 rules, 27 groups
-
-Using phonemetable: 'en'
-Compiling: '/home/jsd1/speechdata/dictsource/ko_list'
-    9: Bad phoneme [o] (0x6f) in: _5  'o
-   10: Bad phoneme [u] (0x75) in: _6  j'uk
-   13: Bad phoneme [u] (0x75) in: _9  k'u
-   18: Bad phoneme [o] (0x6f) in: _5X  'oS;ip
-   22: Bad phoneme [u] (0x75) in: _9X  k'uS;ip
-	27 entries
-Compiling: '/home/jsd1/speechdata/dictsource/ko_rules'
-   13: Bad phoneme [`] in 	ᄁ	k`
-   18: Bad phoneme [`] in 	ᄄ	t`
-   25: Bad phoneme [`] in 	ᄈ	p`
-   28: Bad phoneme [`] in 	ᄊ	s`
-   33: Bad phoneme [`] in 	ᄍ	c`
-   48: Bad phoneme [e] in 	ᅦ	e	   50: Bad phoneme [e] in 	ᅨ	je	   51: Bad phoneme [o] in 	ᅩ	o	   54: Bad phoneme [e] in 	ᅬ	we	   55: Bad phoneme [o] in 	ᅭ	jo	   56: Bad phoneme [u] in 	ᅮ	u	   58: Bad phoneme [e] in 	ᅰ	we	   60: Bad phoneme [u] in 	ᅲ	ju	   61: Bad phoneme [u] in 	ᅳ	u-	   73: Bad phoneme [`] in 	ᆩ	k`
-  150: Bad phoneme [u] in 劇	ku-k
-  151: Bad phoneme [e] in 劑	ce
-  155: Bad phoneme [o] in 寸	chon
-  157: Bad phoneme [u] in 後	hu
-  158: Bad phoneme [u] in 文	mun
-  165: Bad phoneme [o] in 空	koN
-  166: Bad phoneme [e] in 腦	nwe
-  167: Bad phoneme [o] in 藻	co
-	139 rules, 5 groups
-
-Using phonemetable: 'hr'
-Compiling: '/home/jsd1/speechdata/dictsource/hbs_list'
-	564 entries
-Compiling: '/home/jsd1/speechdata/dictsource/hbs_rules'
-	115 rules, 34 groups
-
-Using phonemetable: 'id'
-Compiling: '/home/jsd1/speechdata/dictsource/id_list'
-	128 entries
-Compiling: '/home/jsd1/speechdata/dictsource/id_rules'
-	72 rules, 27 groups
-
-Using phonemetable: 'en'
-Compiling: '/home/jsd1/speechdata/dictsource/rw_list'
-   28: Bad phoneme [e] (0x65) in: x  eks
-   34: Bad phoneme [u] (0x75) in: _0  z'e*u
-   34: Bad phoneme [u] (0x75) in: _0  z'e*u
-   35: Bad phoneme [e] (0x65) in: _1  R'imwe
-   37: Bad phoneme [u] (0x75) in: _3  gat'atu
-   38: Bad phoneme [e] (0x65) in: _4  k'ane
-   39: Bad phoneme [u] (0x75) in: _5  gat'anu
-   40: Bad phoneme [u] (0x75) in: _6  gatand'atu
-   42: Bad phoneme [u] (0x75) in: _8  umun'ani
-   42: Bad phoneme [u] (0x75) in: _8  umun'ani
-   43: Bad phoneme [e] (0x65) in: _9  ikj'enda
-   45: Bad phoneme [u] (0x75) in: _1X  itS'umi
-   46: Bad phoneme [u] (0x75) in: _2X  makumjaB'i*i
-   47: Bad phoneme [u] (0x75) in: _3X  mi*,oNgwit'atu
-   47: Bad phoneme [u] (0x75) in: _3X  mi*,oNgwit'atu
-   48: Bad phoneme [e] (0x65) in: _4X  mi*,oNgw'ine
-   48: Bad phoneme [e] (0x65) in: _4X  mi*,oNgw'ine
-   49: Bad phoneme [u] (0x75) in: _5X  mi*,oNgwit'anu
-   49: Bad phoneme [u] (0x75) in: _5X  mi*,oNgwit'anu
-   50: Bad phoneme [u] (0x75) in: _6X  mi*,oNgitand'atu
-   50: Bad phoneme [u] (0x75) in: _6X  mi*,oNgitand'atu
-   51: Bad phoneme [o] (0x6f) in: _7X  mi*,oNgwi*'indwi
-   52: Bad phoneme [o] (0x6f) in: _8X  mi*,oNgwin'ani
-   53: Bad phoneme [e] (0x65) in: _9X  mi*,oNgwej'enda
-   53: Bad phoneme [e] (0x65) in: _9X  mi*,oNgwej'enda
-   53: Bad phoneme [e] (0x65) in: _9X  mi*,oNgwej'enda
-   57: Bad phoneme [u] (0x75) in: _3C  mag,anat'atu
-   58: Bad phoneme [e] (0x65) in: _4C  mag,an'ane
-   59: Bad phoneme [u] (0x75) in: _5C  mag,anat'anu
-   60: Bad phoneme [u] (0x75) in: _6C  mag,anatand'atu
-   63: Bad phoneme [e] (0x65) in: _9C  mag,anakj'enda
-   65: Bad phoneme [u] (0x75) in: _0M1  iBih'umbi
-   66: Bad phoneme [u] (0x75) in: _1M1  iJih'umbi
-   67: Bad phoneme [u] (0x75) in: _2M1  iBih'umbibiB'i*i
-   68: Bad phoneme [u] (0x75) in: _3M1  iBih'umbibit'atu
-   68: Bad phoneme [u] (0x75) in: _3M1  iBih'umbibit'atu
-   69: Bad phoneme [e] (0x65) in: _4M1  iBih'umbib'ine
-   69: Bad phoneme [e] (0x65) in: _4M1  iBih'umbib'ine
-   70: Bad phoneme [u] (0x75) in: _5M1  iBih'umbibit'anu
-   70: Bad phoneme [u] (0x75) in: _5M1  iBih'umbibit'anu
-   71: Bad phoneme [u] (0x75) in: _6M1  iBih'umbibitand'atu
-   71: Bad phoneme [u] (0x75) in: _6M1  iBih'umbibitand'atu
-   72: Bad phoneme [u] (0x75) in: _7M1  iBih'umbibi*'indwi
-   74: Bad phoneme [o] (0x6f) in: _0M2  milij'oni
-   75: Bad phoneme [e] (0x65) in: _1M2  milij'on'imwe
-   75: Bad phoneme [e] (0x65) in: _1M2  milij'on'imwe
-   76: Bad phoneme [e] (0x65) in: _2M2  milij'oneBj'i*i
-   76: Bad phoneme [e] (0x65) in: _2M2  milij'oneBj'i*i
-   77: Bad phoneme [u] (0x75) in: _3M2  milij'oneS'atu
-   77: Bad phoneme [u] (0x75) in: _3M2  milij'oneS'atu
-   77: Bad phoneme [u] (0x75) in: _3M2  milij'oneS'atu
-   78: Bad phoneme [e] (0x65) in: _4M2  m,ilij'on'en^e
-   78: Bad phoneme [e] (0x65) in: _4M2  m,ilij'on'en^e
-   78: Bad phoneme [e] (0x65) in: _4M2  m,ilij'on'en^e
-   81: Bad phoneme [e] (0x65) in: _dpt  _niB'itSe
-	69 entries
-Compiling: '/home/jsd1/speechdata/dictsource/rw_rules'
-   21: Bad phoneme [e] in 	e	e
-   63: Bad phoneme [o] in 	o	o
-   84: Bad phoneme [u] in 	u	u
-  104: Bad phoneme [o] in 	$	dola*a  	47 rules, 27 groups
-
-Using phonemetable: 'tr'
-Compiling: '/home/jsd1/speechdata/dictsource/tr_list'
-	127 entries
-Compiling: '/home/jsd1/speechdata/dictsource/tr_rules'
-	193 rules, 33 groups
-
-Using phonemetable: 'ku'
-Compiling: '/home/jsd1/speechdata/dictsource/ku_list'
-	106 entries
-Compiling: '/home/jsd1/speechdata/dictsource/ku_rules'
-	46 rules, 32 groups
+Using phonemetable: 'zhy'
+Compiling: '/home/jsd1/speechdata/dictsource/zhy_rules'
+	81 rules, 27 groups
 

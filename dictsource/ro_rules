@@ -7,7 +7,8 @@
 .replace
  ș	ş
  ț	ţ
-
+ Ș	ş	// because Windows doesn't convert upper-case Ș Ț to lower-case
+ Ț	ţ
 
 .group a
         a        a
@@ -176,9 +177,9 @@
         i (A     j
 
      @) i (e_    j
-    &C) i (_N$1q i/
-     &) i (_N$1q i
-     &) i (-N$1q i        // don't reduce to [I^] if a hyphen follows
+    &C) i (_NS1q i/
+     &) i (_NS1q i
+     &) i (-NS1q i        // don't reduce to [I^] if a hyphen follows
      ţ) i (-Că   i
      ţ) i (-Ci   i
 
@@ -471,19 +472,9 @@
 
         , (D     v'irgul@
 
-        .        punkt
-        . (.     _:
-   \.)  .
-
    __)  - (_D    m'inus
    A_)  - (_D    _
    C_)  - (_D    _
-    --) -
-
-        *        aste*isk
-    *)  * (*
-        **
-   **)  * (_     _::
 
 
 

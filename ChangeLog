@@ -1,3 +1,57 @@
+eSpeak 1.40
+
+Added languages:
+lv Latvian, ca Catalan, sq Albanian, hy Armenian.
+
+Adjusted the tonal quality of the speech to reduce the harshness slightly.
+
+Language improvements include:
+English/US, Esperanto.
+
+Windows SAPI5 installer: Remove the limit on the number of eSpeak voices which can be installed.
+
+-m command option: Ignore text within <script> and <style> tag pairs.
+
+-v command option: If the parameter is not a voice file name, look it up as a language name (specified inside voice files).
+
+Added command option --path.  Specified the path of the espeak-data directory.
+
+Added command option --phonout.  Specifies output of mbrola phoneme data, and phoneme data from -x and -X command options, to a file rather than stdout.
+
+Implemented visemes on the SAPI5 interface.
+
+Fix some sound channel lock-ups.
+
+Reduced pause when announcing punctuation characters.
+
+Add voice variant: "fast" to allow experimentation with faster speaking speeds.
+
+Removed the use of C++ Classes.
+
+
+
+
+eSpeak 1.39
+
+Fix for crash with some SSML tags.
+
+Minor language improvements: French, English/US
+
+Fix missing phoneme translations for mbrola French voice.
+
+
+eSpeak 1.38
+
+Language improvements include:
+English/US, French, Afrikaans.
+
+Added support for mbrola Brazilian voices br1, br3, br4.
+
+Pitch changes now work for mbrola voices in SAPI5 version.
+
+Various minor bug fixes.
+
+
 eSpeak 1.37
 
 Added build options for pulseaudio and sada sound systems.
@@ -94,182 +148,4 @@ eSpeak 1.32
 21. Added "consonants" attribute to voice files, to adjust the strength of consonants.
 
 22. RISC_OS version.  Implement --voices (list voices).  Disable "breath" attribute in voice files because it causes a floating-point crash.
-
-
-eSpeak 1.31
-
-1. Added language: jbo (Lojban).
-
-2. Added command line parameter: --split="<minutes>". Starts a new WAV output file every <minutes> minutes.
-
-3. Added command line parameter: --compile=debug. Includes source line numbers from the *_rules file which are shown when the -X option is used.
-
-4. Fixed bug in version 1.30.  Vowels had too strong attack.
-
-5. Fixed intonation bug for lang=es,pt.  Pitch drops until end-of-sentence, after an accented vowel.
-
-6. Mbrola voices.  Better intonation, by applying pitch changes over the first 80% of the mbrola phonemes.
-
-7. Linux: look for environment variable ESPEAK_DATA_PATH (if set) for the espeak-data directory.
-
-8. SSML tag <emphasis>. Fixed bug.  Also, reduce the previous stressed word to unstressed.
-
-9. Remove pause before <say-as> at the beginning of a sentence (fix needed by Speech Dispatcher).  Fix <say-as interpret-as="key">.
-
-10. SSML tag <audio src=""> now works in PLAYBACK modes, or if a UriCallback() function has not been set.
-
-11. Fix SSML tags, <break time="">, 
-
-12. lang=en-r: changes to phonemes.
-
-13. lang=es: improvents.  Added new phoneme [J^] voiced palatal frictive.
-
-14. Fix espeakEVENT_MARK events in AUDIO_OUPUT_PLAYBACK mode.
-
-
-eSpeak 1.30
-
-1. Added languages:
-  zh (Mandarin)
-  sr (Serbian)
-  grc (Ancient Greek).
-
-2. Use a different intonation for exclamation sentences.
-
-3. Add options for different intonation styles ("intonation" attribute in voice files).
-
-4. Reduced some glitches at low pitches.
-
-5. Increase the top speed from 370 to 390 wpm.
-
-6. Added option for gaps (pauses) between words.
-   -g option, and espeak_SetParameter(espeak_WORDGAP).
-
-7. *_list files can include pronounciations as text, as well as as phonemes ($textmode, $phonememode, $text).
-
-8. *_list files can include multiple words of up to 10 parts.
-
-9. *_rules files. .replace section for character substitution before *_rules and *_list are applied.
-
-10. Improved English [r].
-
-11. Allow echo to decay at the end of speech.
-
-12. Allow voice+variant names in SSML tags.
-
-13. Better intonation effect for <emphasis> tag.
-
-14. Remember the voice variant over <speak> tags.
-
-15. Fix problem with Mbrola voices stopping in Jaws screenreader.
-
-16. lang=vi, recognise combining accent characters.
-
-
-eSpeak  1.29
-
-1. Bug fixes and minor improvements.
-
-2. Voice variants have names rather than
-   numbers (eg. espeak -v en+f2 ).
-
-
-eSpeak  1.28
-
-1. Roman number translation added for some languages.
-
-2. Improvements to languages, including en-r, Hungarian, Romanian.
-
-3. Various bug fixes.
-
-
-eSpeak  1.27
-
-1. License change to GPL version 3.
-
-2. Fixes, including crash in espeak_ListVoices()
-
-3. Language improvements, including:
-   French, German, Italian, Hungarian, Afrikaans,
-
-4. Add parameter "options" to espeak_Initialize() to turn on phoneme event reporting.
-
-5. Added breath attributes in voice files, and "en-wisper" voice which uses these.
-
-
-eSpeak  1.26
-
-1. Improvements to languages including
-   hu Hungarian, ro Romanian, af Afrikaans.
-   pt Portuguese, en-r.
-
-2. New language "is" (Icelandic, initial
-   draft).
-
-
-
-eSpeak  1.25
-
-1. Improvements to languages including
-   fr French, cs Czech, sk Slovak,
-   no Norwegian, hr Croatian,
-   pt-pt European Portuguese.
-
-2. Croatian, allow either Latin or Cyrillic. 
-
-3. Change to the tone balance.
-
-
-eSpeak  1.24
-
-1. Improvements to languages including
-   cs Czech,  el Greek
-
-2. Windows: the installer sets the Language
-   attribute in the Registry for each voice.
-
-
-eSpeak  1.23
-
-1. Added language
-   hr  Croatian
-
-eSpeak  1.22
-
-1. Windows: added a command-line version,
-   espeak.exe.
-
-2. eSpeak can be used as a frontend to mbrola 
-diphone voices.  See docs/mbrola.html.
-
-3. Added languages
-   cs  Czech
-   sk  Slovak
-   en-sc  Scottish English
-
-4. Improved languages:
-   pl  Polish
-   sv  Swedish
-
-5. Increased the fastest speaking rate to 370 wpm.
-
-
-eSpeak 1.21
-
-1. Added languages
-   hu  Hungarian
-   sw  Swahili
-
-2. Increased the top speed slightly
-(max speed is 320)
-
-3. Added espeak_Info() function n speak_lib.h to
-give the eSpeak version number.
-
-4. Added "tone" attribute in voices files, to
-adjust the frequency response of the speech.
-Changed the default setting to give a little
-more bass.
-
-5. Other language improvements and bug fixes.
 

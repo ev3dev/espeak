@@ -23,13 +23,12 @@
 #include "src/speak_lib.h"
 #include "stdio.h"
 
-
-
 #define CTRL_EMBEDDED  1
 
 CTTSEngObj *m_EngObj;
 ISpTTSEngineSite* m_OutputSite;
 FILE *f_log2=NULL;
+ULONGLONG event_interest;
 
 extern int AddNameData(const char *name, int wide);
 extern void InitNamedata(void);
@@ -49,6 +48,10 @@ char *path_install = NULL;
 
 unsigned long audio_offset = 0;
 unsigned long audio_latest = 0;
+int prev_phoneme = 0;
+int prev_phoneme_position = 0;
+unsigned long prev_phoneme_time = 0;
+
 unsigned int gBufSize = 0;
 wchar_t *TextBuf=NULL;
 
@@ -65,6 +68,89 @@ int frag_count=0;
 FRAG_OFFSET *frag_offsets = NULL;
 
 
+//#define TEST_INPUT    // printf input text received from SAPI to espeak_text_log.txt
+#ifdef TEST_INPUT
+static int utf8_out(unsigned int c, char *buf)
+{//====================================
+// write a unicode character into a buffer as utf8
+// returns the number of bytes written
+	int n_bytes;
+	int j;
+	int shift;
+	static char unsigned code[4] = {0,0xc0,0xe0,0xf0};
+
+	if(c < 0x80)
+	{
+		buf[0] = c;
+		return(1);
+	}
+	if(c >= 0x110000)
+	{
+		buf[0] = ' ';      // out of range character code
+		return(1);
+	}
+	if(c < 0x0800)
+		n_bytes = 1;
+	else
+	if(c < 0x10000)
+		n_bytes = 2;
+	else
+		n_bytes = 3;
+
+	shift = 6*n_bytes;
+	buf[0] = code[n_bytes] | (c >> shift);
+	for(j=0; j<n_bytes; j++)
+	{
+		shift -= 6;
+		buf[j+1] = 0x80 + ((c >> shift) & 0x3f);
+	}
+	return(n_bytes+1);
+}  // end of utf8_out
+#endif
+
+
+int VisemeCode(unsigned int phoneme_name)
+{//======================================
+// Convert eSpeak phoneme name into a SAPI viseme code
+
+	int ix;
+	unsigned int ph;
+	unsigned int ph_name;
+
+#define PH(c1,c2)  (c2<<8)+c1          // combine two characters into an integer for phoneme name 
+
+	const unsigned char initial_to_viseme[128] = {
+		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,19, 0, 0, 0, 0, 0,
+		 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,255,
+		 4, 2,18,16,17, 4,18,20,12, 6,16,20,14,21,20, 3,
+		21,20,13,16,17, 4, 1, 5,20, 7,16, 0, 0, 0, 0, 0,
+		 0, 1,21,16,19, 4,18,20,12, 6, 6,20,14,21,19, 8,
+		21,20,13,15,19, 7,18, 7,20, 7,15, 0, 0, 0, 0, 0 };
+
+	const unsigned int viseme_exceptions[] = {
+		PH('a','I'), 11,
+		PH('a','U'),  9,
+		PH('O','I'), 10,
+		PH('t','S'), 16,
+		PH('d','Z'), 16,
+		PH('_','|'), 255,
+		0
+	};
+	
+	ph_name = phoneme_name & 0xffff;
+	for(ix=0; (ph = viseme_exceptions[ix]) != 0; ix+=2)
+	{
+		if(ph == ph_name)
+		{
+			return(viseme_exceptions[ix+1]);
+		}
+	}
+	return(initial_to_viseme[phoneme_name & 0x7f]);
+}
+
+
 int SynthCallback(short *wav, int numsamples, espeak_EVENT *events);
 
 int SynthCallback(short *wav, int numsamples, espeak_EVENT *events)
@@ -73,6 +159,8 @@ int SynthCallback(short *wav, int numsamples, espeak_EVENT *events)
 	wchar_t *tailptr;
 	unsigned int text_offset;
 	int length;
+	int phoneme_duration;
+	int this_viseme;
 
 	espeak_EVENT *event;
 #define N_EVENTS 100
@@ -86,7 +174,7 @@ int SynthCallback(short *wav, int numsamples, espeak_EVENT *events)
 	m_EngObj->CheckActions(m_OutputSite);
 
 	// return the events
-	for(event=events; event->type != 0; event++)
+	for(event=events; (event->type != 0) && (n_Events < N_EVENTS); event++)
 	{
 		audio_latest = event->audio_position + audio_offset;
 
@@ -120,6 +208,28 @@ int SynthCallback(short *wav, int numsamples, espeak_EVENT *events)
 			Event->ullAudioStreamOffset = ((event->audio_position + audio_offset) * srate)/10;  // ms -> bytes
 			Event->lParam               = (long)event->id.name;
 			Event->wParam               = wcstol((wchar_t *)event->id.name,&tailptr,10);
+		}
+		if(event->type == espeakEVENT_PHONEME)
+		{
+			if(event_interest & SPEI_VISEME)
+			{
+				phoneme_duration = audio_latest - prev_phoneme_time;
+
+				// ignore some phonemes (which translate to viseme=255)
+				if((this_viseme = VisemeCode(event->id.number)) != 255)
+				{
+					Event = &Events[n_Events++];
+					Event->eEventId             = SPEI_VISEME;
+					Event->elParamType          = SPET_LPARAM_IS_UNDEFINED;
+					Event->ullAudioStreamOffset = ((prev_phoneme_position + audio_offset) * srate)/10;  // ms -> bytes
+					Event->lParam               = phoneme_duration << 16 | this_viseme;
+					Event->wParam               = VisemeCode(prev_phoneme);
+
+					prev_phoneme = event->id.number;
+					prev_phoneme_time = audio_latest;
+					prev_phoneme_position = event->audio_position;
+				}
+			}
 		}
 #ifdef deleted
 		if(event->type == espeakEVENT_SENTENCE)
@@ -286,7 +396,7 @@ STDMETHODIMP CTTSEngObj::SetObjectToken(ISpObjectToken * pToken)
 	gEmphasis = 0;
 	gSayas = 0;
 
-	espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,100,path_install,0);
+	espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,100,path_install,1);
 	espeak_SetVoiceByName(voice);
 	espeak_SetSynthCallback(SynthCallback);
 	
@@ -520,8 +630,32 @@ int CTTSEngObj::ProcessFragList(const SPVTEXTFRAG* pTextFragList, wchar_t *pW_st
 				frag_offsets[frag_count].bufix = pW - pW_start;
 				frag_offsets[frag_count].cmdlen = len;
 
+#ifdef TEST_INPUT
+{
+FILE *f;
+unsigned int c;
+int n;
+char buf[10];
+
+f = fopen("C:\\espeak_text_log.txt","a");
+if(f != NULL)
+{
+	fprintf(f,"----------\n");
+	for(ix=0; ix<pTextFragList->ulTextLen; ix++)
+	{
+		c = pTextFragList->pTextStart[ix];
+		n = utf8_out(c,buf);
+		buf[n] = 0;
+		fprintf(f,"%s",buf);
+	}
+	fprintf(f,"\n");
+	fclose(f);
+}
+}
+#endif
 				for(ix=0; ix<pTextFragList->ulTextLen; ix++)
 				{
+					
 					*pW++ = pTextFragList->pTextStart[ix];
 				}
 				if(pTextFragList->ulTextLen > 0)
@@ -654,7 +788,7 @@ STDMETHODIMP CTTSEngObj::Speak( DWORD dwSpeakFlags,
         m_ullAudioOff = 0;
 
 		m_OutputSite = pOutputSite;
-
+		pOutputSite->GetEventInterest(&event_interest);
 
 		xVolume = gVolume;
 		xSpeed = gSpeed;
@@ -694,6 +828,10 @@ STDMETHODIMP CTTSEngObj::Speak( DWORD dwSpeakFlags,
 		}
 
 		audio_latest = 0;
+		prev_phoneme = 0;
+		prev_phoneme_time = 0;
+		prev_phoneme_position = 0;
+
 		size = ProcessFragList(pTextFragList,TextBuf,pOutputSite,&n_text_frag);
 
 		if(size > 0)

@@ -1,6 +1,9 @@
 // translation rules for Czech
 // This file is UTF-8 encoded
 
+// Letter groups:
+// G   voiced: bdgjlmnrvwzaeiouy
+
 .group a
         a        a
         au       aU
@@ -236,7 +239,7 @@
 
 .group n
         n        n
-        nn       n
+        n (n
         n (g     N
         n (k     N
         n (ě     n^
@@ -339,6 +342,7 @@ _mícha) ni       n^i
    pod) ni (k    n^i
    pro) ni (k    n^i
     ro) ni (c    ni
+synchro) ni      ni
   stoj) ni       n^i
   tago) ni (s    ni
     tu) ni (s    ni
@@ -380,11 +384,6 @@ _mícha) ni       n^i
         qu       kv
 
 .group r
-//        r        r
-//     A) r (A     *
-//     C) r (A     @-*
-//        rr       *r
-//        right    rajt
        K) r (K     r-
 
         r        R
@@ -632,18 +631,9 @@ _flegma) ti      ti
         ü        i
 
 	$	dola:R
-	!	vigR^itSn^i:k
 
-        .        tetSka
-        . (.     _:
-   \.)  .
 
    __)  - (_D    mi:nus
    A_)  - (_D    _
    C_)  - (_D    _
-    --) -
 
-        *        hvj'ezJitSka
-    *)  * (*
-        **
-   **)  * (_     _::

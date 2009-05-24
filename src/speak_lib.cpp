@@ -74,11 +74,12 @@ static int dispatch_audio(short* outbuf, int length, espeak_EVENT* event)
 	
 	int a_wave_can_be_played = fifo_is_command_enabled();
 	
+#ifdef DEBUG_ENABLED
 	SHOW("*** dispatch_audio > uid=%d, [write=%p (%d bytes)], sample=%d, a_wave_can_be_played = %d\n", 
 			(event) ? event->unique_identifier : 0, wave_test_get_write_buffer(), 2*length, 
 			(event) ? event->sample : 0,
 			a_wave_can_be_played);
-
+#endif
 
 	switch(my_mode)
 	{
@@ -156,11 +157,14 @@ static int create_events(short* outbuf, int length, espeak_EVENT* event, uint32_
       else
 		{
 			event = event_list + i;
-
+#ifdef DEBUG_ENABLED
 			SHOW("Synthesize: event->sample(%d) + %d = %d\n", event->sample, the_write_pos, event->sample + the_write_pos);
+#endif
 			event->sample += the_write_pos;
 		}
+#ifdef DEBUG_ENABLED
 		SHOW("*** Synthesize: i=%d (event_list_ix=%d), length=%d\n",i,event_list_ix,length);
+#endif
 		finished = dispatch_audio((short *)outbuf, length, event);
 		length = 0; // the wave data are played once.
 		i++;
@@ -300,10 +304,10 @@ static void init_path(const char *path)
 	}
 
 	buf[0] = 0;
-	RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Speech\\Voices\\Tokens\\eSpeak", 0, KEY_READ, &RegKey);
+	RegOpenKeyExA(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Speech\\Voices\\Tokens\\eSpeak", 0, KEY_READ, &RegKey);
 	size = sizeof(buf);
 	var_type = REG_SZ;
-	RegQueryValueEx(RegKey, "path", 0, &var_type, buf, &size);
+	RegQueryValueExA(RegKey, "path", 0, &var_type, buf, &size);
 
 	sprintf(path_home,"%s\\espeak-data",buf);
 
@@ -342,9 +346,12 @@ static int initialise(void)
 	if((result = LoadPhData()) != 1)
 	{
 		if(result == -1)
+		{
 			fprintf(stderr,"Failed to load espeak-data\n");
+			exit(1);
+		}
 		else
-			fprintf(stderr,"Wrong version of espeak-data 0x%x (expects 0x%x)\n",result,version_phdata);
+			fprintf(stderr,"Wrong version of espeak-data 0x%x (expects 0x%x) at %s\n",result,version_phdata,path_home);
 	}
 
 	memset(&voice_selected,0,sizeof(voice_selected));
@@ -362,7 +369,6 @@ static int initialise(void)
 static espeak_ERROR Synthesize(unsigned int unique_identifier, const void *text, int flags)
 {//========================================================================================
 	// Fill the buffer with output sound
-	ENTER("Synthesize");
 	int length;
 	int finished = 0;
 	int count_buffers = 0;
@@ -371,6 +377,7 @@ static espeak_ERROR Synthesize(unsigned int unique_identifier, const void *text,
 #endif
 
 #ifdef DEBUG_ENABLED
+	ENTER("Synthesize");
 	if (text)
 	{
 	SHOW("Synthesize > uid=%d, flags=%d, >>>text=%s<<<\n", unique_identifier, flags, text);
@@ -426,7 +433,9 @@ static espeak_ERROR Synthesize(unsigned int unique_identifier, const void *text,
 
 	for(;;)
 	{
+#ifdef DEBUG_ENABLED
 		SHOW("Synthesize > %s\n","for (next)");
+#endif
 		out_ptr = outbuf;
 		out_end = &outbuf[outbuf_size];
 		event_list_ix = 0;
@@ -517,15 +526,17 @@ void MarkerEvent(int type, unsigned int char_position, int value, unsigned char 
 	ep->text_position = char_position & 0xffff;
 	ep->length = char_position >> 24;
 	
-	time = (double(count_samples + (out_ptr - out_start)/2)*1000.0)/samplerate;
+	time = (double(count_samples + mbrola_delay + (out_ptr - out_start)/2)*1000.0)/samplerate;
 	ep->audio_position = int(time);
-	ep->sample = (count_samples + (out_ptr - out_start)/2);
+	ep->sample = (count_samples + mbrola_delay + (out_ptr - out_start)/2);
 	
+#ifdef DEBUG_ENABLED
 	SHOW("MarkerEvent > count_samples=%d, out_ptr=%x, out_start=0x%x\n",count_samples, out_ptr, out_start);
 	SHOW("*** MarkerEvent > type=%s, uid=%d, text_pos=%d, length=%d, audio_position=%d, sample=%d\n",
 			label[ep->type], ep->unique_identifier, ep->text_position, ep->length,
 			ep->audio_position, ep->sample);
-	
+#endif
+
 	if((type == espeakEVENT_MARK) || (type == espeakEVENT_PLAY))
 		ep->id.name = &namedata[value];
 	else
@@ -539,11 +550,13 @@ espeak_ERROR sync_espeak_Synth(unsigned int unique_identifier, const void *text,
 		      unsigned int position, espeak_POSITION_TYPE position_type, 
 		      unsigned int end_position, unsigned int flags, void* user_data)
 {//===========================================================================
+	
+#ifdef DEBUG_ENABLED
 	ENTER("sync_espeak_Synth");
-	
 	SHOW("sync_espeak_Synth > position=%d, position_type=%d, end_position=%d, flags=%d, user_data=0x%x, text=%s\n", position, position_type, end_position, flags, user_data, text);
-	
-		espeak_ERROR aStatus;
+#endif
+
+	espeak_ERROR aStatus;
 	
 	InitText(flags);
 	my_unique_identifier = unique_identifier;
@@ -615,7 +628,7 @@ void sync_espeak_Key(const char *key)
 	int letter;
 	int ix;
 
-	ix = utf8_in(&letter,key,0);
+	ix = utf8_in(&letter,key);
 	if(key[ix] == 0)
 	{
 		// a single character
@@ -745,8 +758,10 @@ ESPEAK_API espeak_ERROR espeak_Synth(const void *text, size_t size,
 				     unsigned int end_position, unsigned int flags, 
 				     unsigned int* unique_identifier, void* user_data)
 {//=====================================================================================
+#ifdef DEBUG_ENABLED
 	ENTER("espeak_Synth");
 	SHOW("espeak_Synth > position=%d, position_type=%d, end_position=%d, flags=%d, user_data=0x%x, text=%s\n", position, position_type, end_position, flags, user_data, text);
+#endif
 
 	espeak_ERROR a_error=EE_INTERNAL_ERROR;
 	static unsigned int temp_identifier;
@@ -802,8 +817,10 @@ ESPEAK_API espeak_ERROR espeak_Synth_Mark(const void *text, size_t size,
 					  unsigned int* unique_identifier,
 					  void* user_data)
 {//=========================================================================
+#ifdef DEBUG_ENABLED
   ENTER("espeak_Synth_Mark");
   SHOW("espeak_Synth_Mark > index_mark=%s, end_position=%d, flags=%d, text=%s\n", index_mark, end_position, flags, text);
+#endif
 
 	espeak_ERROR a_error=EE_OK;
 	static unsigned int temp_identifier;
@@ -908,10 +925,12 @@ ESPEAK_API espeak_ERROR espeak_Char(wchar_t character)
 
 
 ESPEAK_API espeak_ERROR espeak_SetVoiceByName(const char *name)
-{//===================================================
+{//============================================================
   ENTER("espeak_SetVoiceByName");
 
-#ifdef USE_ASYNC
+//#ifdef USE_ASYNC
+// I don't think there's a need to queue change voice requests
+#ifdef deleted
 	espeak_ERROR a_error;
 
 	if(synchronous_mode)
@@ -934,10 +953,11 @@ ESPEAK_API espeak_ERROR espeak_SetVoiceByName(const char *name)
 
 
 ESPEAK_API espeak_ERROR espeak_SetVoiceByProperties(espeak_VOICE *voice_selector)
-{//=====================================================================
+{//==============================================================================
   ENTER("espeak_SetVoiceByProperties");
 
-#ifdef USE_ASYNC
+//#ifdef USE_ASYNC
+#ifdef deleted
 	espeak_ERROR a_error;
 
 	if(synchronous_mode)
@@ -1040,7 +1060,7 @@ ESPEAK_API void espeak_SetPhonemeTrace(int value, FILE *stream)
 	option_phonemes = value;
 	f_trans = stream;
 	if(stream == NULL)
-		f_trans = stdout;
+		f_trans = stderr;
 	
 }   //  end of espeak_SetPhonemes
 
@@ -1065,6 +1085,7 @@ ESPEAK_API espeak_ERROR espeak_Cancel(void)
 	}
 	SHOW_TIME("espeak_Cancel > LEAVE");
 #endif
+	embedded_value[EMBED_T] = 0;    // reset echo for pronunciation announcements
 	return EE_OK;
 }   //  end of espeak_Cancel
 

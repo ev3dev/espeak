@@ -11,12 +11,14 @@
 
 // abbreviations
 (http ://)       hA:te@te@p'e@_
+adv         atfuk'A:t
 bpk         b@p&rk
 bv          beIf'o@rbe@lt $dot
 dr          d'Okt@r $dot
 e.a             _:En_'and@r
 edms        eI@ndOms
 ens         Enso@fo@rts $dot
+genl        x2@n@rA:l
 insp        InspEkt'Y@r $dot
 isbn        $abbrev
 kapt kapt'eIn $dot
@@ -27,9 +29,12 @@ pres        pr@s@d'Ent $dot
 prof        pruf'Es@r $dot
 sabc            $abbrev
 sanrb       $abbrev
+sms'e         Es_Em_'Es@
+sauk	    $abbrev
 st          s@nt $dot
 supt        suprEntEnd'Ent $dot
-
+tv          te@fe@_
+vsa         $abbrev
 
 // letter names
 // any letter which also appear as words should be prefixed by a _ here
@@ -78,7 +83,6 @@ z         zEd
 û         $accent
 ü         $accent
 
-
 _cap	h'o@flEt@r
 _??	s@mb'o@l
 _?A	l'Et@r
@@ -100,6 +104,9 @@ _rng	'A:nb&l
 _stk	str'e@p
 _tld	t'Ild@
 
+// symbols
+⅓	d&:rd@
+⅔	tw,e@d'&:rd@s
 
 // numeric
 _0	'nWl
@@ -107,7 +114,7 @@ _1	_'e@n
 _1a	_'e@n
 _2	'twe@
 _3	'dri
-_4	'fir
+_4	'fi:r
 _5	'feIf
 _6	'sEs
 _7	'se@v@
@@ -145,98 +152,149 @@ _roman  rum'eIns@
 
 // Place names
 
+afganistan  afg'anistan
 alaska      al'aska
-asië        A:si@
+algerië     alx2'e@re@:@-
+antwerpen   antv&rp@n
 babilon     babilOn
-bangladesh  baNglad'ES
+bangladesj  baNglad'ES
 bastille    bast'il
+bellevue    b&lvju:
+bermuda     $2
 bethlehem   bEt_liEm
+boedapest   budapEst
 boekarest   bukarEst
+bolivië     bul'Ivi:@
 bonnievale  _^_EN
 brittanje   $2
+brooklyn    _^_EN
+burundi     bur'undi
 caledon     kalidOn
 carolina    karul'ina
 ceres       se@r@s
+cesaréa     s@s@ri:ja
 ceylon      s@lOn
 china       S'ina
+clanwilliam kl&:nw'ili@m
+colenso     kul'E:ns@U
+colesberg   ko@lsb&rx2
+constantia  $2
+christiana  kr@stij'A:na
+damaskus    d@maskWs
+djakarta    dZak'arta
+doebaai     $2
 duitswes    dYytsv'Es
+ermelo      &rm@lo@
 franschhoek frA~nsh'uk
 gadara      x2@dA:ra
 galilea     x2al@l'i:a
 gariep      x2ar'ip
+germiston   _^_EN
 getsémané   x2Ets'e@mani
 goudini     $2
-goodwood    _^_EN
 gordonsbaai gO:rd@nsb'AI
 (graaff reinet) x2rA:f||r@n'Et
 griekeland  x2rik@lant
+groblersdal x2rObl@rsd'al
+havana      hav'ana
 hermon      $1
 hirosjima   hiruS'ima
 israel      IsraI:l
 italië      it'A:li;@
+kalafong    kalaf'ON
 kanada      kanad%a
 kanaän      kA:nA:an
+kaïro       ka_'iru
+kameroen    kam@r'un
 kenia       ki:nia
 kimberley   kimb@rli
+kinshasa    kinS'A:sa
 kongo       kONgu
 knysna      neIsna
+kuruman     kuruman
+kwa         kwa $u $only // KwaZulu, etc.
 lesotho     l@sutu
 limpopo     l@mpo@po@
 macedonië   mas@d'o@ni@
+madagaskar  madax2'askar
 majuba      maj'uba
+malmesbury  mA:msb@ri
+maputo      map'u:tu
 mauritius   mOr'iSjWs
 milaan      $2
 mesopotamië mEsuput'A:mi@
 montagu     mOnt@ky
+moreletapark mOr@l,Etap'ark
 moorreesburg mur'e@sbWrx2
-mosambiek   musamb'ik
+mosambiek   mo@samb'ik
 (thaba nchu) tab'A:||ntSu
 europa      Y@r'o@pa
+nigel       _^_EN
 outeniekwa  @Ut@n'ikwa
-portugal    $1
+oxford      _^_EN
+pelindaba   p&l@nd'A:ba
+portugal    pOrtyx2al
 potchefstroom pOtSIfstr'o@m
-pretoria    prit'o@ria
+richardsbaai ritS@dsb'AI
 robertson   _^_EN
+sahara      sah'A:ra
+secunda     s@kunda
+senekal     se@n@kal
 singapoer   siNgapur
-stellenbosch st%&l@mbOs 
+soshanguve  sOSaNg'u:vE
+soweto      suw'E:tu
+springs     _^_EN $capital
+sunnyside   _^_EN
+suriname    syrin'A:m@
 swellendam  $3
+tokio       to@kiu
 tunisië     $2
 turkye      $2
+ulundi      ul'undi
 upington    apiNt@n
 vesuvius    v@su:viWs
 viëtnam     vj'Etnam
+wallonië    val'o@ni@
+washington  _^_EN
 wellington  wEliNt@n
 wolseley    wulsli
-worcester   v'ust@r
+uganda      ug'anda
 zimbabwe    zI:mb'ab_wE
-
+zulu        zulu // Kwazulu-Natal
 
 
 // People names
 Abiméleg    abin'e@lEx2
 abraham     A:bram
 ackerman    ak@rman
+adam        adam
+adriaan     A:drijan
 adrie       A:dri
-aletta      al'Eta
-alida       al'ida
+albertus    alb'&rtWs
 allah       %alA:
 André       'andreI
 annette     an'Et
 antoinette  antun'Et
+barbara     bA:b@ra
 benjamin    bEndZ@m@n
+bennett     bEn@t
 bester b'Est@r
 beyers      beI@rs
 blomerus    blum'e@rWs
 botha       bo@ta
 bouwer      b@U@r
+brian       _^_EN
+bredenkamp  bre@d@nkamp
 breytenbach breIt@nbax2
 brouwer     bruw'&:r
 caesar      siz@r
 carl        kA:r@L
+cecil       sEs@l
 cecilia     s@si:lia
 charl       SA:l
 charles     _^_EN
 charlie     tSA:li
+charmaine   SA:m'eI:n
 chopin      S%OpA~
 conradie    $2
 chris       krIs
@@ -249,21 +307,32 @@ christine   kr@st'i:n
 cindy       sIndi
 coetzee     kuts'e@
 cronjé      krOnj'e@
+cynthia     _^_EN
+darwin      _^_EN
+david       _^_EN
+(da vinci)  da||v'intSi
 debora      d@bo@ra
 debussy     d@bus'i:
+de		d@
+(de la)     d@||la $u // de la Rey/de la Bat, etc.
 der         d@r
 derick      dErik
 deventer d'e@v@nt@r
+diana       dij'A:na
+donaldson   _^_EN
 du		$u
 (du pisanie) du||pis'A:ni
 (du plessis) du||pl@s'i
 (du preez)  d@||pr'e@
 (du toit)   d@||toI
 eksteen     $1
+eldorado    &ldOr'A:d@U
 elisabeth   il'isabEt
 elize       il'i:z
+elmien      $2
 elsabé      &ls@bi
 emmarentia  Emar'e~nSja
+erasmus     $2
 eségiël    is'e@x2i_@l
 estelle     %ist&l
 etienne     Eti@n
@@ -271,67 +340,89 @@ eugene      judZ'i:n
 eugène     yZ'En
 farao       fA:ro@
 ferreira    f@r&:r@
+fischer     fiS@r
 fourie      fur'i
+francina    $2
 francois    franSwa
 françois    frA~nsw'A:
-freud       frOId
 gabriël     x2A:bri@l
+gandhi      gandi
 george      _^_EN
+georgina    dZO:dZ'ina
 gerhard     x2&rart
 gerhardus   $2
 gloria      glO:ria
 grange      x2rA:nsi
 gustav      gustaf
+guy         _^_EN
+harry       _^_EN
 havenga     hA:f@Nx2a
 haydn       hAId@n
+helen       _^_EN
 helena      hil'e@na
 helloïse    hEluw'i:z
+henry       _^_EN
 herklaas    $1
-herman      $1
+herkules    $1
 hilde       hild@
 ilse 'ilz@
 ingrid      iNgr@d
 isabel      is@b&l
+iskariot    isk'ariOt
 jacques     ZA:k
 james       _^_EN
 jane        _^_EN
 Jean        ZA~n $capital
+jimmy       _^_EN
 joan        _^_EN
 joey        dZ@Ui
-john        _^_EN
+jones       _^_EN
 jordaan     $2
 josef       jo@s@f
 juanita     juan'ita
+julia       _^_EN
+kelvin      _^_EN
+kim         _^_EN $capital
 krige       krix2@
+labuschagne labWsk'ax2ni
 langenhoven laN@nho@f@n
 lasarus     lA:s@r%Ws
 lategan     lA:t@x2an
 le l@
 leandra     li'andra
-leroux      l@ru
+leonardo    liu:n'ardu
 levi        le@fi
 
 louis       luI
 louise      luw'i:z
+mackintosh  _^_EN
 mbeki       mbE:ki
 magdalena   $3
 malan       mal'an
 malherbe      mal'&rb@
+margaret    _^_EN
+margaretha  marx2ar'e@ta
+marguerite  mA:g@r'i:t
 marie       mA:ri
 marius      mA:riWs
 marlene     marl'e@:n
 marlise     marl'i:s
 martha      marta
 martin m'A:rt@n
+mary        _^_EN
+matteus     mat'i:Ws
 matthéüs    mat'i:Ws
+mefistofeles mEfist'o@f@l@s
 melanie     m@lA:ni
 meraai      m@rAI
 messias     m@sijas
 michael     _^_EN
 michelle    miS'&l
 michiel $2
+mike        _^_EN
 miriam      mIri@m
 mohammed    muh'am@t
+morné       mOrn'eI
 mostert     m'Ost@rt
 mouton      mut'On
 mozart      mo@tsart
@@ -340,22 +431,30 @@ napoleon    nap'o@liOn
 natasha n%at'aSa
 naudé       nOd'e@
 neil        _^_EN
+nelson      _^_EN
+niklaas     niklA:s
 ontong      OntON
-philip      fIl@p
 phillips    fIl@ps
 pierre p'e@r
 petronella  pe@trun'&la
 petrus      pe@trWs
 phoebe      fi:bi
+quixote     kix2'OtE
 rachmaninoff rax2m'aninOf
+rademeyer   rA:d@meI@r
 rebekka     r@bEka
+reinette    r@nEt
+renette     r@nEt
 renée       r@neI
 retief      r@tif
+rhodes      _^_EN
+robert      _^_EN
 ronel       run'&l
 rousseau    r@s@U
-roux r'u
 ruda        ruda
+rupert      rup@rt
 salomo      sA:l@mo@
+samuel      sA:my@l
 sandra      sandra
 schalk sk'alk
 scheepers   ske@p@rs
@@ -367,6 +466,8 @@ schutte     skWt@
 sebastian   s@bastian
 servaas     s@rfA:s
 shakespeare _^_EN
+sophia      suf'i:ja
+sophie      _^_EN
 stephan     ste@fan
 stephanus   st@fA:nWs
 strauss     straUs
@@ -375,15 +476,19 @@ suzette     suz'Et
 tania       tanja
 telemann    te@l@man
 terblanche  t@rblA:nS
+theo        tiu
 theron tr'On
 thys        teIs
 toerien     $2
+totius      to@SiWs
 trudie      trudi
 versfeld    f&rsf&lt
+victoria    _^_EN
 viljoen     $2
 villiers    vIli@rs
 vincent     _^_EN
 violet      _^_EN $capital
+visagie     fis'A:x2i
 william     _^_EN
 yolande     jul'and@
 yvonne      iv'On
@@ -397,12 +502,21 @@ scarlatti   $2
 schalkwyk   skalkveIk
 schreiner   SraIn@r
 tony        t@Uni
-xhosa       kO:za
+trichardt   trix2A:rt
 
 khumalo     kum'A:lu
+zuma        zu:ma
 
 // Other proper names
-checkers      tSEk@rs
+absa        absa
+boeing      _^_EN
+centaurus   $2
+checkers    tSEk@rs
+chrysler    kraIsl@r
+ferrari     f@rA:ri
+martini     mart'i:ni
+naspers     nasp&rs
+venda       vEnda
 wimpy       wImpi
 
 // article
@@ -495,7 +609,6 @@ voor		$u $strend2
 
 
 // misc unstressed
-de		d@
 dat		$u $strend
 te		t@ $verbf
 nie $unstressend $verbextend
@@ -518,10 +631,10 @@ julle		$u $verbf
 hulle		$u $verbf
 hulleself       hWl@s&lf $verbf
 my		$u $verbf
-jou		$u $verbf
+jou		$u $only $verbf
 hom		$u $verbf
 haar		$u $only $verbf
-se		s@
+se		Es@ $capital
 
 dis		$u
 
@@ -539,68 +652,79 @@ dis		$u
 aangaande     $2
 aanstaande    $2
 adagio        ad'A:dZi;%@U
+afgaanse      afg'A:ns@
+afgane        afg'A:n@
 africana      $3
 afkere        afke@r@
 agamemnon     ax2am'EmnOn
+aggressie     $2
 agterstevoor  $4
 agterweë      $3
 algaande      $2
+alge          alx2@
 algehele      alx2@h,e@l@
 allegro       al'Egru
-alles         al@s
 almiskie      $3
 alom          al_'Om
 alreeds       $2
 alternatiewe  $4
 amen          A:mEn
 anale         an'A:l@
-anatomie      $4 $only
 asof          asOf
 asook         %as_o@k
 aspris        $2
 asseblief     as@bl'if
+assessore     $3
 attraksie     $2
 
 babelaas      bab@lA:s
 barrikade     $3
 beide         beId@
+bekaf         b&kaf
 belangriker   b@laNr@k,Ir
-belangrikst@  b@laNr@kst@
 bene          be@n@
 beswil        bEsv@l	
-bêre          b&:r@
-beskryf b@skr'eIf
+besnedene     b@sne@d@n@	
 bestes        bEst@s
-beta          be@ta
+beta          be@ta $only
 bewe          be@v@
 bewend        be@v@nt
 bewering      b@ve@rIN
+bomaat      bo@mA:t
+boskaas       $2
 bostaande b'o@stA:nd@
+bourgeois     _^_FR
+bourgeoisie   _^_FR
+briewemes     briv@mEs
 
 cabernet      kab@rn'eI
 camembert     kam@mb'&:r
 camouflage    kamufl'A:Z
+capita        kapita
+casino        kas'i:n@U
 charisma      kar'Isma
 chemikalieë   $3
 crescendo     kr@SEndu
 
 dadelik       dA:d@lIk
 darem         dar@m
-derde         d&:rd@
 dekade        dEk'A:d@
 deurentyd     dy@r@nteIt
 deurgaans     $1
 deurkruis     $2
+deurstaan     $2
 deurstraalde  $2
 dikwels       dIkv@ls
 diplomasie    d@plo@mas'i
+doktore       $2
+doyen       dO:j'En
+dubbelken     dWb@lkEn
 dusver        dWsf&r
 
 eenkeer       $1
 efesiër       if'e@si@r
 effense       Ef@ns@
 ekself %&ks'&lf
-ekstra Ekstra
 elders        &ld@rs
 elite         il'i:t
 encore        A~NkO:r
@@ -613,6 +737,7 @@ espeak        i:;spi:k
 euro          Y@ru
 exodus        Eks'o@dWs
 
+fakture       $2
 figuur        f@x2yr
 filippense    f@l@pEns@
 finalis       $3
@@ -630,15 +755,16 @@ geldelike     x2&ld@l@k@
 genade        $2
 genesis       x2e@n@s@s 
 //gesamentlik   x2@sA:m@ntl@k
+globale       x2lo@b'A:l@
 gooi          x2OI
 gomorra       x2@mOra
 graffiti      graf'iti
 gratis        x2r'A:t@s
+grondys       x2rO:nt_eIs
 
 hallo         h'Il,@U
 hanou         hA:n@U
 hardop        hart?Op
-hasepad       hA:s@pat
 heeltemal     he@lt@mal
 hek           h&k
 hekke         h&k@
@@ -652,19 +778,25 @@ hoera         hur'A:
 hoewel        huv'&l
 hokaai        hOkAI
 hoofsaaklik   $2
+hoogedele     ho@x2	_e@d@l@
 hosanna       hus'ana
+hotagter      hOt_ax2t@r
 
 ibis          $1
 idee          $2
 idilles     id'Il@s
 ignoreer      ix2no@r'e@r
+impromptu     impr'Omptu
 inagneming    @nax2ne@m@N
 indien        Indin $verb
+induna        ind'u:na
+ingevolge     $3
 inkatha       iNk'A:ta
 inkluis       $2
 insomnia      @nsOmnija
 intens @nt'Ens
 intensiteit   $4
+ironieë       irun'i:@
 
 jawoord       jA:vo@rt
 jupiter       jupit@r
@@ -686,16 +818,21 @@ kunsmatige    kWnsm'A:t@x2@
 kwansuis      $2
 
 libido        l@bidu
+londense      lOnd@ns@
+lord          _^_EN
 
 macaroni      makar'o@ni
 madame        mad'A:m
-malles        mal@s
+madamoiselle  _^_FR
 maskering     mask'e@r@N $only
+massaal       $2
+massale       $2
 meegee        me@x2e@
 memorabilia   mEmOrab'ilija
 memoriam      mEm'o@riam
 mercedes      $2
 merlot        m&rl'o@
+midwinter     mIdv@nt@r
 militêre      mIl@t'&:r@
 minister      m@nIst@r
 minute        m@nyt@
@@ -704,6 +841,8 @@ misbruik      $2 $verb
 misbruikte    $2
 miskien       $2
 misterie      m@ste@ri
+(modus operandi) m,o@dWs||o@p@r'andi
+monsieur      _^_FR
 motore        mo@t'o@r@
 motor         mo@t@r
 motortjie     mo@t@rki
@@ -712,6 +851,7 @@ nadele        nA:de@l@
 nadenke       $1
 nagana        nag'A:na
 namens        nA:m@ns
+nasaréner     nasar'e@n@r
 nassau      nas'@U
 nature        nat'yr@
 nalatigheid   nA:l'A:t@x2eIt
@@ -725,11 +865,13 @@ neurone       nY@r'o@n@
 nikswerd      nIksv&:rt
 nimmermeer    $1
 nirvana       n@rvA:na
-nobelprys     $2
 normale       nOrm'A:l@
 numeri        nWm@ri
 
 oeuvre        W:vr@
+oftewel       Oft@v&l
+omgeef        $2
+ommekeer      Om@ke@r
 omrede        $2
 omtrent       Omtr'Ent
 onbegrip      $1
@@ -739,7 +881,10 @@ onderweg      $3
 onderwerp     $3 $verb
 onderwyl      $3
 onderwyser    $3
+ondeug        $1 $only
+ondeugde      $1 $only
 onding        $1
+oneer         On_e@r $only
 ongeag        $1
 ongeduld      $1
 ongeloof      $1
@@ -749,10 +894,14 @@ ongerief      $1
 ongewens      $1
 ongewensde    $3
 ongewoons     $1
+onguns        $1
 onkunde       $1
 onmag         $1
 onmin         $1
+onomwonde     $3
+oorboord      $2
 oorleg        $2
+ooreenkomste  $2
 oorstroom     $2
 oorwaai       $1
 oplaas        $2
@@ -770,25 +919,31 @@ pandemonium   pand@m'o@niWm
 parate        par'A:t@
 parke         park@
 parkie        $1
+patos         pA:tOs
 patriotisme   patri|ut'Ism@
 penorent      pEno@rEnt
-per           pIr
+per           p@r $only
 persent       p@rsEnt
 petite        p@tit
 pinotage      pinut'A:Z
 pirouette     p@ru:'Et
-primaat       $2
+plasenta      plas'Enta
 primate       $2
+(pro forma) pro@||f'Orma
 
 rebelleer     r@b@le@r
 rededele      re@d@de@l@
+regie         r@Zi:
 renaissance   rEn@s'A~ns
 retoriek      r@tur'ik
 rimpeling     rImp@l@N
 rinkink       $2
 rooipers      roIp&:rs
 roterende rut'e@r@nd@
+rottenes      rOt@nEs
 rukkerig      rWk@r@x2
+ruspes        rWsp@s
+rymelary      reIm@lar'eI
 
 salami        sal'A:mi
 salute        sal'yt@
@@ -799,7 +954,7 @@ sektore       $2
 sinagoge      s@n@x2o@x2@
 senatore      s@nat'o@r@
 singenot      sInx2@nOt
-skares        skA:r@s
+sir           _^_EN
 skepsele      skEps@l@
 skuldelas     skWld@las
 s'n           s@n $u
@@ -811,19 +966,23 @@ sombere s'Omb@r@
 sodra         so@dr'A:
 sodoende      s'o@d,und@
 sogenaamde    s'o@x2@n,A:md@
+sondenes      sOnd@nEs
 sononder      sOn_On@r
 sonop         sOn_Op
 sonore        sun'o@r@
 sover         so@f&r
-stabiel       stab'il
 staccato      $2
+stilswye      $1
 suburbia      sWb'Wrbija
 
+tanga         taNga
+tenminste     $2
 terdeë       $2
 terug         t@-rWx2
 tesaam        t@sA:m
 tevrede       t@fre@d@
 toegee        tux2e@
+toereken      ture@k@n
 totale        tut'A:l@
 totsiens      $2
 tragiek       trax2'ik
@@ -831,6 +990,7 @@ tragiek       trax2'ik
 uitdaging     YydA:x2@N
 uiteraard     Yyt@r_'A:rt
 uitermate     $3
+uniforme      $3
 
 vaarwel       fA:rv'&l
 vakant        f%ak'ant
@@ -856,7 +1016,6 @@ verse         f&:rs@
 vers          f&:rs
 verste        f&rst@
 verte         f&rt@
-vertes        f&rt@s
 verweg        f&:rv&x2
 via           via
 volheid       $1
@@ -871,11 +1030,11 @@ voorwaar      $2
 vorendag      $3
 vorige        fo@r@x2@
 voëlent       fo@@l_Ent
+vraprys       frA:preIs
 vrek          fr&k
 
 waarskynlik   $2
 waarskynlike  $2
-wangedrag     vanx2@drax2
 watwo         vatvo@
 watwou        vatv@U
 weergalm      $2
@@ -884,3 +1043,4 @@ weggewens     v&x2@v'E:ns
 welaf         v&l_af
 weleer        v&l_'e@r
 wysgere       veIsx2e@r@
+

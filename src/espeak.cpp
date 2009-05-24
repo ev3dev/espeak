@@ -47,7 +47,7 @@ static const char *help_text =
 "-p <integer>\n"
 "\t   Pitch adjustment, 0 to 99, default is 50\n"
 "-s <integer>\n"
-"\t   Speed in words per minute, 80 to 370, default is 170\n"
+"\t   Speed in words per minute, 80 to 390, default is 170\n"
 "-v <voice name>\n"
 "\t   Use voice file of this name from espeak-data/voices\n"
 "-w <wave file name>\n"
@@ -62,12 +62,16 @@ static const char *help_text =
 "--compile=<voice name>\n"
 "\t   Compile the pronunciation rules and dictionary in the current\n"
 "\t   directory. =<voice name> is optional and specifies which language\n"
+"--path=\"<path>\"\n"
+"\t   Specifies the directory containing the espeak-data directory\n"
+"--phonout=\"<filename>\"\n"
+"\t   Write output from -x -X commands and mbrola phoneme data to this file\n"
 "--punct=\"<characters>\"\n"
 "\t   Speak the names of punctuation characters during speaking.  If\n"
 "\t   =<characters> is omitted, all punctuation is spoken.\n"
 "--split=\"<minutes>\"\n"
 "\t   Starts a new WAV file every <minutes>.  Used with -w\n"
-"--voices=<langauge>\n"
+"--voices=<language>\n"
 "\t   List the available voices for the specified language.\n"
 "\t   If <language> is omitted, then list all voices.\n"
 "-k <integer>\n"
@@ -310,6 +314,8 @@ int main (int argc, char **argv)
 		{"voices",  optional_argument, 0, 0x104},
 		{"stdout",  no_argument,       0, 0x105},
 		{"split",   optional_argument, 0, 0x106},
+		{"path",    required_argument, 0, 0x107},
+		{"phonout", required_argument, 0, 0x108}, 
 		{0, 0, 0, 0}
 		};
 
@@ -318,6 +324,8 @@ int main (int argc, char **argv)
 
 	FILE *f_text=NULL;
 	char *p_text=NULL;
+	FILE *f_phonemes_out = stdout;
+	char *data_path = NULL;   // use default path for espeak-data
 
 	int option_index = 0;
 	int c;
@@ -337,7 +345,8 @@ int main (int argc, char **argv)
 	int option_linelength = 0;
 	int option_waveout = 0;
 
-	char filename[120];
+	espeak_VOICE voice_select;
+	char filename[200];
 	char voicename[40];
 	char voice_mbrola[20];
 	char dictname[40];
@@ -457,7 +466,7 @@ int main (int argc, char **argv)
 			break;
 
 		case 0x104:   // --voices
-			espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,0,NULL,0);
+			espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,0,data_path,0);
 			DisplayVoices(stdout,optarg);
 			exit(0);
 
@@ -466,6 +475,17 @@ int main (int argc, char **argv)
 				samples_split = 30;  // default 30 minutes
 			else
 				samples_split = atoi(optarg);
+			break;
+
+		case 0x107:  // --path
+			data_path = optarg;
+			break;
+
+		case 0x108:  // --phonout
+			if((f_phonemes_out = fopen(optarg,"w")) == NULL)
+			{
+				fprintf(stderr,"Can't write to: %s\n",optarg);
+			}
 			break;
 
 		default:
@@ -477,7 +497,7 @@ int main (int argc, char **argv)
 	if(option_waveout || quiet)
 	{
 		// writing to a file (or no output), we can use synchronous mode
-		samplerate = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,0,NULL,0);
+		samplerate = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,0,data_path,0);
 		samples_split = (samplerate * samples_split) * 60;
 
 		espeak_SetSynthCallback(SynthCallback);
@@ -501,7 +521,7 @@ int main (int argc, char **argv)
 	else
 	{
 		// play the sound output
-		samplerate = espeak_Initialize(AUDIO_OUTPUT_PLAYBACK,0,NULL,0);
+		samplerate = espeak_Initialize(AUDIO_OUTPUT_PLAYBACK,0,data_path,0);
 	}
 	
 
@@ -510,8 +530,13 @@ int main (int argc, char **argv)
 
 	if(espeak_SetVoiceByName(voicename) != EE_OK)
 	{
-		fprintf(stderr,"%svoice '%s'\n",err_load,voicename);
-		exit(2);
+		memset(&voice_select,0,sizeof(voice_select));
+		voice_select.languages = voicename;
+		if(espeak_SetVoiceByProperties(&voice_select) != EE_OK)
+		{
+			fprintf(stderr,"%svoice '%s'\n",err_load,voicename);
+			exit(2);
+		}
 	}
 
 	if(flag_compile)
@@ -538,8 +563,7 @@ int main (int argc, char **argv)
 		espeak_SetParameter(espeakLINELENGTH,option_linelength,0);
 	if(option_punctuation == 2)
 		espeak_SetPunctuationList(option_punctlist);
-	if(option_phonemes >= 0)
-		espeak_SetPhonemeTrace(option_phonemes,stderr);
+	espeak_SetPhonemeTrace(option_phonemes,f_phonemes_out);
 
 	if(filename[0]==0)
 	{
