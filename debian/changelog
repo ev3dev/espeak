@@ -1,4 +1,4 @@
-espeak (1.41.01-1) UNRELEASED; urgency=low
+espeak (1.41.01-1) unstable; urgency=low
 
   * New Upstream Version (Closes: Bug#543453)
 
