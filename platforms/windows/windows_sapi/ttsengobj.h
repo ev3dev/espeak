@@ -96,6 +96,7 @@ class ATL_NO_VTABLE CTTSEngObj :
 
     HRESULT CheckActions( ISpTTSEngineSite* pOutputSite );
 	int ProcessFragList(const SPVTEXTFRAG* pTextFragList, wchar_t *pW, ISpTTSEngineSite* pOutputSite, int *n_text);
+    int WritePhonemes(SPPHONEID *phons, wchar_t *pW_start);
 
   private:
     /*--- Non interface methods ---*/
@@ -116,6 +117,8 @@ class ATL_NO_VTABLE CTTSEngObj :
     const WCHAR*        m_pNextChar;
     const WCHAR*        m_pEndChar;
     ULONGLONG           m_ullAudioOff;
+
+	char voice_name[80];
 };
 
 #endif //--- This must be the last line in the file

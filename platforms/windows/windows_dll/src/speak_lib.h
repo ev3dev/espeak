@@ -28,7 +28,7 @@
 
 #include <stdio.h>
 
-#define ESPEAK_API_REVISION  3
+#define ESPEAK_API_REVISION  5
 /*
 Revision 2
    Added parameter "options" to eSpeakInitialize()
@@ -36,6 +36,11 @@ Revision 2
 Revision 3
    Added espeakWORDGAP to  espeak_PARAMETER
 
+Revision 4
+   Added flags parameter to espeak_CompileDictionary()
+
+Revision 5
+   Added espeakCHARS_16BIT
 */
          /********************/
          /*  Initialization  */
@@ -48,7 +53,7 @@ typedef enum {
   espeakEVENT_SENTENCE,            // Start of sentence
   espeakEVENT_MARK,                // Mark
   espeakEVENT_PLAY,                // Audio element
-  espeakEVENT_END,                 // End of sentence
+  espeakEVENT_END,                 // End of sentence or clause
   espeakEVENT_MSG_TERMINATED,      // End of message
   espeakEVENT_PHONEME              // Phoneme, if enabled in espeak_Initialize()
 } espeak_EVENT_TYPE;
@@ -225,6 +230,7 @@ int UriCallback(int type, const char *uri, const char *base);
 #define espeakCHARS_UTF8   1
 #define espeakCHARS_8BIT   2
 #define espeakCHARS_WCHAR  3
+#define espeakCHARS_16BIT  4
 
 #define espeakSSML        0x10
 #define espeakPHONEMES    0x100
@@ -316,7 +322,8 @@ extern "C"
 #endif
 ESPEAK_API espeak_ERROR espeak_Key(const char *key_name);
 /* Speak the name of a keyboard key.
-   Currently this just speaks the "key_name" as given 
+   If key_name is a single character, it speaks the name of the character.
+   Otherwise, it speaks key_name as a text string.
 
    Return: EE_OK: operation achieved 
            EE_BUFFER_FULL: the command can not be buffered; 
@@ -336,7 +343,6 @@ ESPEAK_API espeak_ERROR espeak_Char(wchar_t character);
 	   EE_INTERNAL_ERROR.
 */
 
-/* Note, there is no function to play a sound icon. This would be done by the calling program */
 
 
 
@@ -389,7 +395,7 @@ ESPEAK_API espeak_ERROR espeak_SetParameter(espeak_PARAMETER parameter, int valu
 
       espeakPUNCTUATION:  which punctuation characters to announce:
          value in espeak_PUNCT_TYPE (none, all, some), 
-	 see espeak_GetParameter() to specify which characters are announced.
+         see espeak_GetParameter() to specify which characters are announced.
 
       espeakCAPITALS: announce capital letters by:
          0=none,
@@ -444,13 +450,16 @@ ESPEAK_API void espeak_SetPhonemeTrace(int value, FILE *stream);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API void espeak_CompileDictionary(const char *path, FILE *log);
+ESPEAK_API void espeak_CompileDictionary(const char *path, FILE *log, int flags);
 /* Compile pronunciation dictionary for a language which corresponds to the currently
    selected voice.  The required voice should be selected before calling this function.
 
    path:  The directory which contains the language's '_rules' and '_list' files.
           'path' should end with a path separator character ('/').
    log:   Stream for error reports and statistics information. If log=NULL then stderr will be used.
+
+   flags:  Bit 0: include source line information for debug purposes (This is displayed with the
+          -X command line option).
 */
          /***********************/
          /*   Voice Selection   */
@@ -459,9 +468,9 @@ ESPEAK_API void espeak_CompileDictionary(const char *path, FILE *log);
 
 // voice table
 typedef struct {
-	char *name;            // a given name for this voice. UTF8 string.
-	char *languages;       // list of pairs of (byte) priority + (string) language (and dialect qualifier)
-	char *identifier;      // the filename for this voice within espeak-data/voices
+	const char *name;      // a given name for this voice. UTF8 string.
+	const char *languages;       // list of pairs of (byte) priority + (string) language (and dialect qualifier)
+	const char *identifier;      // the filename for this voice within espeak-data/voices
 	unsigned char gender;  // 0=none 1=male, 2=female,
 	unsigned char age;     // 0=not specified, or age in years
 	unsigned char variant; // only used when passed as a parameter to espeak_SetVoiceByProperties
