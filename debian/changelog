@@ -1,3 +1,9 @@
+espeak (1.41.01-1) UNRELEASED; urgency=low
+
+  * New Upstream Version
+
+ -- Mario Lang <mlang@debian.org>  Tue, 25 Aug 2009 16:50:15 +0200
+
 espeak (1.40.02-2) unstable; urgency=low
 
   * Provide espeak-data-udeb. (Closes: 522578)
