@@ -1,8 +1,10 @@
 espeak (1.41.01-1) unstable; urgency=low
 
   * New Upstream Version (Closes: Bug#543453)
+  * Remove the paragraph about KTTS from the package description
+    (Closes: Bug#492000).
 
- -- Mario Lang <mlang@debian.org>  Tue, 25 Aug 2009 17:05:29 +0200
+ -- Mario Lang <mlang@debian.org>  Tue, 25 Aug 2009 17:23:53 +0200
 
 espeak (1.40.02-2) unstable; urgency=low
 
