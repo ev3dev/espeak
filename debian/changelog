@@ -1,8 +1,8 @@
 espeak (1.41.01-1) UNRELEASED; urgency=low
 
-  * New Upstream Version
+  * New Upstream Version (Closes: Bug#543453)
 
- -- Mario Lang <mlang@debian.org>  Tue, 25 Aug 2009 16:50:15 +0200
+ -- Mario Lang <mlang@debian.org>  Tue, 25 Aug 2009 17:05:29 +0200
 
 espeak (1.40.02-2) unstable; urgency=low
 
