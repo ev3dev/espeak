@@ -542,7 +542,7 @@ void GetTranslatedPhonemeString(char *phon_out, int n_phon_out)
 
 			if(plist->synthflags & SFLAG_SYLLABLE)
 			{
-				if((stress = plist->tone) > 1)
+				if((stress = plist->stresslevel) > 1)
 				{
 					if(stress > 5) stress = 5;
 					phon_out[phon_out_ix++] = stress_chars[stress];
@@ -696,7 +696,7 @@ static int Unpronouncable_en(Translator *tr, char *word)
 	0x00, 0x88, 0x22, 0x04, 0x00, 0x02, 0x00, 0x04,  // 32
 	0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x28, 0x8a, 0x03, 0x00, 0x00, 0x40, 0x00,  // 48
-	0x02, 0x00, 0x41, 0xca, 0x9b, 0x06, 0x20, 0x80,
+	0x02, 0x00, 0x41, 0xca, 0xbb, 0x06, 0x20, 0x80,
 	0x91, 0x00, 0x00, 0x00, 0x00, 0x20, 0x08, 0x00,  // 64
 	0x08, 0x20, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x22, 0x00, 0x01, 0x00, };
@@ -1030,8 +1030,8 @@ void ChangeWordStress(Translator *tr, char *word, int new_stress)
 
 
 
-void SetWordStress(Translator *tr, char *output, unsigned int dictionary_flags, int tonic, int prev_stress)
-{//========================================================================================================
+void SetWordStress(Translator *tr, char *output, unsigned int &dictionary_flags, int tonic, int prev_stress)
+{//=========================================================================================================
 /* Guess stress pattern of word.  This is language specific
 
    'dictionary_flags' has bits 0-3   position of stressed vowel (if > 0)
@@ -1108,6 +1108,13 @@ void SetWordStress(Translator *tr, char *output, unsigned int dictionary_flags, 
 	}
 
 	max_stress = GetVowelStress(tr, phonetic, vowel_stress, vowel_count, stressed_syllable, 1);
+
+	if((max_stress == 0) && (tr->langopts.stress_flags & 1) && (vowel_count == 2))
+	{
+		// option: don't stress monosyllables except at end-of-clause
+		vowel_stress[1] = 1;
+		dictionary_flags |= FLAG_STRESS_END2;
+	}
 
 	// heavy or light syllables
 	ix = 1;
@@ -1219,8 +1226,6 @@ void SetWordStress(Translator *tr, char *output, unsigned int dictionary_flags, 
 			else
 			{
 				stressed_syllable = 1;
-				if(stressflags & 0x1)
-					max_stress = 3;   // don't give full stress to monosyllables
 			}
 
 			// only set the stress if it's not already marked explicitly
@@ -1403,7 +1408,7 @@ void SetWordStress(Translator *tr, char *output, unsigned int dictionary_flags, 
 				stress = 3;  /* use secondary stress for remaining syllables */
 			}
 			else
-			if((vowel_stress[v-1] <= 1) && (vowel_stress[v+1] <= 1))
+			if((vowel_stress[v-1] <= 1) && ((vowel_stress[v+1] <= 1) || ((stress == 4) && (vowel_stress[v+1] <= 2))))
 			{
 				/* trochaic: give stress to vowel surrounded by unstressed vowels */
 
@@ -1553,7 +1558,7 @@ void SetWordStress(Translator *tr, char *output, unsigned int dictionary_flags, 
 				max_stress = vowel_stress[v];
 			}
 
-			if((*p == phonLENGTHEN) && ((opt_length = tr->langopts.param[LOPT_IT_LENGTHEN]) != 0))
+			if((*p == phonLENGTHEN) && ((opt_length = tr->langopts.param[LOPT_IT_LENGTHEN]) & 1))
 			{
 				// remove lengthen indicator from non-stressed syllables
 				int shorten=0;
@@ -1571,11 +1576,18 @@ void SetWordStress(Translator *tr, char *output, unsigned int dictionary_flags, 
 					shorten = 1;
 				}
 
-				if(((opt_length & 0xf)==2) && (v != (vowel_count - 2)))
-					shorten = 1;    // LANG=Italian, remove lengthen indicator from non-penultimate syllables
-
 				if(shorten)
 					p++;
+			}
+
+			if((v_stress >= 4) && (tr->langopts.param[LOPT_IT_LENGTHEN] == 2))
+			{
+				// LANG=Italian, lengthen penultimate stressed vowels, unless followed by 2 consonants
+				if((v == (vowel_count - 2)) && (syllable_weight[v] == 0))
+				{
+					*output++ = phcode;
+					phcode = phonLENGTHEN;
+				}
 			}
 
 			v++;
@@ -2188,7 +2200,7 @@ static void MatchRule(Translator *tr, char *word[], const char *group, char *rul
 
 				case RULE_LETTERGP2:   // match against a list of utf-8 strings
 					letter_group = *rule++ - 'A';
-					if((n_bytes = IsLetterGroup(tr, pre_ptr-letter_xbytes,letter_group,1)) >0)
+					if((n_bytes = IsLetterGroup(tr, pre_ptr,letter_group,1)) >0)
 					{
 						add_points = (20-distance_right);
 						pre_ptr -= (n_bytes-1);
@@ -2550,6 +2562,14 @@ int TranslateRules(Translator *tr, char *p_start, char *phonemes, int ph_size, c
 							return(0);
 						}
 #endif
+
+						// is it a bracket ?
+						if(IsBracket(letter))
+						{
+							if(pre_pause < 4)
+								pre_pause = 4;
+						}
+
 						// no match, try removing the accent and re-translating the word
 						if((letter >= 0xc0) && (letter <= 0x241) && ((ix = remove_accent[letter-0xc0]) != 0))
 						{
@@ -2669,6 +2689,44 @@ int TranslateRules(Translator *tr, char *p_start, char *phonemes, int ph_size, c
 	return(0);
 }   /* end of TranslateRules */
 
+
+void ApplySpecialAttribute2(Translator *tr, char *phonemes, int dict_flags)
+{//========================================================================
+	// apply after the translation is complete
+	int ix;
+	int len;
+	char *p;
+
+	len = strlen(phonemes);
+
+	switch(tr->translator_name)
+	{
+	case L('i','t'):
+		for(ix=0; ix<(len-1); ix++)
+		{
+			if(phonemes[ix] == phonSTRESS_P)
+			{
+				p = &phonemes[ix+1];
+				if((dict_flags & FLAG_ALT2_TRANS) != 0)
+				{
+					if(*p == PhonemeCode('E'))
+						*p = PhonemeCode('e');
+					if(*p == PhonemeCode('O'))
+						*p = PhonemeCode('o');
+				}
+				else
+				{
+					if(*p == PhonemeCode('e'))
+						*p = PhonemeCode('E');
+					if(*p == PhonemeCode('o'))
+						*p = PhonemeCode('O');
+				}
+				break;
+			}
+		}
+		break;
+	}
+}  // end of ApplySpecialAttribute2
 
 
 void ApplySpecialAttribute(Translator *tr, char *phonemes, int dict_flags)

@@ -1,3 +1,40 @@
+eSpeak 1.41
+
+Added language:  da Danish
+
+Language: it Italian, added dictsource/it_listx with data for stress positions and open/close "e" and "o" vowels.
+
+Languages: pt, it:  Fixed a crash when speaking some numbers.
+
+Fixed numbers greater than 1000000 for Indian languages.
+
+-m option now ignores XML comments.
+
+-b option now has a value (4) to specify 16 bit character input text.
+
+-g option (word gap) fixed for Windows.
+
+--punct option. Fix some unnecessary pauses when speaking punctuation names.
+
+SSML: fixed bug where <mark> was ignored before some punctuation characters.
+
+Changed the format of formant data in espeak-data/phondata, to add extra parameters for use by a Klatt synthesizer.  Changed the formant dialogue in espeakedit to include these.
+
+F7 and F8 formants are now fixed at 7800Hz and 90000Hz.
+
+"Text position" in callback events is no longer limited to 16 bits.
+
+Fixed problems with word-length indications in callback events.
+
+Some changes to allow compilation on WinCE/Windows Mobile, with notes in platforms/windowsMobile.
+
+*_list files. Ad feature for ordinal numbers (for some languages).
+*_list files. Allow hyphenated word groups to start with a number.
+*_list files. Allow "words" of symbols to contain brackets.
+
+
+
+
 eSpeak 1.40
 
 Added languages:

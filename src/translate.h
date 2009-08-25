@@ -175,7 +175,8 @@
 #define CLAUSE_VOICE        0 + 0x24000
 #define CLAUSE_PERIOD      35 + 0x80000
 #define CLAUSE_COMMA       20 + 0x41000
-#define CLAUSE_SHORTCOMMA   5 + 0x41000
+#define CLAUSE_SHORTCOMMA   4 + 0x41000
+#define CLAUSE_SHORTFALL    4 + 0x40000
 #define CLAUSE_QUESTION    35 + 0x82000
 #define CLAUSE_EXCLAMATION 40 + 0x83000
 #define CLAUSE_COLON       30 + 0x40000
@@ -239,7 +240,7 @@ extern const int param_defaults[N_SPEECH_PARAM];
 
 
 
-#define N_LOPTS      15
+#define N_LOPTS      16
 #define LOPT_DIERESES        1
  // 1=remove [:] from unstressed syllables, 2= remove from unstressed or non-penultimate syllables
  // bit 4=0, if stress < 4,  bit 4=1, if not the highest stress in the word
@@ -282,13 +283,16 @@ extern const int param_defaults[N_SPEECH_PARAM];
  // change [t] when followed by unstressed vowel
 #define LOPT_REDUCE_T 12
 
- // stressed syllable is indicated by capitals
-#define LOPT_SYLLABLE_CAPS  13
+ // 1 = allow capitals inside a word
+ // 2 = stressed syllable is indicated by capitals
+#define LOPT_CAPS_IN_WORD  13
 
  // bit 0=Italian "syntactic doubling" of consoants in the word after a word marked with $double attribute
  // bit 1=also after a word which ends with a stressed vowel
 #define LOPT_IT_DOUBLING    14
 
+  // Call ApplySpecialAttributes() if $alt or $alt2 is set for a word
+#define LOPT_ALT  15
 
 
 typedef struct {
@@ -300,7 +304,7 @@ typedef struct {
 	int vowel_pause;
 	int stress_rule; // 1=first syllable, 2=penultimate,  3=last
 
-// bit0=don't stress monosyllables,
+// bit0=don't stress monosyllables, except at end of clause
 // bit1=don't set diminished stress,
 // bit2=mark unstressed final syllables as diminished
 // bit4=don't allow secondary stress on last syllable
@@ -327,6 +331,7 @@ typedef struct {
 #define NUM_ROMAN_UC     0x40000
 #define NUM_NOPAUSE      0x80000
 #define NUM_ROMAN_AFTER 0x200000
+#define NUM_VIGESIMAL   0x400000
 
 	// bits0-1=which numbers routine to use.
 	// bit2=  thousands separator must be space
@@ -347,6 +352,7 @@ typedef struct {
 	// bit19=don't add pause after a number
 	// bit20='and' before hundreds
 	// bit21= say "roman" after the number, not before
+	// bit22= vigesimal number, if tens are not found
 	int numbers;
 
 #define NUM2_100000     0x800   // numbers for 100,000 and 10,000,000
@@ -496,6 +502,7 @@ extern int end_character_position;
 extern int clause_start_char;
 extern int clause_start_word;
 extern char *namedata;
+extern int pre_pause;
 
 
 
@@ -511,7 +518,7 @@ extern Translator *translator2;
 extern const unsigned short *charsets[N_CHARSETS];
 extern char dictionary_name[40];
 extern char ctrl_embedded;    // to allow an alternative CTRL for embedded commands
-extern char *p_textinput;
+extern unsigned char *p_textinput;
 extern wchar_t *p_wchar_input;
 extern int dictionary_skipwords;
 
@@ -558,6 +565,7 @@ int LookupDictList(Translator *tr, char **wordptr, char *ph_out, unsigned int *f
 void MakePhonemeList(Translator *tr, int post_pause, int new_sentence);
 int ChangePhonemes_ru(Translator *tr, PHONEME_LIST2 *phlist, int n_ph, int index, PHONEME_TAB *ph, CHANGEPH *ch);
 void ApplySpecialAttribute(Translator *tr, char *phonemes, int dict_flags);
+void ApplySpecialAttribute2(Translator *tr, char *phonemes, int dict_flags);
 void AppendPhonemes(Translator *tr, char *string, int size, const char *ph);
 
 void CalcLengths(Translator *tr);
@@ -565,11 +573,11 @@ void CalcPitches(Translator *tr, int clause_tone);
 
 int RemoveEnding(Translator *tr, char *word, int end_type, char *word_copy);
 int Unpronouncable(Translator *tr, char *word);
-void SetWordStress(Translator *tr, char *output, unsigned int dictionary_flags, int tonic, int prev_stress);
+void SetWordStress(Translator *tr, char *output, unsigned int &dictionary_flags, int tonic, int prev_stress);
 int TranslateRules(Translator *tr, char *p, char *phonemes, int size, char *end_phonemes, int end_flags, unsigned int *dict_flags);
 int TranslateWord(Translator *tr, char *word1, int next_pause, WORD_TAB *wtab);
 void *TranslateClause(Translator *tr, FILE *f_text, const void *vp_input, int *tone, char **voice_change);
-int ReadClause(Translator *tr, FILE *f_in, char *buf, short *charix, int n_buf, int *tone_type);
+int ReadClause(Translator *tr, FILE *f_in, char *buf, short *charix, int *charix_top, int n_buf, int *tone_type);
 
 void SetVoiceStack(espeak_VOICE *v);
 

@@ -523,7 +523,7 @@ void MarkerEvent(int type, unsigned int char_position, int value, unsigned char 
 	ep->type = (espeak_EVENT_TYPE)type;
 	ep->unique_identifier = my_unique_identifier;
 	ep->user_data = my_user_data;
-	ep->text_position = char_position & 0xffff;
+	ep->text_position = char_position & 0xffffff;
 	ep->length = char_position >> 24;
 	
 	time = (double(count_samples + mbrola_delay + (out_ptr - out_start)/2)*1000.0)/samplerate;
@@ -884,7 +884,7 @@ ESPEAK_API espeak_ERROR espeak_Key(const char *key)
 	}
 
 #ifdef USE_ASYNC
-	t_espeak_command* c = create_espeak_key( key);
+	t_espeak_command* c = create_espeak_key( key, NULL);
 	a_error = fifo_add_command(c);
 	if (a_error != EE_OK)
 	{
@@ -910,7 +910,7 @@ ESPEAK_API espeak_ERROR espeak_Char(wchar_t character)
 		return(EE_OK);
 	}
 
-	t_espeak_command* c = create_espeak_char( character);
+	t_espeak_command* c = create_espeak_char( character, NULL);
 	a_error = fifo_add_command(c);
 	if (a_error != EE_OK)
 	{

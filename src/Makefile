@@ -6,7 +6,7 @@ INCDIR=$(PREFIX)/include/espeak
 LIBDIR=$(PREFIX)/lib
 DATADIR=$(PREFIX)/share/espeak-data
 
-RELEASE = 1.40
+RELEASE = 1.41
 BIN_NAME = speak
 BIN2_NAME = espeak
 LIB_NAME = libespeak.so

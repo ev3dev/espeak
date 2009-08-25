@@ -102,7 +102,6 @@ _#32	speIs
 _ 	hA@dspeIs    // U+00A0  no-break-space
 _!	Ekskl@m'eIS@n
 _"	kwoUts
-_#	haS
 _$	d0l3
 _%	p3s'Ent
 ?5 _%	pVRs'Ent
@@ -133,7 +132,7 @@ _{	lEftbreIs
 _|	vi:b'A@
 _}	raItbreIs
 ~	tIld@  $max3
-_¡	Inv,3:tI2dEkskl@m'eIS@n
+_¡	%Inv,3:tI2dEkskl@m'eIS@n
 _¦	broUk@nb'A@
 _¨	daIa2r'i:sIs
 _ª	fEmI2nIn'O@dI2n@L
@@ -147,7 +146,7 @@ _¸	sEd'Il@
 _¹	su:p@skrIptw'0n
 _º	maskjUlIn'O@dI2n@L
 _»	raIt'gIl@mEt
-_¿	Inv,3:tI2dkw'EstS@n
+_¿	%Inv,3:tI2dkw'EstS@n
 
 _‐	haIf@n
 _‑	haIf@n
@@ -178,16 +177,17 @@ _‴	trIp@LpraIm
 _‼	Ekskla2m'eIS@nz
 _₠	jU@roU
 
-@	_at_
-&	_and
+#	haS   $max3
+@	_at_	$u+
+&	_and   $u+
 \	bakstroUk  $max3
 /	stroUk  $max3
 ?3 \	bakslaS  $max3
 ?3 /	slaS  $max3
 *	ast@rIsk $max3
 %	p3sEnt  $max3
-=	_:i:kw@Lz_:  $max3
 ?5 %	pVRs'Ent $max3
+=	_:i:kw@Lz_:  $max3
 ¢	sEnts
 £	paUnd
 ¥	jEn
@@ -303,10 +303,24 @@ _0M3	b'Ili@n
 _dpt	pOInt
 _roman	roUm@n_
 
-(1 st)	f3:st
-(2 nd)	sEk@nd
-(3 rd)	T3:d
-(5 th)	fIT
+_0st	st
+_0nd	@nd
+_0rd	d
+_0th	T
+_ord	T	// default ending
+_1o	f'3:
+_2o	s'Ek
+_3o	T'3:
+_5o	f'If
+_20o	tw'Enti@
+_30o	T'3:ti@
+_40o	f'o@ti@
+_50o	f'Ifti@
+_60o	s'Iksti@
+_70o	s'Ev@nti@
+_80o	'eIti@
+_90o	n'aInti@
+_0Co	h'Vndr@dT
 
 
 // ABBREVIATIONS
@@ -338,6 +352,7 @@ ibm	$abbrev
 ie	aIi:_!   $pause $only
 i.e	aIi:_!   $pause
 irc	$abbrev
+(km ²)	skw,e@kIl'0mIt3z
 lbs	paUndz
 LBS	$abbrev
 ltd	lImI2tI2d
@@ -359,6 +374,7 @@ ui	$abbrev
 uk	$abbrev
 url	$abbrev
 usa	$abbrev
+usb	$abbrev
 utc     $abbrev
 u.s     ju:'Es
 VI      $abbrev
@@ -425,6 +441,7 @@ accursed         a2k3:sI2d
 ?5 accursed      a2kVRsI2d
 achille          a2kIli:
 aching           eIkI2N
+achy             eIkI
 adam             ad@m
 adamant          ad@m@nt
 add              ad
@@ -527,6 +544,7 @@ anemometer       anIm'0mI2t3
 anemone          a2nEn@mI
 anew             a2nju:
 ?3 anew          a2nu:
+anime            anImeI
 anion            aneI@n
 anniversary      anIv'3:s@rI 
 anon             a2n0n
@@ -565,6 +583,8 @@ approximate      a2pr0ksIm@t   $only
 approximate      a2pr0ksImeIt  $verb
 arab             ar@b
 arabic                         $1
+arable           ara2b@L
+arc              A@k	// arcing
 arcade                         $2
 arch             A@tS
 arches           A@tSI2z
@@ -578,9 +598,9 @@ arisen           a2rIz@n
 armslength       ,A@mzl'ENT
 arouse           a2raUz
 asbestos         asb'Est@s
-ascertain        as3teIn
 arsenal          A@s@n@L
 arsenic          A@snIk
+ascertain        as3teIn
 asiatic          eISI'atIk
 askance          a2skans
 ass              as
@@ -603,6 +623,7 @@ authority        a2T0rI2tI
 authoritative    O:T'0rI2t@tIv
 autograph        O:t@graf
 auto             O:toU
+autocracy        O:t'0kr@sI
 automobile       O:t@m@bi@l
 autonomous       O:t'0n@m@s
 autopsy          O:t0psI
@@ -659,7 +680,6 @@ blockade          $2
 blouse           blaUz
 blurry           bl3:rI
 ?5 blurry        blVRrI
-bogey            boUgI
 boing            bOIN
 bombard          $2
 bonbon           b0nb0n
@@ -716,6 +736,7 @@ cannabis         kana2bIs
 canoe            k@nu:
 canoes           k@nu:z
 canton           kant0n
+canvas           kanv@s
 capitol          kapIt@L
 caprice          ka2pr'i:s
 caramel          kar@mEl
@@ -749,6 +770,10 @@ chapel           tSap@L
 charade          Sa2rA:d
 charismatic      karIsm'atIk
 charit           tSarIt        // charitable
+chemise          SEm'i:z
+chic             Si:k
+chimpanzee       $3
+chisel           tSIz@L
 chocolate        tS0kl@t
 cholera          k0l@r@
 cholesterol      k@lEst@r0l
@@ -759,7 +784,7 @@ cigarette        sIg@'rEt
 circumference                  $2
 circumvent       s3:k@mvEnt
 ?5 circumvent    sIRk@mvEnt
-citizen          sItIz@n
+cleanliness      klEnlIn@s
 cleanse          klEnz
 ?!3 clerk        klA@k
 cliche           kli:SeI
@@ -788,6 +813,7 @@ colonel          k3:n@L
 ?5 colonel       kVRn@L
 combat           k0mbat       // combating
 combo            k0mboU
+comely           kVmlI    // comeliness
 comer            kVm3
 comet            k0mI2t
 commence         k@mEns
@@ -815,7 +841,7 @@ concise          k0ns'aIs
 cone             koUn
 conflict          $1           $onlys
 conflict                       $verb
-conger           k0ng3
+conger           k0Ng3
 conscience       k0nS@ns
 construct                      $1 $onlys
 construct                      $verb
@@ -832,6 +858,7 @@ contrary         k0ntr@rI
 contrast         k0ntr'ast     $verb
 contrite         k0ntr'aIt
 conven           k0nv'i:n           // convened
+convent          k0nv@nt
 converse                       $1 $only
 converse                       $verb
 convict                        $1 $onlys
@@ -843,6 +870,7 @@ coordinate       koU'O:dI2neIt   $verb
 copier           k0pi@3
 coral            k0r@L
 coronet          k0r@nEt
+corollary        $2
 corporal         kO@pr@L
 corporate        kO@p@r@t
 corps            kO@           $only
@@ -856,6 +884,7 @@ crevasse         kr@vas
 crisis           kraIsIs
 crises           kraIsi:z
 christmas        krIsm@s
+croissant        kwA:sA~
 crooked          krUkId
 crusade                        $2
 cuckoo           kUku:
@@ -917,6 +946,7 @@ detente          deIt'0nt
 détente          deIt'0nt
 detritus         dI2traIt@s
 deus             deIUs
+devotee          dEvoUt'i:
 di               d,I
 diabetes         daI@b'i:ti:z 
 diameter         daI'amI2t3
@@ -960,6 +990,7 @@ drier            draI3
 driest           draI|@st
 duet             dju:'Et
 dugout           dVgaUt
+dungaree         dVNga2r'i:
 duvet            du:veI
 d'ye             dj@
 
@@ -995,9 +1026,11 @@ entente          0nt'0nt
 entourage        0ntu:rA:Z
 entrance          $1       $onlys
 entrance         Entr'aans     $verb
+entree           0ntreI
 envelope         Env@loUp      $only
 envelopes        Env@loUps
 envelope                       $verb
+epiphany         I2pIf@nI
 epistle          I2pIs@L
 epitome          I2pIt@mI
 equation         I2kweIZ@n
@@ -1044,6 +1077,7 @@ extract           $2           $verb
 extradite        Ekstr@daIt    // extradited
 extrem           Ekstr'i:m     // extremism
 extremist        Ekstr'i:mIst
+extricate         $1
 eyrie            i@rI
 
 facade           f@sA:d
@@ -1067,6 +1101,7 @@ fete             feIt
 fetus            fi:t@s
 fi               f,aI		// as in "hi-fi"
 fiasco           fi:'askoU
+fiat             fi:@t
 fiery            faI@rI
 finale           fI2nA:lI
 finance          faInans       $only
@@ -1079,6 +1114,7 @@ fiord            fi:O@d
 fix              fIks		// for fixer
 fjord            fIO@d
 flagellum        fla2dZEl@m
+flamenco         fla2mENkoU
 flexible         flEksIb@L
 flier            flaI3
 flourish         flVrI2S
@@ -1099,6 +1135,7 @@ fortunate        fO@tS@n@t
 fortune          fO@tSu:n
 foyer            fOIeI
 freelance        fri:laans
+fricassee         frIka2seI
 frigate          frIg@t
 fringer          frIndZ3	// infringer
 fringing         frIndZIN
@@ -1149,6 +1186,7 @@ grenade          gr@neId
 griffon          grIf@n
 grosvenor        groUv@n3
 groupie          gru:pI
+guacamole        gwA:ka2m'oUli:
 gui              gu:I
 guinea           gInI
 gurus            gu:ru:z
@@ -1166,11 +1204,13 @@ hatred           heItrI2d
 hazardous        haz3d@s
 hehe             hi:h'i:
 heifer           hEf@
+heist            haIst
 helium           hi:li@m
 helix            hi:lIks
 hello            h@loU
 henceforth       hEnsfo@T
 hercules         h3:kjUli:z
+heretical        hI2rEtI2k@L
 hereto           hi@3'tu:
 hermaphrodite                  $2
 hermes           h3:mi:z
@@ -1199,6 +1239,7 @@ hospitable       h0sp'It@b@L
 hostage          h0stI2dZ
 hostess          hoUstEs
 hotel            hoUt'El
+hotkey           h0tki:
 house            haUz          $verb 
 however           $2
 howto            haUtu:
@@ -1214,10 +1255,12 @@ hyperbole        haIp'3:b@lI
 hypothesis       haIp'0T@sIs
 hypotheses       haIp'0T@si:z 
 hypotenuse       haIp'0t@nju:s
+hypoxia          haIp'0ksi@
 
 
 icon             aIk0n
 iconbar          aIk0nbA@
+idly             aIdlI
 ignoramus        Igno@r'eIm@s
 imagine          I2madZI2n
 impedance        Imp'i:d@ns
@@ -1225,8 +1268,8 @@ imperative       Imp'Er@tIv
 impercept         $3       // imperceptible
 impi              $1
 impinging        Imp'IndZIN
-imprecise        Impr'Is'aIs
-impregnable      I'mpr'Egn@b@L
+imprecise        ImprIs'aIs
+impregnable      Impr'Egn@b@L
 inanimate        In'anIm@t
 inappropriate    ,Ina2proUpri@t
 incense          Ins'Ens       $verb
@@ -1271,6 +1314,7 @@ interrogatory     $3
 inventory        Inv@ntrI
 interface                      $1
 intermin         Int'3:mIn	// interminable
+internee         Int'3:ni:
 internet         Int3nEt
 interrupt                      $1 $onlys
 interrupt                      $3 $verb
@@ -1319,6 +1363,7 @@ las              ,las
 lasagne          l@zanj@
 laser            leIz3
 lasso            las'u:
+latte            lateI
 lawyer           lOI3
 lava             lA:v@
 le               l@            $only
@@ -1341,6 +1386,7 @@ ligate           li:geIt
 lilac            laIl@k
 lily             lIlI
 limit            lImI2t        // limited
+limo             lImoU
 limousine        lIm@zi:n
 lingerie         l0nZ@rI
 linen            lInI2n
@@ -1363,6 +1409,7 @@ losing           lu:zI2N        // misspell
 lukewarm         lu:kwO@m
 lullaby          lVl@baI
 lunatic          lu:n@tIk
+lychee           li:tSi:
 
 macabre          m@kA:br@
 machete          ma2SEtI
@@ -1382,6 +1429,7 @@ mammoth          mam@T
 mandate           $2           $verb
 manganese         $1
 manger           meIndZ3
+mangetout        m0nZt'u:
 manhour          manaU@
 mankind                        $2
 maneuver         m@nu:v3
@@ -1483,6 +1531,7 @@ necklace         nEkl@s
 necktie          nEktaI
 negate           nI2geIt
 neglect          nI2glEkt
+negligee         nEglIZeI
 neon             ni:0n
 nepenthe         nI2pEnTI
 nescience        nEsI@ns
@@ -1523,6 +1572,7 @@ offer            0f3
 offers           0f3z
 ogre             oUg3
 okay             oUk'eI
+omeg             oUm'eIg@
 omelet           0ml@t
 omelette         0ml@t
 omnibus           $1
@@ -1577,13 +1627,17 @@ pageant          padZ@nt
 paltry           pO:ltrI
 panacea          pana2s'i:@
 panache           $2
+pancreas         pankri@s
 parabola         p@rab@l@
 paralysis        p@ral@sIs
 parameter        p@ramI2t3
 parasite         par@saIt
+paren            pa2rEn   // "parenthesis"
 pariah           p@raI@
 parole           pa2r'oUl
 passenger        pasI2ndZ3
+passerby         pas3b'aI
+passersby        pas3zb'aI
 pasted           peIstI2d
 pasting          peIstI2N
 pastry           peIstrI
@@ -1655,6 +1709,7 @@ predicate        prEdI2keIt
 preface          prEf@s
 preferably       prEf@-r@blI   $verbf
 prelude          prElju:d
+premier          prEmI3
 preparation      prEp@r'eIS@n
 prescience       pri:si@ns
 present          prEz@nt       $only
@@ -1665,6 +1720,7 @@ prestige         prEst'i:Z
 ?3 pretense      pri:tEns
 pretext          pri:tEkst
 pretty           prItI
+privation        praIv'eIS@n
 privilege        prIvI2lI2dZ
 privy            prIvI
 prix             pri:
@@ -1734,6 +1790,7 @@ rawest           rO:@st
 re               r,i:
 read             ri:d
 read             rEd           $past $only
+readd            ri:'ad
 readme           ri:dmi:
 reading          ri:dI2N
 readonly         ,ri:d'oUnlI
@@ -1759,6 +1816,7 @@ reference        rEfr@ns
 referee          rEf@r'i:
 referral         rI2f3:r@L
 referring        rI2f3:rI2N 
+refinery         rI2faIn@rI
 refit            ri:fIt
 reflex           ri:flEks
 reflux           ri:flVks
@@ -1767,12 +1825,12 @@ regal            ri:g@L
 regime           reIZ'i:m
 region           ri:dZ@n       // & regional
 reign            reIn
+reiki            reIki:
 rein             reIn
 reined           reInd
 reining          reInI2N
 reindeer         reIndi@3
 reinvent         ri:Inv'Ent
-refinery         rI2faIn@rI
 relative         rEl@tIv
 relic            rElIk
 relish           rElI2S
@@ -1787,6 +1845,7 @@ renegade         rEn@geId
 repel            rI2pEl
 replay           ri:pleI
 reply            rI2plaI       // for replied
+repo             ri:poU
 repost           r,i:p'oUst
 reprisal         rI2praIz@L
 reputable        rEpju:t@b@L
@@ -1847,6 +1906,7 @@ satan            seIt@n
 satanist         seIt@nIst
 saucepan         sO:sp@n
 saudi            saUdI
+saute            sO:teI
 says             sEz
 schema           ski:m@
 shallow          SaloU
@@ -1856,6 +1916,8 @@ scared           ske@d
 scaring          ske@rI2N
 scenic           si:nIk
 scald            sk0ld
+scepter          sEpt3
+sceptre          sEpt3
 sclera           skli@r
 scourge          sk3:dZ
 scythe           saID
@@ -1884,8 +1946,10 @@ sentient         sEnti@nt
 sequester         $2
 sequine          si:kwI2n
 series           si:ri:z
+serenade         sErI2n'eId
 serene           s@ri:n
 sergeant         sA@dZ@nt
+sesame           sEsa2mI
 settee                         $2
 severe           sI2v'i@3        $only
 severely         sI2v'i@3lI2     $verbf
@@ -1903,7 +1967,9 @@ shrilly          SrIllI       $verbf
 sibelius         sI2beIli@s
 sierra           sI'e@r@
 signage          saInI2dZ
+signal           sIgn@l        // signaled
 signer           saIn3
+signup           saInVp
 sikh             si:k
 silhouette       sI2lUw'Et
 silo             saIloU
@@ -1923,6 +1989,7 @@ slavish          sleIvIS
 snooker          snu:k3
 society          s@saI@tI
 sofa             soUf@
+soiree           swA:reI
 soldier          soUldZ3
 solemn           s0l@m
 solicit          s@lIsI2t       // solicited,ing
@@ -1991,6 +2058,7 @@ sync             sINk
 synthesis        sInT@sIs      $only
 synthesise       sInT@saIz
 
+tableau          tabloU
 tablet           tabl@t
 taboo             $2
 tabu             tabu:
@@ -2046,6 +2114,7 @@ tonight          t@naIt
 tonne            tVn
 tornado          tO@n'eIdoU
 touche           tu:SeI        $only
+toupee           tu:peI
 transcript          $1 $onlys
 transfer                       $1 $onlys
 transfer                       $verb
@@ -2130,9 +2199,11 @@ veg              vEdZ
 vegetable        vEdZI2t@b@L
 vehicle          vi@k@L
 vegan            vi:g@n
+veggy            vEdZI
 vengeance        vEndZ@ns
 venus            vi:n@s
 versus           v3:sI2z
+vertices         v3:tIsi:z
 vestige          vEstI2dZ
 vex              vEks        // for vexed
 vicar            vIk3
@@ -2191,6 +2262,7 @@ writable         raIt@b@L
 writh            raID
 wrongdoing       r0Ndu:I2N
 wuss             wUs
+wysiwyg          wIzi:wIg
 
 xmas             Eksma2s
 
@@ -2265,6 +2337,7 @@ Algiers		$2
 Amman		a2m'A:n
 Andes		andi:z
 Angeles		andZ@li:z
+Angolan		aNg'oUl@n
 Antarctica	$2
 Antigua		ant'i:g@
 Antilles	ant'Ili:z
@@ -2273,11 +2346,12 @@ Armageddon	A@ma2g'Ed@n
 Arkansas	A@k@nsO:
 Athens		aTI2nz
 Bahrain		$2
-Belgrade	$2
-Barents		bar@nt|s
 Bangledesh	baNgl@d'ES
+Barbados	bA@'beId0s
+Barents		bar@nt|s
 Beijing		$2
 Beirut		beIr'u:t
+Belgrade	$2
 Belize		bEl'i:z
 Bengal		b,Eng'O:l
 Benin		bEnIn
@@ -2298,6 +2372,7 @@ Canberra	kanb@r@
 Carolina	kar@l'aIn@
 Caribbean	kar@b'i@n
 Ceylon		$2
+Cheyenne	SaI'an
 Chile		tSIlI
 Cologne		k@loUn
 Columbus	$2
@@ -2382,14 +2457,13 @@ Oman		oUm'an
 Oregon		0rI2g@n
 Pacific		pa2sIfIk
 Palestine	pal@staIn 
-Palestinian	pal@st'Ini:@n
+Palestinia	pal@st'Ini:@
 Panama		pan@mA:
 Paris		parIs
 Peking		pi:k'IN
 Peru		p@ru:
 Phillipine	fIlI2pi:n
 Philipine	fIlI2pi:n        // misspell
-Poland		poUl@nd
 Polish		poUlIS        $capital $only
 Portuguese	po@tju:g'i:z
 Potomac		$2
@@ -2411,7 +2485,7 @@ Seychelle	seIS'El
 Sicily		sIsI2lI
 Slovak		sloUvak
 Seoul		soUl
-(sri lanka)	sr,i:||l'anka2
+Sri		sr,i:   // Sri Lanka(n)
 Sudan		su:d'an
 Suez		su:I2z
 Sulawesi	su:la2w'eIsI
@@ -2419,7 +2493,6 @@ Suriname	sU@rIn'am
 Taipei		t,aIp'eI
 Taiwan		taI'wan
 (tel aviv)	t,El||a2v'i:v
-Tibet		tI2b'Et
 Toronto		t@r0ntoU
 Timor		ti:mo@
 Tokyo		toUkIoU
@@ -2439,7 +2512,9 @@ Wyoming		waI'oUmI2N
 Xhosa		kO:s@
 zaire		zaI'i@3
 zimbabwe	zI2mbA:bwI
+zimbabwean	zI2mbA:bwI@n
 
+Aaliyah		@li:@
 Aaron		e@r@n
 Abe		eIb
 Abu		abu:
@@ -2447,6 +2522,7 @@ Abraham		eIbr@ham
 Ada		eId@  $onlys
 Adrian		eIdri@n
 Agnes		agn@s
+Aguilera	agi:l'e@r@
 Ahab		eIhab
 Ahmed		axmEd
 Alan		al@n
@@ -2461,20 +2537,30 @@ Amy		eImI
 Andre		0ndreI
 Anthony		ant@nI
 Anton		ant0n
+Aoife		i:f@
+Archibald	A@tSIbO:ld
+Archie		A@tSI
 Ares		e@ri:z
 Astley		astlI
+Baez		baI'Ez
+Bambi		bambi:
 Barack		ba2rA:k
 Barbara		bA@b@r@
 Boris		b0rIs
 Brien		braI@n
+Candace		kandIs
 Carol		kar@l
 Calliope	ka2laI@pI
 Cassandra	k@sandr@
 Cassey		keIsI
 Catherine	kaTrI2n
 Cecile		sEsi:l
+Cher		Se@
+Cheri		Se@r'i:
+Cherie		Se@r'i:
 Chloe		kloUI
 Chris		krIs
+Connie		k0nI
 Connor		k0n3
 Daphne		dafnI
 Darryl		dar@L
@@ -2485,17 +2571,23 @@ Denise		d@ni:s
 Derek		dErIk
 Dinah		daIn@
 Dominic		d0mI2nIk
+Donaghy		d0n'hi:
 Doris		d0rIs
 Dougall		du:g@L
 Dylan		dIl@n
 Edith		i:dIT
 Elizabeth	I2lIz@b@T
 Emma		Em@
+Emmy		EmI
+Etheridge	ET@-rIdZ
+Euler		OIl3
 Evan		Ev@n
 Gary		garI
 Geraint		gEraInt
 Gibbs		gIbz
 Giles		gaIlz
+Gillian		dZIli:@n
+Gladys		gladIs
 Glynn		glIn
 Graeme		greI@m
 Graham		greI@m
@@ -2511,11 +2603,13 @@ Imogen		Im@dZ@n
 Irene		aIri:n
 Isaac		aIs@k
 Isabel		Iz@bEl
+Isla		aIl@
 Isiah		aIz'aI@
 Ivan		aIv@n
 Jacob		dZeIk@b
-Jamie		dZeImI
 Jacques		Zak
+Jamie		dZeImI
+Jared		dZarEd
 Jesus		dZi:z@s
 Jonah		dZoUn@
 José		hoUs'eI
@@ -2529,12 +2623,14 @@ Katie		keItI
 Kieran		ki@r@n
 Laurence	l0r@ns
 Lawrence	l0r@ns
+Leanne		li:'an
 Lenore		lEn'o@
 Leroy		li:rOI
 Liam		li:@m
 Louis		lu:I
 Louise		lu:w'i:z
 Madeline	mad@lI2n
+Maeve		meIv
 Mahmoud		maxm'u:d
 Malcolm		malk@m
 Maria		ma2ri:@
@@ -2550,10 +2646,14 @@ Michael		maIk@L
 Michele		mI2SEl
 Michelle	mI2SEl
 Miguel		mi:Q'El
-Mohammad	moUh'amId
-Muhammad	moUh'amId
+Mildred		mIldrI2d
+Minerva		mI2n3:v@
+Mohamed		moUh'amI2d
+Mohammad	moUh'amI2d
+Muhammad	moUh'amI2d
 Moira		mOIr@
 Natalie		nata2li
+Natasha		$2
 Nathan		neIT@n
 Neville		nEvIl
 Nicholas	nIk@l@s
@@ -2570,15 +2670,24 @@ Penelope	p@nEl@pI
 Phoebe		fi:bi:
 Rachel		reItS@L
 Raul		raU'u:l
+Reggie		rEdZI
+Reynold		rEn@Ld
 Rhys		ri:s
+Rihanna		rI'A:n@
 Roderick	r0drIk
+Rosario		roUz'A@rIoU
+Sabina		sa2bi:n@
+Sabine		sa2bi:n
 Samantha	s@manT@
+(Santa claus)	s'ant@||kl'O:z
+Saoirse		se@S@
 Sarah		se@r@
 Seamus		SeIm@s
 Sean		SO:n
 Sebastian	$2
 Sheila		Si:l@
 Sinead		SI2neId
+Siobhan		S@vO:n
 Sonia		s0nj@
 Sophie		soUfI
 Stephen		sti:v@n
@@ -2586,6 +2695,7 @@ Stewart		stju:3t
 ?3 Stewart	stu:3t
 Stuart		stju:3t
 ?3 Stuart	stu:3t
+Suzy		su:zI
 Theresa		t@ri:z@
 Thomas		t0m@s
 Tina		ti:n@
@@ -2599,11 +2709,15 @@ Zoe		zoUI
 Andromeda	andr'0mId@
 Buchanan	bju:k'an@n
 Campbell	kamb@l
+Cthulhu		k@-Tu:Lu:
 Chrysler	kraIzl3
 Disney		dIznI
+Dolce		d0ltSeI
+Hades		heIdi:z
 Patel		pa2tEl
 Primavera	pri:m@v'e@r@
 Prentice	prEntIs
+Reid		ri:d
 Reuter		rOIt3
 Ubuntu		u:b'u:ntu:
 Yaesu		jeIsu:
@@ -2644,120 +2758,121 @@ so               ,soU         $strend2 $verbf
 //prepositions
 //  these should be stressed at the end of a sentence
 
-of               0v           $u $only
-?6 of            Vv           $u $only
-(of a)           @v@          $nounf
-(of an)          @v@n         $nounf
-(of which)       0vw'ItS      $pause
-?6 (of the)      %VD@2        $nounf
-?6 (of which)    Vvw'ItS      $pause
+of               0v		$u $only
+?6 of            Vv		$u $only
+(of a)           @v@		$nounf
+(of an)          @v@n		$nounf
+(of which)       0vwItS		$2 $pause
+?6 (of the)      %VD@2		$nounf
+?6 (of which)    VvwItS		$2 $pause
 
-for              fO@ $u
-(for a)          f@@          $nounf
-(for an)         f@@n         $nounf
-(for the)        f3D@2        $nounf
+for              fO@		$u
+(for a)          f@@		$nounf
+(for an)         f@@n		$nounf
+(for the)        f3D@2		$nounf
 (for a while)    f@@||w'aIl
-(for one)        fO@w'0n      $atend
+(for one)        fO@w0n		$2 $atend
 
-to               t@5          $verbf    // @ change to U before vowel
-(to be)          t@b%I        $pastf
-(to be)          t@||'bi:       $atend
-(to to)          %tU_t@5        $verbf
+to               t@5		$verbf    // @ change to U before vowel
+(to be)          t@b%I		$pastf
+(to be)          t@||'bi:	$atend
+(to to)          %tU_t@5	$verbf
 (to and fro)     tu:@ndfr'oU
-to               tu:          $u $atend
-to               tu:          $allcaps
+to               tu:		$u $atend
+to               tu:		$u $allcaps
 
 
-at               at           $nounf $only $u
-(at a)           %at@          $nounf
+at               at		$nounf $only $u
+(at a)           %at@		$nounf
 (at once)        a2t_w0ns
 (at will)        a2t_w'Il
 
-with             wID          $u
+with             wID		$u
 (with the)       w%IDD@2	$nounf
 
-in               %In            $strend $only $nounf
+in               %In		$strend $only $nounf
 (in the)         %InD@2
-(in which)       In||w,ItS     $pause
+(in which)       In||wItS	$u2 $pause
 
-on               ,0n           $strend2
+on               ,0n		$strend2
 (on the)         %0nD@2
 
 (out of)         ,aUt@v
 into             ,IntU
-onto             ,0ntU         $strend2
+onto             ,0ntU		$strend2
 unto             ,VntU
 ?3 into          ,Int2U
-?3 onto          ,0nt2U         $strend2
+?3 onto          ,0nt2U		$strend2
 ?3 unto          ,Vnt2U
-upon             @p,0n
-from             %fr0m
-?3 from          %frVm
-(from where)     %fr0m||w'e@   $pause
-(from which)     %fr0m||w'ItS  $pause
-up               ,Vp           $strend2
-down             ,daUn         $only $strend2
-by               %baI
-across           @kr,0s        $strend2
-per              %p3:
+upon             @p0n		$u2
+from             fr0m		$u
+?3 from          frVm		$u
+(from where)     %fr0m||w'e@	$pause
+(from which)     %fr0m||w'ItS	$pause
+up               ,Vp		$strend2
+down             ,daUn		$only $strend2
+by               baI		$u
+across           @kr0s		$u2 $strend2
+per              p3:		$u
 (per cent)       p3||s'Ent
 (per se)         p,3:||s'eI
-through          %Tru:         $strend2
-toward           %tUwO@d
-over             ,oUv3         $strend2 $only
-under            ,Vnd3         $strend2 $only
-within           %wID,In
-without          %wID,aUt      $strend2
-above            @b,Vv         $strend2
-about            a2b,aUt       $strend2
+through          Tru:		$u $strend2
+toward           tUwO@d		$2
+over             oUv3		$u $strend2 $only
+under            Vnd3		$u $strend2 $only
+within           wIDIn		$u2
+without          wIDaUt		$u2 $strend2
+above            @bVv		$u2 $strend2
+about            a2baUt		$u2 $strend2
 against          a2gEnst
 ahead            a2hEd
-among            a2m,VN        $strend2
-amongst          a2m,VNst      $strend2
+among            a2mVN		$u2 $strend2
+amongst          a2mVNst	$u2 $strend2
 around           a2raUnd
-before           bIf,o@        $strend2
-behind           bIh,aInd      $strend2
-below            bIl,oU        $strend2
-beneath          bI2n,i:T      $strend2
-beyond           bIj,0nd       $strend2
-beside           bIs,aId       $strend2
-between          bItw,i:n      $strend2
-together         t@g,ED3       $strend2
-near             ,ni@3         $strend2
+before           bIfo@		$u2 $strend2
+behind           bIhaInd	$u2 $strend2
+below            bIloU		$u2 $strend2
+beneath          bI2ni:T	$u2 $strend2
+beyond           bIj0nd		$u2 $strend2
+beside           bIsaId		$u2 $strend2
+between          bItwi:n	$u2 $strend2
+together         t@gED3		$u2 $strend2
+near             ,ni@3		$strend2
 thence           DEns
 
 
 //aux. verbs
 
-be               %bi:          $pastf $only
-been             ,bi:n         $pastf $only
-?3 been          ,bIn          $pastf $only
-being            ,bi:IN        $pastf $only $strend2
-is               %Iz           $pastf $only // use contraction for 'is a'
+be               %bi:		$pastf $only
+been             ,bi:n		$pastf $only
+?3 been          ,bIn		$pastf $only
+being            ,bi:IN		$pastf $only $strend2
+is               %Iz		$pastf $only // use contraction for 'is a'
 // am               %am            $nounf $only  // now in en_rules
-are              %A@            $pastf $only
-was              %w0z           $pastf $only
-?3 was           %wVz           $pastf $only
-?3 wasn't        wVznt          $pastf $only
-wast             %w0st         $only $pastf $only
-were             %w3:           $pastf $only
-isn't            ,Iz@nt        $pastf $strend2
-aren't           ,A@nt         $pastf $strend2
-weren't          ,w3:nt        $pastf $strend2
+are              %A@		$pastf $only
+was              %w0z		$pastf $only
+?3 was           %wVz		$pastf $only
+?3 wasn't        wVznt		$pastf $only
+wast             %w0st		$only $pastf $only
+were             %w3:		$pastf $only
+isn't            ,Iz@nt		$pastf $strend2
+aren't           ,A@nt		$pastf $strend2
+weren't          ,w3:nt		$pastf $strend2
 
-will              $u+           $only $verbf $strend2
+will              $u+		$only $verbf $strend2
+//will                            $noun  // but not "this/these/that/those will"
 (will to)        wIlt@5
 would             $u+           $verbf $only $strend2
 (would have)     w%Udh%a2v      $pastf
 (would have)     wUdhav         $pastf $atend
-(would have to)  wUd,havt@5     $verbf $strend2
-(wouldn't have)  ,wUdnt@v       $pastf $strend2
+(would have to)  wUdhavt@5	$u2 $verbf $strend2
+(wouldn't have)  wUdnt@v	$u1 $pastf $strend2
 (wouldn't have to)  ,wUdntavt@5       $verbf $strend2
-won't            woUnt      $u+ $verbf $strend2 $only
+won't            woUnt		$u+ $verbf $strend2 $only
 wouldst           $u+
-(won't have)     woUnta2v       $pastf $u1
-(won't have)     woUnthav       $pastf $atend
-(won't have to)  w'oUntavt@5    $verbf $strend2
+(won't have)     woUnta2v	$pastf $u1
+(won't have)     woUnthav	$pastf $atend
+(won't have to)  w'oUntavt@5	$verbf $strend2
 
 must                            $verbf
 (must have)      mVsta2v        $pastf $1
@@ -2771,81 +2886,81 @@ shall            ,Sal           $verbf $only $strend2
 shalt            ,Salt          $verbf $only
 should           ,SUd           $verbf $only $strend2
 (should have)    SUd@v          $pastf $u1+
-(should have to)    SUd,havt@5         $verbf $strend2
-shouldn't        ,SUdnt         $verbf $strend2 $only
-(shouldn't have) SUdnth@v       $pastf $u1+
-(shouldn't have to) 'SUdntavt@5      $verbf $strend2
-shalln't         ,SA:nt         $verbf $strend2
-shan't           ,SA:nt         $verbf $strend2
+(should have to)  SUdhavt@5	$u2 $verbf $strend2
+shouldn't        ,SUdnt		$verbf $strend2 $only
+(shouldn't have) SUdnth@v	$pastf $u1+
+(shouldn't have to) 'SUdntavt@5	$verbf $strend2
+shalln't         ,SA:nt		$verbf $strend2
+shan't           ,SA:nt		$verbf $strend2
 
-can              %kan           $verbf $only $strend2
-can't            kA:nt          $verbf $only $strend2
-?3 cannot        $2             $verbf $only $strend2
-(can't have)     kA:nta2v       $pastf
-(can't have to)   ,kA:nt'avt@5       $verbf $atend
-?3 can't            kant          $verbf $only $strend2
-?3 (can't have)     kanta2v       $pastf
+can              %kan		$verbf $only $strend2
+can't            kA:nt		$verbf $only $strend2
+?3 cannot        $2		$verbf $only $strend2
+(can't have)     kA:nta2v	$pastf
+(can't have to)   ,kA:nt'avt@5	$verbf $atend
+?3 can't         kant		$verbf $only $strend2
+?3 (can't have)  kanta2v	$pastf
 ?3 (can't have to)   ,kant'avt@5       $verbf $atend
-could            %kUd           $verbf $strend2 $only
-(could have)     ,kUda2v        $pastf
-(could have)     kUdhav         $pastf $atend
-(could have to)  kUd,havt@5         $verbf $strend2
+could            %kUd		$verbf $strend2 $only
+(could have)     ,kUda2v	$pastf
+(could have)     kUdhav		$pastf $atend
+(could have to)  kUdhavt@5	$u2 $verbf $strend2
 couldn't         ,kUd@nt        $verbf $strend2
 (couldn't have)  kUd@nt@v       $pastf $u1+
 (couldn't have to)  'kUd@ntavt@5     $verbf $strend2
 
-may              meI            $verbf $strend2
-(may have)       meIha2v        $pastf $u1+
-(may have to)    ,meIh'avt@5    $verbf $atend
-might            ,maIt          $verbf $strend2 $only
-(might have)     maItha2v       $pastf $u1+
-(might have to)  ,maIth'avt@5   $verbf $atend
+may              meI		$verbf $strend2
+(may have)       meIha2v	$pastf $u1+
+(may have to)    ,meIh'avt@5	$verbf $atend
+might            ,maIt		$verbf $strend2 $only
+(might have)     maItha2v	$pastf $u1+
+(might have to)  ,maIth'avt@5	$verbf $atend
 
-have             %hav           $pastf $only $strend2
+have             %hav		$pastf $only $strend2
 haves            havz
-(have been)      %hav%bIn       $pastf
-has              %ha2z          $pastf $only
-has              haz            $only $atend
-(has been)       %haz%bIn       $pastf
-(has to)         haztU          $atend
-has              haz            $allcaps
-hath             %haT           $pastf $only
-had              %had           $pastf $strend2 $only
-(had been)       %had%bIn       $pastf
-having           ,havI2N        $strend2 $pastf $only
-haven't          hav@nt        $pastf
-hadn't           had@nt        $pastf
-hasn't           haz@nt        $pastf
+(have been)      %hav%bIn	$pastf
+has              %ha2z		$pastf $only
+has              haz		$only $atend
+(has been)       %haz%bIn	$pastf
+(has to)         haztU		$atend
+has              haz		$allcaps
+hath             %haT		$pastf $only
+had              %had		$pastf $strend2 $only
+(had been)       %had%bIn	$pastf
+having           ,havI2N	$strend2 $pastf $only
+haven't          hav@nt		$pastf
+hadn't           had@nt		$pastf
+hasn't           haz@nt		$pastf
 
-get              %gEt          $strend2 $pastf $only
-getting          ,gEtI2N       $strend2 $pastf $only
-got              %g0t          $strend2 $pastf $only
+get              %gEt		$strend2 $pastf $only
+getting          ,gEtI2N	$strend2 $pastf $only
+got              %g0t		$strend2 $pastf $only
 
-go               ,goU          $strend2 $only
-goes             %goUz         $strend2 $only
-going            ,goUI2N       $strend2 $only
-gone             %g0n          $strend2 $only
-?3 gone          %gOn          $strend2 $only
-went             %wEnt         $strend2 $only
+go               ,goU		$strend2 $only
+goes             %goUz		$strend2 $only
+going            ,goUI2N	$strend2 $only
+gone             %g0n		$strend2 $only
+?3 gone          %gOn		$strend2 $only
+went             %wEnt		$strend2 $only
 
-do               du:           $verbf
-(do not)         du:n0t        $verbf $u2+
-does             dVz           $verbf
-(does not)       dVzn0t        $verbf $u2+
-don't            doUnt         $verbf
-doesn't          dVz@nt        $verbf
-doesnt           dVz@nt        $verbf
-doing            ,du:I2N       $strend2 $only
-did              dId            $verbf
-(did not)        dIdn0t        $verbf $u2+
-didn't           dIdnt         $verbf
+do               du:		$verbf
+(do not)         du:n0t		$verbf $u2+
+does             dVz		$verbf
+(does not)       dVzn0t		$verbf $u2+
+don't            doUnt		$verbf
+doesn't          dVz@nt		$verbf
+doesnt           dVz@nt		$verbf
+doing            ,du:I2N	$strend2 $only
+did              dId		$verbf
+(did not)        dIdn0t		$verbf $u2+
+didn't           dIdnt		$verbf
 done             dVn
 
 putting           pUtI2N
-put              ,pUt          $onlys $strend2
+put              ,pUt		$onlys $strend2
 
-become           bI,kVm        $strend2
-became           bI,keIm       $strend2
+become           bIkVm		$u2 $strend2
+became           bIkeIm		$u2 $strend2
 
 we're            %wi@3
 you're           %jO@
@@ -2855,57 +2970,58 @@ it'd             %It@d
 that'd           %Dat@d
 there'd          %De@d
 
-I'll             %aIl          $verbf
-you'll           %ju:l         $verbf
-he'll            %hi:l         $verbf
-she'll           %Si:l         $verbf
-we'll            %wi:l         $verbf
-they'll          %DeIl         $verbf
-there'll         %De@l         $verbf
+I'll             aIl		$u $verbf
+you'll           ju:l		$u $verbf
+he'll            hi:l		$u $verbf
+she'll           Si:l		$u $verbf
+we'll            wi:l		$u $verbf
+they'll          DeIl		$u $verbf
+there'll         De@l		$u $verbf
 
-I've             %aIv          $pastf
-you've           %ju:v         $pastf
-he's             %hi:z         $pastf
-she's            %Si:z         $pastf
-we've            %wi:v         $pastf
-they've          %DeIv         $pastf
+I've             aIv		$u $pastf
+you've           ju:v		$u $pastf
+he's             hi:z		$u $pastf
+she's            Si:z		$u $pastf
+we've            wi:v		$u $pastf
+they've          DeIv		$u $pastf
 
-we'd             %wi:d         $pastf
+we'd             wi:d		$u $pastf
 
-I                aI            $u+ $verbf $only
+I                aI		$u+ $verbf $only
 (I am)           %aIa2m
-he               %hi:          $verbsf
-she              %Si:          $only $verbsf
-it               %It           $verbsf
-(it has)         %It||haz      $atend
-(it is)          %It||Iz       $atend
-(it was)         %It||w0z      $atend
-it               $allcaps $abbrev
-we               %wi:          $verbf $only
-you              %ju:          $verbf
-they             %DeI          $verbf
+(I am)           %aIam		$atend
+he               hi:		$u $verbsf
+she              Si:		$u $only $verbsf
+it               It		$u $verbsf
+(it has)         %It||haz	$atend
+(it is)          %It||Iz	$atend
+(it was)         %It||w0z	$atend
+it               		$allcaps $abbrev
+we               wi:		$u $verbf $only
+you              ju:		$u $verbf
+they             DeI		$u $verbf
 
 thee             ,Di: 
 thou             DaU
 thy              ,DaI
 thine            ,DaIn
 
-me               ,mi:          $only
-him              ,hIm          $only
-us               ,Vz           $only
-us                $abbrev      $allcaps
-them             ,DEm          $only
+me               ,mi:		$only
+him              ,hIm		$only
+us               ,Vz		$only
+us               		$abbrev $allcaps
+them             ,DEm		$only
 
-my               %maI          $nounf $strend2
-his              h%Iz          $nounf $only $strend2
-her              %h3:          $nounf $only
-hers             %h3:z         $strend2
-its              %Its          $nounf
-our              %aU@          $nounf $only
-?3  our          %aU3          $nounf $only
-your             %jO@          $nounf $only
-?6 your          %jU@          $nounf $only
-their            %De@          $nounf $only
+my               maI		$u $nounf $strend2
+his              hIz		$u $nounf $only $strend2
+her              h3:		$u $nounf $only
+hers             h3:z		$u $strend2
+its              Its		$u $nounf
+our              aU@		$u $nounf $only
+?3  our          aU3		$u $nounf $only
+your             jO@		$u $nounf $only
+?6 your          jU@		$u $nounf $only
+their            De@		$u $nounf $only
 theirs           De@z
 
 none             n0n
@@ -2916,76 +3032,76 @@ someone          sVmw0n
 
 //conjunctions
 
-although         OlD'oU        $pause
-and              %and          $pause $only
-as               ,az           $pause $only
-(as is)          ,az,Iz        $pause
-(as it is)       ,azIt,Iz      $u+
-because          bIk'Vz        $pause
-once                           $pause
-or               %O@           $pause $only
-nor              nO@           $pause $only
-but              ,bVt          $pause $only
-if               ,If           $pause $only
-despite                        $pause
-instead                        $pause
-otherwise        VD3waIz       $pause
-regardless                     $pause
-since            sIns          $pause
-thus             DVs           $pause
+although         OlD'oU		$pause
+and              and		$u $pause $only
+as               ,az		$pause $only
+(as is)          ,az,Iz		$pause
+(as it is)       ,azIt,Iz	$u+
+because          bIkVz		$2 $pause
+once             		$pause
+or               O@		$u $pause $only
+nor              nO@		$pause $only
+but              ,bVt		$pause $only
+if               ,If		$pause $only
+despite          		$pause
+instead          		$pause
+otherwise        VD3waIz	$pause
+regardless       		$pause
+since            sIns		$pause
+thus             DVs		$pause
 though           ,DoU
-whenever         wEn,Ev3       $pause
-within                         $pause
-whoever          hu:'Ev3
-whatever         w0t'Ev3       $pause
-?3 whatever      wVt'Ev3       $pause
-while                          $pause
-whilst           waIlst        $pause
-(rather than)    r'A:D3||Da2n  $pause
+whenever         wEnEv3		$u2 $pause
+within           		$pause
+whoever          hu:Ev3		$2
+whatever         w0tEv3		$2 $pause
+?3 whatever      wVtEv3		$2 $pause
+while            		$pause
+whilst           waIlst		$pause
+(rather than)    r'A:D3||Da2n	$pause
 
-//some adverbs  (note -ly suffix already implies verb-follows)
 
-just              $verbf
-never             $verbf
-now               $verbf
-now               naU          $verbf $allcaps
-soon              $verbf
-still             $verbf
-already           O:lr,EdI     $verbf $strend2
+//some adverbs
+just             		$verbf
+never            		$verbf
+now              		$verbf
+now              naU		$verbf $allcaps
+soon             		$verbf
+still            		$verbf
+already          O:lrEdI	$u2 $verbf $strend2
 
-not              ,n0t          $verbextend $only $strend
-(not have)       n0ta2v        $pastf $u1
-(not have)       n0thav        $pastf $atend
-(not have to)    ,n0thavt@5    $pastf $strend
-(not a)          ,n0t@         $nounf
-not              n0t           $allcaps $verbextend    // don't spell "NOT"; speak it with stress
-only             oUnlI         $verbextend
+not              ,n0t		$verbextend $only $strend
+(not have)       n0ta2v		$pastf $u1
+(not have)       n0thav		$pastf $atend
+(not have to)    ,n0thavt@5	$pastf $strend
+(not a)          ,n0t@		$nounf
+not              n0t		$allcaps $verbextend    // don't spell "NOT"; speak it with stress
+only             oUnlI		$verbextend
 
-any              ,EnI          $nounf $only
-many             mEnI          $nounf
+any              ,EnI		$nounf $only
+many             mEnI		$nounf
 (many of)        mEnI|@v
-some             ,sVm          $nounf $unstressend $only
+some             ,sVm		$nounf $unstressend $only
 (some one)       sVmw0n
-one              w0n           $nounf $onlys $unstressend
-ones             w0nz          $only $unstressend
+one              w0n		$nounf $onlys $unstressend
+ones             w0nz		$only $unstressend
 
-this             %DIs          $nounf $strend $verbsf
-(this one)       D'Isw,0n      $verbsf
-that             %Dat          $nounf $strend2 $verbsf
-(that a)         ,Dat@         $nounf
-(that an)        ,Dat@n        $nounf
-(that it)        ,Da2tIt       $verbsf
+this             DIs		$u+ $nounf $verbsf
+(this one)       D'Isw,0n	$verbsf
+that             Dat		$u $nounf $strend2 $verbsf
+(that a)         ,Dat@		$nounf
+(that an)        ,Dat@n		$nounf
+(that it)        ,Da2tIt	$verbsf
 (that one)       D'atw,0n
 (that the)       %DatD@2
-these            %Di:z         $nounf $strend2 $only
-those            %DoUz         $nounf $strend2 $only
-there            %De@          $strend2 $only
+these            Di:z		$u $nounf $strend2 $only
+those            DoUz		$u $nounf $strend2 $only
+there            De@		$u $strend2 $only
 (there be)       De@b'i:
 
-than             %Dan          $only
-(than a)         ,Dan@         $nounf
-(than an)        ,Dan@n        $nounf
-then             DEn           $verbf 
+than             Dan		$u $only
+(than a)         ,Dan@		$nounf
+(than an)        ,Dan@n		$nounf
+then             DEn		$verbf 
 
 // these should be stressed at the start of a sentence
 which            ,wItS         $pause $strend2 $only $verbf
@@ -3055,6 +3171,7 @@ like             laIk          $strend2
 ?3 err		e@
 ?3 fortune	fO@tS@n
 ?3 garage	ga2rA:Z
+?3 happy	hapi:
 ?3 herb		3:b
 ?3 hurricane	h3:@keIn
 ?3 investigative Inv,EstI2g'eItIv
@@ -3071,6 +3188,4 @@ like             laIk          $strend2
 ?3 tomato	t@meItoU
 ?3 vitamin      vaIt@mIn
 ?3 zebra	zi:br@
-
-
 

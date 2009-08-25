@@ -98,8 +98,10 @@
           _) achs (el     'aks
           j) ag (d        A:k
           _) air          _^_EN
+          m) air (_       aI3
              ai (sch      A:I
          tr) ain          En
+             air (_       E:r
              akqu         %akv
          @A) al (_        'A:l
           g) al (_        'A:l
@@ -131,7 +133,8 @@
           _) aufent       aUf@nt
              austra (l    %aUst@-*A
           _) authen       aUtEn
-             ay (_        EI
+             ay (_N       EI
+          m) ayr (_       aI3
           p) ay           EI
 
 .group b
@@ -356,6 +359,7 @@
              ein (and     _|%aIn
           _) eine (r@     aIn@
           _) einig        aInIg
+          m) eir (_       aI3
           _) eisen (@P5   'aIz@n
           _) e (lek       %e:
           _) elektro (@P7 e:l'Ekt@-*o:
@@ -704,8 +708,8 @@
           _) miet (C@P4   m'i:t
           _) mikro (@P5   m,i:k@-*o:
           _) mit (P3      m'It
-             mitt (eC     mIt
-             mitt (l      mIt
+             mitt         mIt
+             mitt (eil    mItt
           _) mo (rb       m%O
           _) mono (@      m,o:no:
           _) motor        m%o:to:*
@@ -837,7 +841,6 @@
              sst (@       sSt
 
              sch          S
-             sch (en_     sC
           _) sh           S
              sh (K        S
              sou (nd      saU
@@ -863,6 +866,14 @@
 
           _) safe         _^_EN
           &) schaft (_S6  Saft
+
+          ä) schen        sC@n  // but not wäschen
+         fe) schen        sC@n
+         ie) schen        sC@n
+          h) schen        sC@n
+          ö) schen        sC@n  // but not löschen
+         äu) schen        sC@n  // but not täuschen
+
              schein (lich S'aIn
           _) schul (@P5   S'u:l
           _) schul (d     S'Ul
@@ -877,6 +888,7 @@
 
              sound        _^_EN
              speed        _^_EN
+          @) straße (_S6   st*,A:s@
           _) street       _^_EN
              style        _^_EN
              synthesi     _^_EN

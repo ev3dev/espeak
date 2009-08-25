@@ -35,8 +35,8 @@
 #include "translate.h"
 #include "wave.h"
 
-const char *version_string = "1.40  22.Dec.08";
-const int version_phdata  = 0x014000;
+const char *version_string = "1.41.01  25.Aug.09";
+const int version_phdata  = 0x014100;
 
 int option_device_number = -1;
 
@@ -46,7 +46,7 @@ int current_phoneme_table;
 PHONEME_TAB *phoneme_tab[N_PHONEME_TAB];
 unsigned char phoneme_tab_flags[N_PHONEME_TAB];   // bit 0: not inherited
 
-unsigned int *phoneme_index=NULL;
+static unsigned int *phoneme_index=NULL;
 char *spects_data=NULL;
 unsigned char *wavefile_data=NULL;
 static unsigned char *phoneme_tab_data = NULL;
@@ -677,5 +677,6 @@ void LoadConfig(void)
 			}
 		}
 	}
+	fclose(f);
 }  //  end of LoadConfig
 
