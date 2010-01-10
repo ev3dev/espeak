@@ -1,3 +1,10 @@
+espeak (1.41.01-1) unreleased; urgency=low
+
+  [ Samuel Thibault ]
+  * debian/watch: Add.
+
+ -- Mario Lang <mlang@debian.org>  Sun, 10 Jan 2010 21:49:20 +0100
+
 espeak (1.41.01-1) unstable; urgency=low
 
   * New Upstream Version (Closes: Bug#543453)
