@@ -8,8 +8,6 @@ soname=libespeak.so.1
 #version=$(shell dpkg-parsechangelog|sed -n -e 's/^Version: //p'|cut -d- -f1)
 version=1.41
 
-voicelist=$(shell ls -1 dictsource/*_list | cut -f2 -d/ | cut -f1 -d_)
-
 CFLAGS = -Wall -g
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
@@ -27,18 +25,10 @@ build-stamp:
 	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE)
 
 	# Build static speak binary
-	#cd src && $(MAKE) clean
-	#cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) speak DATADIR=$(CURDIR)/espeak-data
-	#cd platforms/big_endian && CFLAGS="$(CFLAGS)" $(MAKE)
+	cd platforms/big_endian && CFLAGS="$(CFLAGS)" $(MAKE)
 	# Build voice metadata.
-	#mkdir -p $(CURDIR)/tmp
-	#$(CURDIR)/platforms/big_endian/espeak-phoneme-data $(CURDIR)/espeak-data $(CURDIR)/tmp $(CURDIR)/platforms/big_endian/phondata-manifest
-	#mv $(CURDIR)/tmp/* $(CURDIR)/espeak-data
-	#rmdir $(CURDIR)/tmp
-	#cd dictsource && \
-	#for voice in $(voicelist); do \
-	#    $(CURDIR)/src/speak --compile=$$voice; \
-	#done
+	cp -a $(CURDIR)/espeak-data $(CURDIR)/espeak-data-local
+	$(CURDIR)/platforms/big_endian/espeak-phoneme-data $(CURDIR)/espeak-data-local $(CURDIR)/espeak-data-local $(CURDIR)/espeak-data/phondata-manifest
 
 	touch build-stamp
 
@@ -50,6 +40,8 @@ clean:
 	-cd src && $(MAKE) distclean
 	-cd platforms/big_endian && $(MAKE) clean
 
+	rm -fr espeak-data-local
+
 	dh_clean 
 
 install: build
@@ -59,7 +51,7 @@ install: build
 	dh_installdirs
 
 	install -m 755 -o root -g root src/espeak $(CURDIR)/debian/espeak/usr/bin/espeak
-	cp -r espeak-data $(CURDIR)/debian/espeak-data/usr/share
+	cp -r espeak-data-local $(CURDIR)/debian/espeak-data/usr/share/espeak-data
 	find $(CURDIR)/debian/espeak-data/usr/share -type f -exec chmod 644 {} \;
 	find $(CURDIR)/debian/espeak-data/usr/share -type d -exec chmod 755 {} \;
 	cp -al $(CURDIR)/debian/espeak-data/usr $(CURDIR)/debian/espeak-data-udeb

@@ -1,7 +1,9 @@
-espeak (1.41.01-1) unreleased; urgency=low
+espeak (1.41.01-2) unreleased; urgency=low
 
   [ Samuel Thibault ]
   * debian/watch: Add.
+  * debian/rules: Systematically rebuild voices for big-endian architectures
+    (Closes: Bug#439019).
 
  -- Mario Lang <mlang@debian.org>  Sun, 10 Jan 2010 21:49:20 +0100
 
