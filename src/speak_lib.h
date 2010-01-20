@@ -26,6 +26,7 @@
 /*************************************************************/
 
 #include <stdio.h>
+#include <stddef.h>
 
 #define ESPEAK_API_REVISION  5
 /*

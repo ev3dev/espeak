@@ -4,6 +4,7 @@ espeak (1.41.01-2) unreleased; urgency=low
   * debian/watch: Add.
   * debian/rules: Systematically rebuild voices for big-endian architectures
     (Closes: Bug#439019).
+  * src/speak_lib.h: Include stddef.h (Closes: Bug#565571).
 
  -- Mario Lang <mlang@debian.org>  Sun, 10 Jan 2010 21:49:20 +0100
 
