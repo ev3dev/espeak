@@ -14,13 +14,15 @@
 
 .group b
 	b	b
+	b (C	b_
 
 .group c
 	c	S
+     K) c (C    S_!
 
 .group d
 	d	d
-	dj	dZ
+	dj	dZ  // ??
 
 .group e
 	e	e
@@ -81,8 +83,8 @@
 .group r
 	r	r-  // syllabic
      A) r	R
-     C) r (A    @-*
 	r (A	R
+	r (C	R_   // ?? do this in phonemes data instead?
 
 
 .group s

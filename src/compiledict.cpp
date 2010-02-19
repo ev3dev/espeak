@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2007 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2010 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -40,6 +40,8 @@ int HashDictionary(const char *string);
 static FILE *f_log = NULL;
 extern char *dir_dictionary;
 
+extern char word_phonemes[N_WORD_PHONEMES];    // a word translated into phoneme codes
+
 static int linenum;
 static int error_count;
 static int transpose_offset;  // transpose character range for LookupDictList()
@@ -47,6 +49,7 @@ static int transpose_min;
 static int transpose_max;
 static int text_mode = 0;
 static int debug_flag = 0;
+static int error_need_dictionary = 0;
 
 static int hash_counts[N_HASH_DICT];
 static char *hash_chains[N_HASH_DICT];
@@ -80,7 +83,6 @@ MNEM_TAB mnem_flags[] = {
 	{"$unstressend",13},   /* reduce stress at end of clause */
 	{"$atend",     14},    /* use this pronunciation if at end of clause */
 
-	{"$dot",       16},   /* ignore '.' after this word (abbreviation) */
 	{"$abbrev",    17},    /* use this pronuciation rather than split into letters */
 	{"$stem",      18},   // must have a suffix
 
@@ -88,7 +90,11 @@ MNEM_TAB mnem_flags[] = {
 	{"$double",    19},   // IT double the initial consonant of next word
 	{"$alt",       20},   // use alternative pronunciation
 	{"$alt2",      21},
-	
+	{"$combine",   22},   // Combine with the next word
+	{"$alt3",      23},
+
+	{"$dot",       24},   // ignore '.' after this word (abbreviation)
+	{"$hasdot",    25},   // use this pronunciation if there is a dot after the word
 
 	{"$max3",      27},   // limit to 3 repetitions
 	{"$brk",       28},   // a shorter $pause
@@ -122,6 +128,7 @@ typedef struct {
 	char name[LEN_GROUP_NAME+1];
 	unsigned int start;
 	unsigned int length;
+	int group3_ix;
 } RGROUP;
 
 
@@ -342,7 +349,7 @@ step=1;  // TEST
 			break;
 	
 		case 1:
-			if((c == '-') && (word[0] != '_'))
+			if((c == '-') && multiple_words)
 			{
 				if(isdigit(word[0]))
 				{
@@ -427,15 +434,36 @@ step=1;  // TEST
 	if(text_mode)
 		text_not_phonemes = 1;
 
-	if(text_not_phonemes != translator->langopts.textmode)
-	{
-		flag_codes[n_flag_codes++] = BITNUM_FLAG_TEXTMODE;
-	}
-
 	if(text_not_phonemes)
 	{
-		// this is replacement text, so don't encode as phonemes. Restrict the length of the replacement word
-		strncpy0(encoded_ph,phonetic,N_WORD_BYTES-4);
+		if(word[0] == '_')
+		{
+			// This is a special word, used by eSpeak.  Translate this into phonemes now
+			strcat(phonetic, " ");     // need a space to indicate word-boundary
+
+	// PROBLEM  vowel reductions are not applied to the translated phonemes
+	// condition rules are not applied
+			TranslateWord(translator,phonetic,0,NULL);
+			text_not_phonemes = 0;
+			strncpy0(encoded_ph, word_phonemes, N_WORD_BYTES-4);
+
+			if((word_phonemes[0] == 0) && (error_need_dictionary < 3))
+			{
+				// the dictionary was not loaded, we need a second attempt
+				error_need_dictionary++;
+				fprintf(f_log,"%5d: Need to compile dictionary again\n",linenum);
+			}
+{
+//char decoded_phonemes[128];
+//DecodePhonemes(word_phonemes,decoded_phonemes);
+//printf("Translator %x  %s  [%s] [%s]\n",translator->translator_name,word,phonetic,decoded_phonemes);
+}
+		}
+		else
+		{
+			// this is replacement text, so don't encode as phonemes. Restrict the length of the replacement word
+			strncpy0(encoded_ph,phonetic,N_WORD_BYTES-4);
+		}
 	}
 	else
 	{
@@ -459,6 +487,12 @@ step=1;  // TEST
 			}
 		}
 	}
+
+	if(text_not_phonemes != translator->langopts.textmode)
+	{
+		flag_codes[n_flag_codes++] = BITNUM_FLAG_TEXTMODE;
+	}
+
 
 	if(sscanf(word,"U+%x",&wc) == 1)
 	{
@@ -538,12 +572,10 @@ step=1;  // TEST
 		}
 		else
 		{
-			dict_line[length++] = 80 + multiple_words + multiple_numeric_hyphen;   // if numeric, count a hyphen as an extra word
+			dict_line[length++] = 80 + multiple_words;
 			ix = multiple_string_end - multiple_string;
 			if(multiple_numeric_hyphen)
 			{
-				// the first part is numeric, so keep the hyphen to match on
-				dict_line[length++] = '-';
 				dict_line[length++] = ' ';
 			}
 			memcpy(&dict_line[length],multiple_string,ix);
@@ -659,9 +691,14 @@ static int compile_dictlist_file(const char *path, const char* filename)
 	
 	text_mode = 0;
 
-	sprintf(fname,"%s%s",path,filename);
+	// try with and without '.txt' extension
+	sprintf(fname,"%s%s.txt",path,filename);
 	if((f_in = fopen(fname,"r")) == NULL)
-		return(-1);
+	{
+		sprintf(fname,"%s%s",path,filename);
+		if((f_in = fopen(fname,"r")) == NULL)
+			return(-1);
+	}
 
 	fprintf(f_log,"Compiling: '%s'\n",fname);
 
@@ -706,6 +743,7 @@ static char rule_post[80];
 static char rule_match[80];
 static char rule_phonemes[80];
 static char group_name[LEN_GROUP_NAME+1];
+static int group3_ix;
 
 #define N_RULES 2000		// max rules for each group
 
@@ -827,6 +865,9 @@ static void copy_rule_string(char *string, int &state)
 					break;
 				case 'X':
 					c = RULE_NOVOWELS;
+					break;
+				case 'J':
+					c = RULE_SKIPCHARS;
 					break;
 				case 'L':
 					// expect two digits
@@ -1086,8 +1127,8 @@ static char *compile_rule(char *input)
 }  //  end of compile_rule
 
 
-static int __cdecl string_sorter(char **a, char **b)
-{//=================================================
+int __cdecl string_sorter(char **a, char **b)
+{//===========================================
 	char *pa, *pb;
 	int ix;
 
@@ -1101,7 +1142,10 @@ static int __cdecl string_sorter(char **a, char **b)
 
 static int __cdecl rgroup_sorter(RGROUP *a, RGROUP *b)
 {//===================================================
+// Sort long names before short names
 	int ix;
+	ix = strlen(b->name) - strlen(a->name);
+	if(ix != 0) return(ix);
 	ix = strcmp(a->name,b->name);
 	if(ix != 0) return(ix);
 	return(a->start-b->start);
@@ -1373,6 +1417,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 	int n_rules=0;
 	int count=0;
 	int different;
+	int wc;
 	const char *prev_rgroup_name;
 	unsigned int char_code;
 	int compile_mode=0;
@@ -1381,6 +1426,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 	char *rules[N_RULES];
 
 	int n_rgroups = 0;
+	int n_groups3 = 0;
 	RGROUP rgroup[N_RULE_GROUP2];
 	
 	linenum = 0;
@@ -1408,6 +1454,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 			if(n_rules > 0)
 			{
 				strcpy(rgroup[n_rgroups].name,group_name);
+				rgroup[n_rgroups].group3_ix = group3_ix;
 				rgroup[n_rgroups].start = ftell(f_temp);
 				output_rule_group(f_temp,n_rules,rules,group_name);
 				rgroup[n_rgroups].length = ftell(f_temp) - rgroup[n_rgroups].start;
@@ -1453,7 +1500,8 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 				while((*p > ' ') && (ix < LEN_GROUP_NAME))
 					group_name[ix++] = *p++;
 				group_name[ix]=0;
-	
+				group3_ix = 0;
+
 				if(sscanf(group_name,"0x%x",&char_code)==1)
 				{
 					// group character is given as a character code (max 16 bits)
@@ -1466,8 +1514,19 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 					*p++ = char_code;
 					*p = 0;
 				}
+				else
+				{
+					if(translator->letter_bits_offset > 0)
+					{
+						utf8_in(&wc, group_name);
+						if(((ix = (wc - translator->letter_bits_offset)) >= 0) && (ix < 128))
+						{
+							group3_ix = ix+1;   // not zero
+						}
+					}
+				}
 	
-				if(strlen(group_name) > 2)
+				if((group3_ix == 0) && (strlen(group_name) > 2))
 				{
 					if(utf8_in(&c,group_name) < 2)
 					{
@@ -1545,7 +1604,17 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 			if(gp > 0)
 				fputc(RULE_GROUP_END,f_out);
 			fputc(RULE_GROUP_START,f_out);
-			fprintf(f_out, prev_rgroup_name = rgroup[gp].name);
+
+			if(rgroup[gp].group3_ix != 0)
+			{
+				n_groups3++;
+				fputc(1,f_out);
+				fputc(rgroup[gp].group3_ix, f_out);
+			}
+			else
+			{
+				fprintf(f_out, "%s", prev_rgroup_name = rgroup[gp].name);
+			}
 			fputc(0,f_out);
 		}
 
@@ -1565,7 +1634,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 	fclose(f_temp);
 	remove(fname_temp);
 
-	fprintf(f_log,"\t%d rules, %d groups\n\n",count,n_rgroups);
+	fprintf(f_log,"\t%d rules, %d groups (%d)\n\n",count,n_rgroups,n_groups3);
 	return(0);
 }  //  end of compile_dictrules
 
@@ -1586,6 +1655,7 @@ int CompileDictionary(const char *dsource, const char *dict_name, FILE *log, cha
 	char path[sizeof(path_home)+40];       // path_dsource+20
 
 	error_count = 0;
+	error_need_dictionary = 0;
 	memset(letterGroupsDefined,0,sizeof(letterGroupsDefined));
 
 	debug_flag = flags & 1;
@@ -1598,14 +1668,18 @@ int CompileDictionary(const char *dsource, const char *dict_name, FILE *log, cha
 	if(f_log == NULL)
 		f_log = stderr;
 
+	// try with and without '.txt' extension
 	sprintf(path,"%s%s_",dsource,dict_name);
-	sprintf(fname_in,"%srules",path);
-	f_in = fopen_log(fname_in,"r");
-	if(f_in == NULL)
+	sprintf(fname_in,"%srules.txt",path);
+	if((f_in = fopen(fname_in,"r")) == NULL)
 	{
-		if(fname_err)
-			strcpy(fname_err,fname_in);
-		return(-1);
+		sprintf(fname_in,"%srules",path);
+		if((f_in = fopen_log(fname_in,"r")) == NULL)
+		{
+			if(fname_err)
+				strcpy(fname_err,fname_in);
+			return(-1);
+		}
 	}
 
 	sprintf(fname_out,"%s%c%s_dict",path_home,PATHSEP,dict_name);

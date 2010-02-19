@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2007 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2010 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -48,13 +48,17 @@
 #define FLAG_ATEND          0x4000  /* use this pronunciation if at end of clause */
 #define FLAG_SPELLWORD      0x8000  // re-translate the word as individual letters, separated by spaces
 
-#define FLAG_DOT           0x10000  /* ignore '.' after word (abbreviation) */
 #define FLAG_ABBREV        0x20000  // spell as letters, even with a vowel, OR use specified pronunciation rather than split into letters
 #define FLAG_STEM          0x40000  // must have a suffix
 
 #define FLAG_DOUBLING      0x80000  // doubles the following consonant
 #define FLAG_ALT_TRANS    0x100000  // language specific
 #define FLAG_ALT2_TRANS   0x200000  // language specific
+#define FLAG_COMBINE      0x400000  // combine with the next word
+#define FLAG_ALT3_TRANS   0x800000  // language specific
+
+#define FLAG_ALLOW_DOT  0x01000000  // ignore '.' after word (abbreviation)
+#define FLAG_NEEDS_DOT  0x02000000  // only if the word is followed by a dot
 
 #define FLAG_MAX3       0x08000000  // limit to 3 repeats
 #define FLAG_PAUSE1     0x10000000  // shorter prepause
@@ -75,9 +79,9 @@
 #define FLAG_VERB_EXT        0x100  /* extend the 'verb follows' */
 #define FLAG_CAPITAL         0x200  /* pronunciation if initial letter is upper case */
 #define FLAG_ALLCAPS         0x400  // only if the word is all capitals
-#define BITNUM_FLAG_ALLCAPS   0x2a
 #define FLAG_ACCENT          0x800  // character name is base-character name + accent name
 #define FLAG_HYPHENATED     0x1000  // multiple-words, but needs hyphen between parts 1 and 2
+#define BITNUM_FLAG_ALLCAPS   0x2a
 #define BITNUM_FLAG_HYPHENATED  0x2c
 
 
@@ -98,9 +102,13 @@
 #define FLAG_DONT_SWITCH_TRANSLATOR  0x1000
 #define FLAG_SUFFIX_REMOVED  0x2000
 #define FLAG_HYPHEN_AFTER    0x4000
+#define FLAG_ORDINAL       0x8000   // passed to TranslateNumber() to indicate an ordinal number
+#define FLAG_HAS_DOT       0x10000  // dot after this word
+#define FLAG_COMMA_AFTER   0x20000  // comma after this word
+#define FLAG_MULTIPLE_SPACES 0x40000  // word is preceded by multiple spaces, newline, or tab
 
-#define FLAG_NO_TRACE      0x10000   // passed to TranslateRules() to suppress dictionary lookup printout
-#define FLAG_NO_PREFIX     0x20000
+#define FLAG_NO_TRACE      0x10000000   // passed to TranslateRules() to suppress dictionary lookup printout
+#define FLAG_NO_PREFIX     0x20000000
 
 // prefix/suffix flags (bits 8 to 14, bits 16 to 22) don't use 0x8000, 0x800000
 #define SUFX_E        0x0100   // e may have been added
@@ -130,18 +138,19 @@
 #define RULE_LINENUM		8  // next 2 bytes give a line number, for debugging purposes
 
 #define RULE_SPACE		32   // ascii space
-#define RULE_SYLLABLE	9
-#define RULE_STRESSED	10
-#define RULE_DOUBLE		11
-#define RULE_INC_SCORE	12
-#define RULE_DEL_FWD		13
-#define RULE_ENDING		14
+#define RULE_SYLLABLE	9    // @
+#define RULE_STRESSED	10   // &
+#define RULE_DOUBLE		11   // %
+#define RULE_INC_SCORE	12   // +
+#define RULE_DEL_FWD		13   // #
+#define RULE_ENDING		14   // S
 #define RULE_DIGIT		15   // D digit
 #define RULE_NONALPHA	16   // Z non-alpha
 #define RULE_LETTERGP   17   // A B C H F G Y   letter group number
 #define RULE_LETTERGP2  18   // L + letter group number
-#define RULE_CAPITAL    19   //    word starts with a capital letter
+#define RULE_CAPITAL    19   // !   word starts with a capital letter
 #define RULE_REPLACEMENTS 20  // section for character replacements
+#define RULE_SKIPCHARS  23   // J
 #define RULE_NO_SUFFIX  24   // N
 #define RULE_NOTVOWEL   25   // K
 #define RULE_IFVERB     26   // V
@@ -162,29 +171,32 @@
 
 // Punctuation types  returned by ReadClause()
 // bits 0-7 pause x 10mS, bits 12-14 intonation type,
+// bit 15- don't need space after the punctuation
 // bit 19=sentence, bit 18=clause,  bits 17=voice change
 // bit 16 used to distinguish otherwise identical types
 // bit 20= punctuation character can be inside a word (Armenian)
+// bit 21= speak the name of the punctuation character
+// bit 22= dot after the last word
 #define CLAUSE_BIT_SENTENCE  0x80000
+#define CLAUSE_BIT_CLAUSE    0x40000
 #define CLAUSE_BIT_VOICE     0x20000
+#define CLAUSE_BITS_INTONATION 0x7000
 #define PUNCT_IN_WORD        0x100000
+#define PUNCT_SAY_NAME       0x200000
+#define CLAUSE_DOT           0x400000
 
 #define CLAUSE_NONE         0 + 0x04000
 #define CLAUSE_PARAGRAPH   70 + 0x80000
-#define CLAUSE_EOF         35 + 0x90000
+#define CLAUSE_EOF         40 + 0x90000
 #define CLAUSE_VOICE        0 + 0x24000
-#define CLAUSE_PERIOD      35 + 0x80000
+#define CLAUSE_PERIOD      40 + 0x80000
 #define CLAUSE_COMMA       20 + 0x41000
 #define CLAUSE_SHORTCOMMA   4 + 0x41000
 #define CLAUSE_SHORTFALL    4 + 0x40000
-#define CLAUSE_QUESTION    35 + 0x82000
-#define CLAUSE_EXCLAMATION 40 + 0x83000
+#define CLAUSE_QUESTION    40 + 0x82000
+#define CLAUSE_EXCLAMATION 45 + 0x83000
 #define CLAUSE_COLON       30 + 0x40000
-#ifdef PLATFORM_RISCOS
-#define CLAUSE_SEMICOLON   30 + 0x40000
-#else
 #define CLAUSE_SEMICOLON   30 + 0x41000
-#endif
 
 #define SAYAS_CHARS     0x12
 #define SAYAS_GLYPHS    0x13
@@ -194,6 +206,7 @@
 #define SAYAS_DIGITS1   0xc1
 
 #define CHAR_EMPHASIS   0x0530  // this is an unused character code
+#define CHAR_COMMA_BREAK  0x0557  // unused character code
 
 // Rule:
 // [4] [match] [1 pre] [2 post] [3 phonemes] 0
@@ -212,22 +225,13 @@ typedef struct {
 
 // used to mark words with the source[] buffer
 typedef struct{
+	unsigned int flags;
 	unsigned short start;
 	unsigned short sourceix;
-	unsigned short flags;
 	unsigned char pre_pause;
 	unsigned char wmark;
 	unsigned char length;
 } WORD_TAB;
-
-// a clause translated into phoneme codes (first stage)
-typedef struct {
-	unsigned char phcode;
-	unsigned char stress;
-	unsigned char tone_number; 
-	unsigned char synthflags;
-	unsigned short sourceix;
-} PHONEME_LIST2;
 
 
 typedef struct {
@@ -240,7 +244,7 @@ extern const int param_defaults[N_SPEECH_PARAM];
 
 
 
-#define N_LOPTS      16
+#define N_LOPTS      19
 #define LOPT_DIERESES        1
  // 1=remove [:] from unstressed syllables, 2= remove from unstressed or non-penultimate syllables
  // bit 4=0, if stress < 4,  bit 4=1, if not the highest stress in the word
@@ -292,7 +296,25 @@ extern const int param_defaults[N_SPEECH_PARAM];
 #define LOPT_IT_DOUBLING    14
 
   // Call ApplySpecialAttributes() if $alt or $alt2 is set for a word
+  // bit 1: stressed syllable: $alt change [e],[o] to [E],[O],  $alt2 change [E],[O] to [e],[o]
 #define LOPT_ALT  15
+
+  // pause for bracket (default=4), pause when annoucing bracket names (default=2)
+#define LOPT_BRACKET_PAUSE 16
+
+	// bit 1, don't break clause before annoucning . ? !
+#define LOPT_ANNOUNCE_PUNCT 17
+
+	// set minimum length for long vowels at fast speeds, to keep a distinction with short vowels
+#define LOPT_MIN_LONG_VOWEL 18
+
+
+// stress_rule
+#define STRESSPOSN_1L	0	// 1st syllable
+#define STRESSPOSN_2L	1	// 2nd syllable
+#define STRESSPOSN_2R	2	// penultimate
+#define STRESSPOSN_1R	3	// final syllable
+#define STRESSPOSN_3R	4	// antipenultimate
 
 
 typedef struct {
@@ -304,6 +326,15 @@ typedef struct {
 	int vowel_pause;
 	int stress_rule; // 1=first syllable, 2=penultimate,  3=last
 
+#define S_NO_DIM            0x02
+#define S_FINAL_DIM         0x04
+#define S_FINAL_NO_2        0x10
+#define S_NO_AUTO_2         0x20
+#define S_2_TO_HEAVY        0x40
+#define S_2_SYL_2           0x1000
+#define S_INITIAL_2         0x2000
+#define S_NO_AUTO_DIM       0x10000
+#define S_HYPEN_UNSTRESS    0x100000
 // bit0=don't stress monosyllables, except at end of clause
 // bit1=don't set diminished stress,
 // bit2=mark unstressed final syllables as diminished
@@ -319,19 +350,41 @@ typedef struct {
 // bit17= "priority" stress reduces other primary stress to "unstressed" not "secondary"
 // bit18= don't lengthen short vowels more than long vowels at end-of-clause
 // bit19=stress on final syllable if it has a long vowel, but previous syllable has a short vowel
+// bit20= hyphenated words, 2nd part is unstressed
 
 	int stress_flags; 
 	int unstressed_wd1; // stress for $u word of 1 syllable
 	int unstressed_wd2; // stress for $u word of >1 syllable
 	int param[N_LOPTS];
+	int param2[N_LOPTS];
 	unsigned char *length_mods;
 	unsigned char *length_mods0;
 
+#define NUM_THOUS_SPACE  0x4
+#define NUM_DECIMAL_COMMA 0x8
+#define NUM_SWAP_TENS    0x10
+#define NUM_AND_UNITS    0x20
+#define NUM_HUNDRED_AND  0x40
+#define NUM_SINGLE_AND   0x80
+#define NUM_SINGLE_STRESS 0x100
+#define NUM_SINGLE_VOWEL 0x200
+#define NUM_OMIT_1_HUNDRED 0x400
+#define NUM_1900         0x800
+#define NUM_ALLOW_SPACE  0x1000
+#define NUM_DFRACTION_1  0x2000
+#define NUM_DFRACTION_2  0x4000
+#define NUM_DFRACTION_3  0x6000
+#define NUM_DFRACTION_4  0x8000
+#define NUM_DFRACTION_5  0xa000
+#define NUM_ORDINAL_DOT  0x10000
 #define NUM_ROMAN        0x20000
 #define NUM_ROMAN_UC     0x40000
 #define NUM_NOPAUSE      0x80000
-#define NUM_ROMAN_AFTER 0x200000
-#define NUM_VIGESIMAL   0x400000
+#define NUM_AND_HUNDRED  0x100000
+#define NUM_ROMAN_AFTER  0x200000
+#define NUM_VIGESIMAL    0x400000
+#define NUM_ROMAN_ORDINAL 0x800000
+#define NUM_ROMAN_CAPITALS 0x1000000
 
 	// bits0-1=which numbers routine to use.
 	// bit2=  thousands separator must be space
@@ -353,20 +406,21 @@ typedef struct {
 	// bit20='and' before hundreds
 	// bit21= say "roman" after the number, not before
 	// bit22= vigesimal number, if tens are not found
+	// bit23=Roman numbers are ordinal numbers
+	// bit24=Roman numbers must be capital letters
 	int numbers;
 
-#define NUM2_100000     0x800   // numbers for 100,000 and 10,000,000
-#define NUM2_100000a    0xc00   // numbers for 100,000 and 1,000,000
 	// bits 1-4  use variant form of numbers before thousands,millions,etc.
 	// bit6=(LANG=pl) two forms of plural, M or MA
 	// bit7=(LANG-ru) use MB for 1 thousand, million, etc
 	// bit8=(LANG=cs,sk) two forms of plural, M or MA
 	// bit9=(LANG=rw) say "thousand" and "million" before its number, not after
-   // bit10=(LANG=sw) special word for 100,000 and 1,000,000
-	// bit11=(LANG=hi) special word for 100,000 and 10,000,000
 	int numbers2;
 
+#define BREAK_THOUSANDS   0x49249248
+	int break_numbers;  // which digits to break the number into thousands, millions, etc (Hindi has 100,000 not 1,000,000)
 	int max_roman;
+	int min_roman;
 	int thousands_sep;
 	int decimal_sep;
 
@@ -386,6 +440,8 @@ typedef struct {
 	int listx;    // compile *_listx after *list
 	const unsigned int *replace_chars;      // characters to be substitutes
 	const char *ascii_language;  // switch to this language for Latin characters
+	int max_lengthmod;
+	int suffix_add_e;     // replace a suffix (which has the SUFX_E flag) with this character
 } LANGUAGE_OPTIONS;
 
 
@@ -445,6 +501,7 @@ struct Translator
 	// the two-letter rules for each letter must be consecutive in the language_rules source
 	
 	char *groups1[256];         // translation rule lists, index by single letter
+	char *groups3[128];         // index by offset letter
 	char *groups2[N_RULE_GROUP2];   // translation rule lists, indexed by two-letter pairs
 	unsigned int groups2_name[N_RULE_GROUP2];  // the two letter pairs for groups2[]
 	int n_groups2;              // number of groups2[] entries used
@@ -549,13 +606,14 @@ Translator *SelectTranslator(const char *name);
 int SetTranslator2(const char *name);
 void DeleteTranslator(Translator *tr);
 int Lookup(Translator *tr, const char *word, char *ph_out);
+int LookupFlags(Translator *tr, const char *word);
 
-int TranslateNumber(Translator *tr, char *word1, char *ph_out, unsigned int *flags, int wflags);
-int TranslateRoman(Translator *tr, char *word, char *ph_out);
+int TranslateNumber(Translator *tr, char *word1, char *ph_out, unsigned int *flags, WORD_TAB *wtab);
+int TranslateRoman(Translator *tr, char *word, char *ph_out, WORD_TAB *wtab);
 
 void ChangeWordStress(Translator *tr, char *word, int new_stress);
 void SetSpellingStress(Translator *tr, char *phonemes, int control, int n_chars);
-int TranslateLetter(Translator *tr, char *letter, char *phonemes, int control, int word_length);
+int TranslateLetter(Translator *tr, char *letter, char *phonemes, int control);
 void LookupLetter(Translator *tr, unsigned int letter, int next_byte, char *ph_buf);
 void LookupAccentedLetter(Translator *tr, unsigned int letter, char *ph_buf);
 
@@ -573,12 +631,14 @@ void CalcPitches(Translator *tr, int clause_tone);
 
 int RemoveEnding(Translator *tr, char *word, int end_type, char *word_copy);
 int Unpronouncable(Translator *tr, char *word);
-void SetWordStress(Translator *tr, char *output, unsigned int &dictionary_flags, int tonic, int prev_stress);
+void SetWordStress(Translator *tr, char *output, unsigned int *dictionary_flags, int tonic, int prev_stress);
 int TranslateRules(Translator *tr, char *p, char *phonemes, int size, char *end_phonemes, int end_flags, unsigned int *dict_flags);
 int TranslateWord(Translator *tr, char *word1, int next_pause, WORD_TAB *wtab);
 void *TranslateClause(Translator *tr, FILE *f_text, const void *vp_input, int *tone, char **voice_change);
 int ReadClause(Translator *tr, FILE *f_in, char *buf, short *charix, int *charix_top, int n_buf, int *tone_type);
 
 void SetVoiceStack(espeak_VOICE *v);
+void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_DATA *phdata);
+void InterpretPhoneme2(int phcode, PHONEME_DATA *phdata);
 
 extern FILE *f_trans;		// for logging

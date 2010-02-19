@@ -116,6 +116,11 @@ void SetSpeed(int control)
 	wpm = embedded_value[EMBED_S];
 	if(control == 2)
 		wpm = embedded_value[EMBED_S2];
+
+	if(voice->speed_percent > 0)
+	{
+		wpm = (wpm * voice->speed_percent)/100;
+	}
 	wpm2 = wpm;
 
 	if(wpm > 369) wpm = 369;
@@ -293,6 +298,7 @@ void CalcLengths(Translator *tr)
 	int emphasized;
 	int  tone_mod;
 	unsigned char *pitch_env=NULL;
+	PHONEME_DATA phdata_tone;
 
 	for(ix=1; ix<n_phoneme_list; ix++)
 	{
@@ -321,10 +327,10 @@ void CalcLengths(Translator *tr)
 		case phSTOP:
 			last_pitch = 0;
 			if(prev->type == phFRICATIVE)
-				p->prepause = 20;
+				p->prepause = 25;
 			else
 			if((more_syllables > 0) || (stress < 4))
-				p->prepause = 40;
+				p->prepause = 48;
 			else
 				p->prepause = 60;
 
@@ -403,7 +409,7 @@ void CalcLengths(Translator *tr)
 
 		case phLIQUID:
 		case phNASAL:
-			p->amp = tr->stress_amps[1];  // unless changed later
+			p->amp = tr->stress_amps[0];  // unless changed later
 			p->length = 256;  //  TEMPORARY
 			min_drop = 0;
 			
@@ -469,6 +475,10 @@ void CalcLengths(Translator *tr)
 
 			if(stress > 7) stress = 7;
 
+if(stress <= 1)
+{
+  stress = stress ^ 1;  // swap diminished and unstressed (until we swap stress_amps,stress_lengths in tr_languages)
+}
 			if(pre_sonorant)
 				p->amp = tr->stress_amps[stress]-1;
 			else
@@ -557,11 +567,11 @@ void CalcLengths(Translator *tr)
 			{
 				length_mod += 20;
 			}
-			
+
 			if((len = tr->stress_lengths[stress]) == 0)
 				len = tr->stress_lengths[6];
 
-			length_mod = (length_mod * len)/128;
+			length_mod = length_mod * len;
 
 			if(p->tone_ph != 0)
 			{
@@ -575,11 +585,19 @@ void CalcLengths(Translator *tr)
 			if(end_of_clause == 2)
 			{
 				// this is the last syllable in the clause, lengthen it - more for short vowels
-				len = p->ph->std_length;
+				len = (p->ph->std_length * 2);
 				if(tr->langopts.stress_flags & 0x40000)
 					len=200;  // don't lengthen short vowels more than long vowels at end-of-clause
 				length_mod = length_mod * (256 + (280 - len)/3)/256;
 			}
+
+			if(length_mod > tr->langopts.max_lengthmod*speed1)
+			{
+				//limit the vowel length adjustment for some languages
+				length_mod = (tr->langopts.max_lengthmod*speed1);
+			}
+
+			length_mod = length_mod / 128;
 
 if(p->type != phVOWEL)
 {
@@ -595,7 +613,8 @@ if(p->type != phVOWEL)
 
 			if(p->tone_ph != 0)
 			{
-				pitch_env = LookupEnvelope(phoneme_tab[p->tone_ph]->spect);
+				InterpretPhoneme2(p->tone_ph, &phdata_tone);
+				pitch_env = LookupEnvelope(phdata_tone.pitch_env);
 			}
 			else
 			{

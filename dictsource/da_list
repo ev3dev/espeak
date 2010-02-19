@@ -1,4 +1,4 @@
- 
+﻿ 
 // This file is UTF8 encoded 
 // Spelling-to-phoneme words for Danish
 
@@ -27,9 +27,9 @@ _ac2	dV@lakj'u:t
 _brv	br'i:v
 _ced	s@d'ila
 _cir	s'3:kVmfl,Eks
-_dia	'umlaut
+_dia	'omlyd
 _dot	wiDd'0tabVv
-_grv	gr'a:v
+_grv	aks'aN gr'a:v
 _hac	h'atS,Ek
 _mcn	m'akr,0n
 _ogo	'0g0n,Ek
@@ -58,20 +58,32 @@ _#32	blank
 @	sn,&:bel'&:
 /	sgRVsdrai	$max3
 \	'Vmvendsgr,VsdRai $max3
-_,	koma:
+_,	k'oma:
 _;	se:mi:ko:lVn
-_:	ko:lVn
-_.	pun^tum
+_:	k'o:lVn
+_.	puNtum
 _?	spWrgsmVlstajn
 _!	udRVbstejn
 _-	binnesdrai
-__	bOndsdrai
+__	b'Onsdrai
 &	ou
 £	pun?
 €	euro
 © kopyrajt
+÷ divid'eReD meD 
 =	l'imeD
 #	n'OmV
+§	paragr'af
+×	g'aNe
+ª	feminin Wdin'al
+º	m'askulin Wdin'al
+®	registr'eret varemerke
+¼	en kvart
+¢	s'ents
+¥	j'en:
+µ	my
+'	apostr'of
+
 // numbers
 _0	'nOl
 _1	'e:n
@@ -130,6 +142,8 @@ fordi	fVdi		$pause	// because
 når	nVr		$pause	// while
 som		$u+ $pause   // who (relative)
 der	dA	$u+ $pause
+hvor	v'Vr	// where
+hvorfor	vVf'Vr	// why
 
 // prepositions
 på		pO	$u+
@@ -141,7 +155,7 @@ med			$u+	// with
 af	a?			$u+	// of
 at		at $u+	// to
 hos			$u+	// at
-
+som	$u	sVm	// which / that 
 
 
 // pronouns
@@ -169,17 +183,17 @@ disse	$u+	// these
 // possessive pronouns
 Min	min	$u
 Mit	mit	$u
-Mine	min@	$u
-din	di?n
-dit	di?t	$u
-dine	$u
+Mine	m'in@	
+din	d'in
+dit	d'it	$u
+dine	d'ine
 deres	$u
 hans	$u
 hendes	$u
 dens	$u
 dets	$u
-sin	si?n
-sit	si?t	$u
+sin	s'in
+sit	s'it	$u
 sine	$u
 vor	$u
 vort	$u
@@ -213,6 +227,7 @@ k	kO:
 l	El
 m	Em
 n	En
+o	o
 p	pe:
 q	ku:
 r	Er
@@ -227,13 +242,23 @@ z	sEt
 
 
 // exceptions
+Alene	al'en@	// alone
 egen a:j@n
 eget	a:j@D
 egne	a:in@
-igen	igen
 enter	entV
-også	Vs@
-sig	sAi	// oneself
-sagde	sa@	// said
+ide	id'e	// idea
+idé	id'e	// idea
+igen	igen
 Ny	ny	// new
+også	Vs@	// also
+havde	h'aD@ // had
+idet	id'e	// in so far as
+sagde	sa@	// said
+sig	sAi	// oneself
+slags	sl'ags	// sort, type
+tre	tr'e	// the number 3
+
+
+
 

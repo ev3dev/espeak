@@ -241,16 +241,15 @@ static int parwave(klatt_frame_ptr frame)
 	static double sourc;
 	int ix;
 
-	frame_init(frame);  /* get parameters for next frame of speech */
-
 	flutter(frame);  /* add f0 flutter */
 
-#ifdef deleted
+#ifdef LOG_FRAMES
+if(option_log_frames)
 {
 	FILE *f;
-	f=fopen("klatt_log","a");
-	fprintf(f,"%4dhz %2dAV %4d %3d, %4d %3d, %4d %3d, %4d %3d, %4d, %3d, %4d %3d TLT=%2d\n",frame->F0hz10,frame->AVdb,
-	frame->F1hz,frame->B1hz,frame->F2hz,frame->B2hz,frame->F3hz,frame->B3hz,frame->F4hz,frame->B4hz,frame->F5hz,frame->B5hz,frame->F6hz,frame->B6hz,frame->TLTdb);
+	f=fopen("log-klatt","a");
+	fprintf(f,"%4dhz %2dAV %4d %3d, %4d %3d, %4d %3d, %4d %3d, %4d, %3d, FNZ=%3d TLT=%2d\n",frame->F0hz10,frame->AVdb,
+	frame->Fhz[1],frame->Bhz[1],frame->Fhz[2],frame->Bhz[2],frame->Fhz[3],frame->Bhz[3],frame->Fhz[4],frame->Bhz[4],frame->Fhz[5],frame->Bhz[5],frame->Fhz[0],frame->TLTdb);
 	fclose(f);
 }
 #endif
@@ -467,8 +466,8 @@ static int parwave(klatt_frame_ptr frame)
 		{
 			temp =  32767.0;
 		}
-	
-		*out_ptr++ = int(temp);   // **JSD
+
+		*out_ptr++ = int(temp);
 		*out_ptr++ = int(temp) >> 8;
 		sample_count++;
 		if(out_ptr >= out_end)
@@ -482,37 +481,42 @@ static int parwave(klatt_frame_ptr frame)
 
 
 
-/*
-function PARWAVE_INIT
 
-Initialises all parameters used in parwave, sets resonator internal memory
-to zero.
-*/
-
-static void reset_resonators()
+void KlattReset(int control)
 {
 	int r_ix;
 
-	for(r_ix=0; r_ix < N_RSN; r_ix++)
+	if(control == 2)
+	{
+		//Full reset
+		kt_globals.FLPhz = (950 * kt_globals.samrate) / 10000;
+		kt_globals.BLPhz = (630 * kt_globals.samrate) / 10000;
+		kt_globals.minus_pi_t = -PI / kt_globals.samrate;
+		kt_globals.two_pi_t = -2.0 * kt_globals.minus_pi_t;
+		setabc(kt_globals.FLPhz,kt_globals.BLPhz,&(kt_globals.rsn[RLP]));
+
+	}
+
+	if(control > 0)
+	{
+		kt_globals.nper = 0;
+		kt_globals.T0 = 0;
+		kt_globals.nopen = 0;
+		kt_globals.nmod = 0;
+
+		for(r_ix=RGL; r_ix < N_RSN; r_ix++)
+		{
+			kt_globals.rsn[r_ix].p1 = 0;
+			kt_globals.rsn[r_ix].p2 = 0;
+		}
+
+	}
+
+	for(r_ix=0; r_ix <= R6p; r_ix++)
 	{
 		kt_globals.rsn[r_ix].p1 = 0;
 		kt_globals.rsn[r_ix].p2 = 0;
 	}
-}
-
-static void parwave_init()
-{
-	kt_globals.FLPhz = (950 * kt_globals.samrate) / 10000;
-	kt_globals.BLPhz = (630 * kt_globals.samrate) / 10000;
-	kt_globals.minus_pi_t = -PI / kt_globals.samrate;
-	kt_globals.two_pi_t = -2.0 * kt_globals.minus_pi_t;
-	setabc(kt_globals.FLPhz,kt_globals.BLPhz,&(kt_globals.rsn[RLP]));
-	kt_globals.nper = 0;
-	kt_globals.T0 = 0;
-	kt_globals.nopen = 0;
-	kt_globals.nmod = 0;
-
-	reset_resonators();
 }
 
 
@@ -556,7 +560,7 @@ static void frame_init(klatt_frame_ptr frame)
 	kt_globals.amp_gain0 = DBtoLIN(Gain0_tmp) / kt_globals.scale_wav;
 	
 	/* Set coefficients of variable cascade resonators */
-	for(ix=0; ix<=8; ix++)
+	for(ix=1; ix<=9; ix++)
 	{
 		// formants 1 to 8, plus nasal pole
 		setabc(frame->Fhz[ix],frame->Bhz[ix],&(kt_globals.rsn[ix]));
@@ -982,6 +986,7 @@ int Wavegen_Klatt(int resume)
 	int pk;
 	int x;
 	int ix;
+	int fade;
 
 	if(resume==0)
 	{
@@ -1057,22 +1062,37 @@ int Wavegen_Klatt(int resume)
 		if(kt_globals.nspfr > STEPSIZE)
 			kt_globals.nspfr = STEPSIZE;
 
+		frame_init(&kt_frame);  /* get parameters for next frame of speech */
+
 		if(parwave(&kt_frame) == 1)
 		{
-			return(1);
+			return(1);    // output buffer is full
 		}
 	}
 
-	if(end_wave == 1)
+	if(end_wave > 0)
 	{
+#ifdef deleted
+		if(end_wave == 2)
+		{
+		fade = (kt_globals.T0 - kt_globals.nper)/4;  // samples until end of current cycle
+		if(fade < 64)
+			fade = 64;
+		}
+		else
+#endif
+		{
+			fade = 64;   // not followd by formant synthesis
+		}
+
 		// fade out to avoid a click
-		kt_globals.fadeout = 64;
+		kt_globals.fadeout = fade;
 		end_wave = 0;
-		sample_count -= 64;
-		kt_globals.nspfr = 64;
+		sample_count -= fade;
+		kt_globals.nspfr = fade;
 		if(parwave(&kt_frame) == 1)
 		{
-			return(1);
+			return(1);    // output buffer is full
 		}
 	}
 
@@ -1086,6 +1106,7 @@ void SetSynth_Klatt(int length, int modn, frame_t *fr1, frame_t *fr2, voice_t *v
 	DOUBLEX next;
 	int qix;
 	int cmd;
+	frame_t *fr3;
 	static frame_t prev_fr;
 
 	if(wvoice != NULL)
@@ -1115,6 +1136,17 @@ void SetSynth_Klatt(int length, int modn, frame_t *fr1, frame_t *fr2, voice_t *v
 			if(cmd==WCMD_KLATT)
 			{
 				end_wave = 0;  // next wave generation is from another spectrum
+
+				fr3 = (frame_t *)wcmdq[qix][2];
+				for(ix=1; ix<6; ix++)
+				{
+					if(fr3->ffreq[ix] != fr2->ffreq[ix])
+					{
+						// there is a discontinuity in formants
+						end_wave = 2;
+						break;
+					}
+				}
 				break;
 			}
 			if((cmd==WCMD_WAVE) || (cmd==WCMD_PAUSE))
@@ -1122,46 +1154,43 @@ void SetSynth_Klatt(int length, int modn, frame_t *fr1, frame_t *fr2, voice_t *v
 		}
 	}
 
+#ifdef LOG_FRAMES
+if(option_log_frames)
 {
-//FILE *f;
-//f=fopen("klatt_log","a");
-//fprintf(f,"len %4d  (%3d %4d %4d) (%3d %4d %4d)\n",length,fr1->ffreq[1],fr1->ffreq[2],fr1->ffreq[3],fr2->ffreq[1],fr2->ffreq[2],fr2->ffreq[3]);
-//fclose(f);
+	FILE *f_log;
+	f_log=fopen("log-espeakedit","a");
+	if(f_log != NULL)
+	{
+		fprintf(f_log,"K %3dmS  %3d %3d %4d %4d %4d %4d (%2d)  to  %3d %3d %4d %4d %4d %4d (%2d)\n",length*1000/samplerate,
+			fr1->klattp[KLATT_FNZ]*2,fr1->ffreq[1],fr1->ffreq[2],fr1->ffreq[3],fr1->ffreq[4],fr1->ffreq[5], fr1->klattp[KLATT_AV],
+			fr2->klattp[KLATT_FNZ]*2,fr2->ffreq[1],fr2->ffreq[2],fr2->ffreq[3],fr1->ffreq[4],fr1->ffreq[5], fr2->klattp[KLATT_AV] );
+		fclose(f_log);
+	}
+	f_log=fopen("log-klatt","a");
+	if(f_log != NULL)
+	{
+		fprintf(f_log,"K %3dmS  %3d %3d %4d %4d (%2d)  to  %3d %3d %4d %4d (%2d)\n",length*1000/samplerate,
+			fr1->klattp[KLATT_FNZ]*2,fr1->ffreq[1],fr1->ffreq[2],fr1->ffreq[3], fr1->klattp[KLATT_AV],
+			fr2->klattp[KLATT_FNZ]*2,fr2->ffreq[1],fr2->ffreq[2],fr2->ffreq[3], fr2->klattp[KLATT_AV] );
+	
+		fclose(f_log);
+	}
 }
+#endif
 
 	if(control & 1)
 	{
-		if(wdata.prev_was_synth == 0)
+		for(ix=1; ix<6; ix++)
 		{
-			// A break, not following on from another synthesized sound.
-			// Reset the synthesizer
-			//reset_resonators(&kt_globals);
-			parwave_init();
-		}
-		else
-		{
-			if((prev_fr.ffreq[1] != fr1->ffreq[1]) || (prev_fr.ffreq[2] != fr1->ffreq[2]))
+			if(prev_fr.ffreq[ix] != fr1->ffreq[ix])
 			{
-
-				// fade out to avoid a click, but only up to the end of output buffer
-				ix = (out_end - out_ptr)/2;
-				if(ix > 64)
-					ix = 64; 
-				kt_globals.fadeout = ix;
-				kt_globals.nspfr = ix;
-				parwave(&kt_frame);
-
-				//reset_resonators(&kt_globals);
-				parwave_init();
+				// Discontinuity in formants.
+				// end_wave was set in SetSynth_Klatt() to fade out the previous frame
+				KlattReset(0);
+				break;
 			}
 		}
-		wdata.prev_was_synth = 1;
 		memcpy(&prev_fr,fr2,sizeof(prev_fr));
-	}
-	if(fr2->frflags & FRFLAG_BREAK)
-	{
-//		fr2 = fr1;
-//		reset_resonators(&kt_globals);
 	}
 
 	for(ix=0; ix<N_KLATTP; ix++)
@@ -1203,8 +1232,14 @@ void SetSynth_Klatt(int length, int modn, frame_t *fr1, frame_t *fr2, voice_t *v
 
 	// nasal zero frequency
 	peaks[0].freq1 = fr1->klattp[KLATT_FNZ] * 2;
+	if(peaks[0].freq1 == 0)
+		peaks[0].freq1 = kt_frame.Fhz[F_NP];   // if no nasal zero, set it to same freq as nasal pole
+
 	peaks[0].freq = int(peaks[0].freq1);
 	next = fr2->klattp[KLATT_FNZ] * 2;
+	if(next == 0)
+		next = kt_frame.Fhz[F_NP];
+
 	peaks[0].freq_inc = ((next - peaks[0].freq1) * STEPSIZE) / length;
 
 	peaks[0].bw1 = 89;
@@ -1275,7 +1310,7 @@ void KlattInit()
 	kt_globals.outsl = 0;
 	kt_globals.f0_flutter = 20;
 
-	parwave_init();
+	KlattReset(2);
 
 	// set default values for frame parameters
 	for(ix=0; ix<=9; ix++)
@@ -1297,7 +1332,7 @@ void KlattInit()
 	kt_frame.Kskew = 0;
 	kt_frame.AB = 0;
 	kt_frame.AVpdb = 0;
-	kt_frame.Gain0 = 60;   // 62
+	kt_frame.Gain0 = 62;   // 60
 }  // end of KlattInit
 
 #endif  // INCLUDE_KLATT
