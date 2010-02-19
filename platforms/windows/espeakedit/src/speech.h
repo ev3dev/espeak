@@ -24,7 +24,7 @@
 
 // comment this out when compiling the "speak" process
 //#define SPECT_EDITOR
-//#define INCLUDE_KLATT
+#define INCLUDE_KLATT
 
 #include <windows.h>
 #define PLATFORM_WINDOWS
@@ -34,6 +34,7 @@
 #define PATHSEP  '\\'
 #define USE_PORTAUDIO
 //#define USE_NANOSLEEP
+#define NO_VARIADIC_MACROS
 #define __cdecl 
 #define ESPEAK_API
 #define PATH_ESPEAK_DATA  "C:\\Program files\\espeak\\espeak-data"

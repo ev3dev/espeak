@@ -30,8 +30,10 @@
 
 #define PATHSEP '\\'
 // #define USE_PORTAUDIO
+#define NO_VARIADIC_MACROS
 #define ESPEAK_API __declspec(dllexport)
 #define LIBRARY
+#define INCLUDE_KLATT
 
 // will look for espeak_data directory here, and also in user's home directory
 #define PATH_ESPEAK_DATA  "/usr/share/espeak-data"

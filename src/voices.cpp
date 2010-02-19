@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2007 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2010 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -104,6 +104,7 @@ enum {
 	V_MBROLA,
 	V_KLATT,
 	V_FAST,
+	V_SPEED,
 
 // these need a phoneme table to have been specified
 	V_REPLACE,
@@ -112,12 +113,13 @@ enum {
 
 
 
-typedef struct {
-	const char *mnem;
-	int data;
-} keywtab_t;
+static MNEM_TAB options_tab[] = {
+	{"reduce_t",  LOPT_REDUCE_T},
+	{"bracket", LOPT_BRACKET_PAUSE},
+	{"fastLongVowel", LOPT_MIN_LONG_VOWEL},
+	{NULL,   -1} };
 
-static keywtab_t keyword_tab[] = {
+static MNEM_TAB keyword_tab[] = {
 	{"name",       V_NAME},
 	{"language",   V_LANGUAGE},
 	{"gender",     V_GENDER},
@@ -150,6 +152,7 @@ static keywtab_t keyword_tab[] = {
 	{"consonants", V_CONSONANTS},
 	{"klatt",      V_KLATT},
 	{"fast_test",  V_FAST},
+	{"speed",      V_SPEED},
 
 	// these just set a value in langopts.param[]
 	{"l_dieresis", 0x100+LOPT_DIERESES},
@@ -371,14 +374,17 @@ void VoiceReset(int tone_only)
 
 	static int breath_widths[N_PEAKS] = {0,200,200,400,400,400,600,600,600};
 
-	// default is:  pitch 82,118
-//	voice->pitch_base =   0x49000;    // default, 73 << 12;
-//	voice->pitch_range =  0x0f30;     // default = 0x1000
+	// default is:  pitch 80,118
 	voice->pitch_base = 0x47000;
-	voice->pitch_range = 3996;
+	voice->pitch_range = 4104;
+
+//	default is:  pitch 80,117
+//	voice->pitch_base = 0x47000;
+//	voice->pitch_range = 3996;
 
 	voice->formant_factor = 256;
 
+	voice->speed_percent = 100;
 	voice->echo_delay = 0;
 	voice->echo_amp = 0;
 	voice->flutter = 64;
@@ -500,12 +506,12 @@ voice_t *LoadVoice(const char *vname, int control)
 //          bit 4  1 = vname = full path
 
 	FILE *f_voice = NULL;
-	keywtab_t *k;
 	char *p;
 	int  key;
 	int  ix;
 	int  n;
 	int  value;
+	int  value2;
 	int  error = 0;
 	int  langix = 0;
 	int  tone_only = control & 2;
@@ -524,6 +530,7 @@ voice_t *LoadVoice(const char *vname, int control)
 	char translator_name[40];
 	char new_dictionary[40];
 	char phonemes_name[40];
+	char option_name[40];
 	const char *language_type;
 	char buf[200];
 	char path_voices[sizeof(path_home)+12];
@@ -565,8 +572,14 @@ voice_t *LoadVoice(const char *vname, int control)
 
 			if(GetFileLength(buf) <= 0)
 			{
-				// look in "test" sub-directory
-				sprintf(buf,"%stest%c%s",path_voices,PATHSEP,voicename);
+				// look in "extra" sub-directory
+				sprintf(buf,"%sextra%c%s",path_voices,PATHSEP,voicename);
+
+				if(GetFileLength(buf) <= 0)
+				{
+					// look in "test" sub-directory
+					sprintf(buf,"%stest%c%s",path_voices,PATHSEP,voicename);
+				}
 			}
 		}
 	}
@@ -628,15 +641,7 @@ voice_t *LoadVoice(const char *vname, int control)
 
 		if(buf[0] == 0) continue;
 
-		key = 0;
-		for(k=keyword_tab; k->mnem != NULL; k++)
-		{
-			if(strcmp(buf,k->mnem)==0)
-			{
-				key = k->data;
-				break;
-			}
-		}
+		key = LookupMnem(keyword_tab, buf);
 
 		switch(key)
 		{
@@ -801,10 +806,15 @@ voice_t *LoadVoice(const char *vname, int control)
 			break;
 
 		case V_OPTION:
-			if(sscanf(p,"%d %d",&ix,&value) == 2)
+			value2 = 0;
+			if((sscanf(p,"%s %d %d",option_name,&value,&value2) >= 2) && ((ix = LookupMnem(options_tab, option_name)) >= 0))
 			{
-				if((ix >= 0) && (ix < N_LOPTS))
-					langopts->param[ix] = value;
+				langopts->param[ix] = value;
+				langopts->param2[ix] = value2;
+			}
+			else
+			{
+				fprintf(stderr,"Bad voice option: %s %s\n",buf,p);
 			}
 			break;
 
@@ -867,6 +877,10 @@ voice_t *LoadVoice(const char *vname, int control)
 			value = sscanf(p,"%d %d",&voice->consonant_amp, &voice->consonant_ampv);
 			break;
 
+		case V_SPEED:
+			sscanf(p,"%d",&voice->speed_percent);
+			break;
+
 		case V_MBROLA:
 			{
 				int srate = 16000;
@@ -910,6 +924,8 @@ voice_t *LoadVoice(const char *vname, int control)
 		// not set by language attribute
 		new_translator = SelectTranslator(translator_name);
 	}
+
+	SetSpeed(1);   // for speed_percent
 
 	for(ix=0; ix<N_PEAKS; ix++)
 	{
