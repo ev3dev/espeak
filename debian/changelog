@@ -8,8 +8,9 @@ espeak (1.43-1) UNRELEASED; urgency=low
 
   [ Mario Lang ]
   * New upstream release.
+  * debian:watch: Use sf redirector.
 
- -- Mario Lang <mlang@debian.org>  Fri, 19 Feb 2010 19:05:13 +0100
+ -- Mario Lang <mlang@debian.org>  Fri, 19 Feb 2010 19:18:59 +0100
 
 espeak (1.41.01-1) unstable; urgency=low
 
