@@ -10,8 +10,12 @@ espeak (1.43-1) UNRELEASED; urgency=low
   * New upstream release.
   * debian:watch: Use sf redirector.
   * debian/rules: Fix location of phonedata-manifest.
+  * debian/rules Add ${misc:Depends} to a few packages to make lintian
+    happy.
+  * debian/control: Upgrade Standards-Version from 3.8.1 to 3.8.4 (no
+    changes).
 
- -- Mario Lang <mlang@debian.org>  Fri, 19 Feb 2010 19:21:21 +0100
+ -- Mario Lang <mlang@debian.org>  Fri, 19 Feb 2010 19:30:55 +0100
 
 espeak (1.41.01-1) unstable; urgency=low
 
