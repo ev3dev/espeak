@@ -6,7 +6,7 @@
 
 soname=libespeak.so.1
 #version=$(shell dpkg-parsechangelog|sed -n -e 's/^Version: //p'|cut -d- -f1)
-version=1.41
+version=1.43
 
 CFLAGS = -Wall -g
 
@@ -28,7 +28,7 @@ build-stamp:
 	cd platforms/big_endian && CFLAGS="$(CFLAGS)" $(MAKE)
 	# Build voice metadata.
 	cp -a $(CURDIR)/espeak-data $(CURDIR)/espeak-data-local
-	$(CURDIR)/platforms/big_endian/espeak-phoneme-data $(CURDIR)/espeak-data-local $(CURDIR)/espeak-data-local $(CURDIR)/espeak-data/phondata-manifest
+	$(CURDIR)/platforms/big_endian/espeak-phoneme-data $(CURDIR)/espeak-data-local $(CURDIR)/espeak-data-local $(CURDIR)/platforms/big_endian/phondata-manifest
 
 	touch build-stamp
 
