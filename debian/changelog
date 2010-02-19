@@ -1,4 +1,4 @@
-espeak (1.43-1) UNRELEASED; urgency=low
+espeak (1.43-1) unstable; urgency=low
 
   [ Samuel Thibault ]
   * debian/watch: Add.
