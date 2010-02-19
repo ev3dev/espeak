@@ -1,4 +1,4 @@
-espeak (1.41.01-2) unreleased; urgency=low
+espeak (1.43-1) UNRELEASED; urgency=low
 
   [ Samuel Thibault ]
   * debian/watch: Add.
@@ -6,7 +6,10 @@ espeak (1.41.01-2) unreleased; urgency=low
     (Closes: Bug#439019).
   * src/speak_lib.h: Include stddef.h (Closes: Bug#565571).
 
- -- Mario Lang <mlang@debian.org>  Sun, 10 Jan 2010 21:49:20 +0100
+  [ Mario Lang ]
+  * New upstream release.
+
+ -- Mario Lang <mlang@debian.org>  Fri, 19 Feb 2010 19:05:13 +0100
 
 espeak (1.41.01-1) unstable; urgency=low
 
