@@ -1007,6 +1007,11 @@ static char *compile_rule(char *input)
 			copy_rule_string(buf,state);
 			state = 3;
 			p = buf;
+			if(input[ix+1] == ' ')
+			{
+				fprintf(f_log,"%5d: Syntax error. Space after (\n",linenum);
+				error_count++;
+			}
 			break;
 			
 		case '\n':		// end of line
@@ -1041,7 +1046,14 @@ static char *compile_rule(char *input)
 		strcpy(rule_match,group_name);
 
 	if(rule_match[0]==0)
+	{
+		if(rule_post[0] != 0)
+		{
+			fprintf(f_log,"%5d: Syntax error\n",linenum);
+			error_count++;
+		}
 		return(NULL);
+	}
 
 	EncodePhonemes(rule_phonemes,buf,bad_phoneme);
 	for(ix=0;; ix++)

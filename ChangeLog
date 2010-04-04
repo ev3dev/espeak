@@ -1,3 +1,23 @@
+espeak 1.43.03  (bug fixes)
+
+Fix crash when embedded control codes are followed by numbers of 5 or more digits.
+Fix lang=hu,  First character of an abbreviation is missed after an ordinal number (eg."2. cd")
+Fix XML tag not recognized after "..." when announce punctuation is enabled.
+Fix lang=zh-yue, 'p' 't' 'k' after a vowel give a long pause.
+Fix lang=ru, "o" missing in unstressed syllables.
+
+espeak 1.43.02
+
+Language improvements including Danish.
+
+Fix: "  50000" with leading spaces was spoken as "50".
+
+Don't consider multiple spaces as a thousands separator (eg. "2  000").
+
+Fixed phoneme [n^] for klatt synthesizer.
+
+Lang=Hungarian, don't allow dot as thousands separator.
+
 
 
 espeak 1.43

@@ -840,14 +840,18 @@ if((wmark > 0) && (wmark < 8))
 
 			length=0;
 			while(wordx[length] != ' ') length++;
-			if(length > 0)
-				wordx[-1] = ' ';            // prevent this affecting the pronunciation of the pronuncable part
 		}
 		SetSpellingStress(tr,unpron_phonemes,0,posn);
 
 		// anything left ?
 		if(*wordx != ' ')
 		{
+			if(unpron_phonemes[0] != 0)
+			{
+				// letters which have been spoken individually from affecting the pronunciation of the pronuncable part
+				wordx[-1] = ' ';
+			}
+
 			// Translate the stem
 			end_type = TranslateRules(tr, wordx, phonemes, N_WORD_PHONEMES, end_phonemes, wflags, dictionary_flags);
 
@@ -1361,6 +1365,18 @@ static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pa
 	int word_flags;
 	int word_copy_len;
 	char word_copy[N_WORD_BYTES+1];
+	char old_dictionary_name[40];
+
+	if((f_logespeak != NULL) && (logging_type & 8))
+	{
+		fprintf(f_logespeak,"WORD: flg=%.5x len=%d  '",wtab->flags,wtab->length);
+		for(ix=0; ix<40; ix++)
+		{
+			if(word[ix]==0) break;
+			fputc(word[ix], f_logespeak);
+		}
+		fprintf(f_logespeak,"'\n");
+	}
 
 	len = wtab->length;
 	if(len > 31) len = 31;
@@ -1550,6 +1566,7 @@ static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pa
 			if(new_language[0]==0)
 				new_language = "en";
 
+			strcpy(old_dictionary_name, dictionary_name);
 			switch_phonemes = SetTranslator2(new_language);
 
 			if(switch_phonemes >= 0)
@@ -1784,6 +1801,7 @@ static int TranslateWord2(Translator *tr, char *word, WORD_TAB *wtab, int pre_pa
 	if(switch_phonemes >= 0)
 	{
 		// this word uses a different phoneme table, now switch back
+		strcpy(dictionary_name, old_dictionary_name);
 		SelectPhonemeTable(voice->phoneme_tab_ix);
 		SetPlist2(&ph_list2[n_ph_list2],phonSWITCH);
 		ph_list2[n_ph_list2++].tone_ph = voice->phoneme_tab_ix;  // original phoneme table number
@@ -2075,6 +2093,14 @@ void *TranslateClause(Translator *tr, FILE *f_text, const void *vp_input, int *t
 	for(ix=0; ix<N_TR_SOURCE; ix++)
 		charix[ix] = 0;
 	terminator = ReadClause(tr, f_text, source, charix, &charix_top, N_TR_SOURCE, &tone2);
+
+	if((f_logespeak != NULL) && (logging_type & 4))
+	{
+		fprintf(f_logespeak,"CLAUSE %x:\n",terminator);
+		for(p=source; *p != 0; p++)
+			fputc(*p, f_logespeak);
+		fprintf(f_logespeak,"ENDCLAUSE\n");
+	}
 
 	charix[charix_top+1] = 0;
 	charix[charix_top+2] = 0x7fff;
@@ -2777,6 +2803,11 @@ if((c == '/') && (tr->langopts.testing & 2) && IsDigit09(next_in) && IsAlpha(pre
 			}
 			pw--;
 			memcpy(&num_wtab[nw], &words[ix], sizeof(WORD_TAB)*2);    // the original number word, and the word after it
+
+			for(j=1; j<=nw; j++)
+			{
+					num_wtab[j].flags &= ~(FLAG_MULTIPLE_SPACES | FLAG_EMBEDDED);     // don't use these flags for subsequent parts when splitting a number
+			}
 
 			// include the next few characters, in case there are an ordinal indicator or other suffix
 			memcpy(pn, pw, 16);

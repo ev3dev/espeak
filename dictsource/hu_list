@@ -141,6 +141,8 @@ _#-áig	a:ig	$alt2
 _#-étől	e:tY:l	$alt2
 _#-ét	e:t	$alt2
 _#-át	a:t	$alt2
+_#-ének	e:nEk
+_#-ának	a:nAk
 
 (1-e)	elseje		$text $alt2
 (1-én)	elsején 	$text $alt2
@@ -163,6 +165,7 @@ _#-át	a:t	$alt2
 (1-jére)	elsejére	$text $alt2
 (1-jétől)	elsejétől	$text $alt2
 (1-jéig)	elsejéig	$text $alt2
+(1-ének)	elsejének	$text $alt2
 (2-i)	másodikai	$text $alt2
 (2-ig)	másodikáig	$text $alt2
 (3-i)	hAR2_mAdikAi	$alt2
@@ -198,12 +201,15 @@ _#-át	a:t	$alt2
 (0-ban) nul:a:bAn
 (0-ba) nul:a:bA
 (00-s) nul:Anul:a:S
+(0-át) nul:a:t
+(0-ától) nul:a:to:l
 (1-gyet) EJ:Et
 (1-gyes) EJ:ES
 (2-őt) kEt:Y:t
 
 // entries with a single digit such as (2-i) also apply to 22, 32, etc, unless $only
 (30-cal) hAR2mints:Al
+(3-al) ha:R2om:Al
 
 //4 number suffixes
 (4-el) ne:J:El //Nneed J: phoneme, not J phoneme contains one suffix) 
@@ -213,6 +219,7 @@ _#-át	a:t	$alt2
 (5-el) Yt:El
 (5-től) Yt:Y:l
 (5-től) YtYdike:tY:l	$alt2
+(5-t) YtYt
 (6-al) hAt:Al
 (6-tal) hAt:Al
 (6-tól) hAt:o:l
@@ -221,7 +228,10 @@ _#-át	a:t	$alt2
 (7-től) he:t:Y:l
 (7-től)	hEtEdike:tY:l	$alt2
 (7-tel) he:t:El
+(7-el) he:t:El
 (8-cal) n^olts:Al
+(8-al) n^olts:Al
+(9-el) kilEnts:El
 _10e	tiz
 _20e	hus
 (10-szer) ti:s:ER2
@@ -334,6 +344,7 @@ GDP	dZi:di:pi:	$allcaps
 ?2 GDP $abbrev $allcaps
 HSDPA	$abbrev $allcaps
 kb	kYR2ylbElyl $hasdot
+MLSZ EmElEs $allcaps
 ORTT	$abbrev $allcaps
 ORFK	oEREfka:	$abbrev $allcaps
 MÁV	ma:v	$allcaps
@@ -346,7 +357,7 @@ VDSZSZ	ve:de:EsEs	$allcaps
 WC	ve:tse:	$allcaps
 LST	ElESte:	$allcaps
 BAR	bAR2	$allcaps
-SS	EsEs	$allcaps
+//SS	EsEs	$allcaps
 
 a.m	An^n^i||m'int  $dot
 ún	u:JnEvEzEt:	$hasdot
@@ -441,7 +452,7 @@ is        $u         // also
 elöl	$unstressend      // in front of
 elől	$unstressend
 elé	$unstressend
-előtt	$alt3 $unstressend
+előtt	$alt $alt3 $unstressend
 este	$alt3
 estéjén	$alt3
 mögül	$unstressend      // behind
@@ -526,7 +537,13 @@ vel     $unstressend
 
 ellen	$unstressend	// against
 //elé	$u	// before
-óta	$alt3	// since
+óta	$alt $alt3	// since. Not a bug both $alt $alt3 attribute,
+//because if only a year is present, need spokening normal number, not
+//ordinal number. For example:
+//2004. óta meaning since 2004 and need spokening normal number.
+//But június 26. óta need spokening $alt3 style date ordinal number. This
+//attribute combine fix this problem.
+
 hétfőig	$alt3
 keddig	$alt3
 szerdáig	$alt3
@@ -919,6 +936,8 @@ vitt	$unstressend
 rést	$unstressend
 brit	$unstressend
 természetes	$u $1
+front	$unstressend
+szerezni	$unstressend
 
 
 // word pairs
@@ -1149,15 +1168,10 @@ egyezség	eggyesség
 (dvd-n) dévédén
 (dvd-d) dévédéd
 (DVD-d) dévédéd
-
-
-
-
-
-
-
-
-
+(USA-éval) usáéval
+(ubuntu-n) ubuntun
+(hu-n) hun
+(USA-ban) usában
 
 
 
