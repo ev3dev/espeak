@@ -3,6 +3,8 @@ espeak (1.43.03-1) UNRELEASED; urgency=low
   [ Samuel Thibault ]
   * New upstream release (Closes: #564583, #573536).
 
+ -- Samuel Thibault <sthibault@debian.org>  Mon, 05 Apr 2010 00:53:55 +0200
+
 espeak (1.43-1) unstable; urgency=low
 
   [ Samuel Thibault ]
