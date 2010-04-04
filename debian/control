@@ -33,6 +33,7 @@ Description: A multi-lingual software speech synthesizer
 
 Package: espeak-data
 Architecture: any
+Depends: ${misc:Depends}
 Recommends: espeak (= ${binary:Version})
 Description: A multi-lingual software speech synthesizer: speech data files
  eSpeak is a software speech synthesizer for English, and some other
