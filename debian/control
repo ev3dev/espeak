@@ -6,7 +6,7 @@ Vcs-Browser: http://git.debian.org/?p=pkg-a11y/espeak.git;a=summary
 Vcs-Git: git://git.debian.org/git/pkg-a11y/espeak.git
 Homepage: http://espeak.sourceforge.net/
 Build-Depends: debhelper (>= 5.0.0), portaudio19-dev
-Standards-Version: 3.8.4
+Standards-Version: 3.9.0
 
 Package: espeak
 Architecture: any
