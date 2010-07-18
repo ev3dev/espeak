@@ -1,7 +1,8 @@
 Source: espeak
 Section: sound
 Priority: optional
-Maintainer: Mario Lang <mlang@debian.org>
+Maintainer: Debian Accessibility Team <debian-accessibility@lists.debian.org>
+Uploaders: Mario Lang <mlang@debian.org>, Samuel Thibault <sthibault@debian.org>
 Vcs-Browser: http://git.debian.org/?p=pkg-a11y/espeak.git;a=summary
 Vcs-Git: git://git.debian.org/git/pkg-a11y/espeak.git
 Homepage: http://espeak.sourceforge.net/
