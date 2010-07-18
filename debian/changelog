@@ -1,11 +1,11 @@
-espeak (1.43.03-1) UNRELEASED; urgency=low
+espeak (1.43.03-1) unstable; urgency=low
 
   [ Samuel Thibault ]
   * New upstream release (Closes: #564583, #573536).
   * debian/control: Add misc:Depends to espeak-data.
   * debian/control: Bump Standards-Version to 3.9.0 (no change needed).
 
- -- Samuel Thibault <sthibault@debian.org>  Tue, 29 Jun 2010 01:43:58 +0200
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 18 Jul 2010 19:54:37 +0200
 
 espeak (1.43-1) unstable; urgency=low
 
