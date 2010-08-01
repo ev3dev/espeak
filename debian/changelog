@@ -1,9 +1,11 @@
-espeak (1.43.03-2) unreleased; urgency=low
+espeak (1.43.03-2) unstable; urgency=medium
 
   * debian/control:
     - Bump Standards-Version to 3.9.0 (no change needed).
+  * debian/patches/big-endian.diff: New patch to fix phoneme index on
+    big-endian machines (Closes: #585654).
 
- -- Samuel Thibault <sthibault@debian.org>  Tue, 27 Jul 2010 01:52:14 +0200
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 01 Aug 2010 22:30:18 +0200
 
 espeak (1.43.03-1) unstable; urgency=low
 
