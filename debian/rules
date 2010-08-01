@@ -22,6 +22,7 @@ build: build-stamp
 build-stamp:
 	dh_testdir
 
+	cp src/portaudio19.h src/portaudio.h
 	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE)
 
 	# Build static speak binary
@@ -38,6 +39,7 @@ clean:
 	rm -f build-stamp
 
 	-cd src && $(MAKE) distclean
+	cp -f src/portaudio18.h src/portaudio.h
 	-cd platforms/big_endian && $(MAKE) clean
 
 	rm -fr espeak-data-local

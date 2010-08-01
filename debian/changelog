@@ -4,6 +4,8 @@ espeak (1.43.03-2) unstable; urgency=medium
     - Bump Standards-Version to 3.9.0 (no change needed).
   * debian/patches/big-endian.diff: New patch to fix phoneme index on
     big-endian machines (Closes: #585654).
+  * debian/rules: Use portaudio19.h for building, but revert to upstream
+    portaudio18.h on cleaning.
 
  -- Samuel Thibault <sthibault@debian.org>  Sun, 01 Aug 2010 22:30:18 +0200
 
