@@ -3,10 +3,11 @@ Fri, 23 Jun 2006 08:49:03 +0200.
 
 It was downloaded from http://prdownloads.sourceforge.net/espeak/speak-1.10-source.zip
 
-Copyright Holders: Jonathan Duddington <jonsd@jsd.clara.co.uk> 2005, 2006
+Copyright Holders: Jonathan Duddington <jonsd@jsd.clara.co.uk> 2005-2008
                    Gilles Casse <gcasse@oralux.org>            2007
                    Ross Bencina <rossb@audiomulch.com>         1999-2002
                    Phil Burk <philburk@softsynth.com>          1999-2002
+                   Sun Microsystems, Inc.                      2008
 
 License:
 
@@ -34,3 +35,9 @@ big_endian/espeak-phoneme-data.c:
        This file has no copyright, as intended by the author, and
        has been placed in the public domain.
 
+The following files have a different license to what is stated above.
+
+big_endian/espeak-phoneme-data.c:
+	Author: Leonardo Boshell <leonardop@gentoo.org>
+	This file has no copyright, as intended by the author, and
+	has been placed in the public domain.

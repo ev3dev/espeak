@@ -2,7 +2,7 @@
 .\" First parameter, NAME, should be all caps
 .\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
 .\" other parameters are allowed: see man(7), man(1)
-.TH ESPEAK 1 "June 23, 2006"
+.TH ESPEAK 1 "July 25, 2007"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -50,10 +50,13 @@ lines less than this length as and-of-clause
 Pitch adjustment, 0 to 99, default is 50
 .TP
 .B -s <integer>
-peed in words per minute, default is 160
+Speed in words per minute, default is 160
 .TP
 .B \-v <voice name>
 Use voice file of this name from espeak-data/voices
+.TP
+.B -b
+Input text is 8-bit encoding
 .TP
 .B -m
 Indicates that the text contains SSML (Speech Synthesis Markup Language) tags or other XML tags. Those SSML tags which are supported are interpreted. Other tags, including HTML, are ignored, except that some HTML tags such as <hr> <h2> and <li> ensure a break in the speech.
@@ -65,13 +68,19 @@ Write output to this WAV file, rather than speaking it directly
 Write phoneme mnemonics to stdout
 .TP
 .B \-X
-Write phonemes mnemonics and translation trace to stdout
+Write phonemes mnemonics and translation trace to stdout. If rules files have been built with --compile=debug, line numbers will also be displayed.
 .TP
 .B \-\-stdout
 Write speech output to stdout
 .TP
 .B \-\-compile=<voice name>
 Compile the pronunciation rules and dictionary in the current directory. =<voice name> is optional and specifies which language
+.TP
+.B \-\-path=<path>
+Specifies the directory containing the espeak-data directory
+.TP
+.B \-\-phonout=<filename>
+Write output from -x -X commands and mbrola phoneme data to this file
 .TP
 .B \-\-punct="<characters>"
 Speak the names of punctuation characters during speaking. If =<characters> is omitted, all punctuation is spoken.
@@ -81,6 +90,12 @@ Indicate capital letters with: 1=sound, 2=the word "capitals", higher values = a
 .TP
 .B \-\-voices[=<language code>]
 Lists the available voices. If =<language code> is present then only those voices which are suitable for that language are listed.
+.TP
+.B \-\-compile=voicename
+Compile the pronunciation rules and dictionary in the current directory. =<voice name> is optional and specifies which language
+.TP
+.B \-\-compile=debug
+Compile the pronunciation rules and dictionary in the current directory as above, but include line numbers, that get shown when -X is used.
 .SH AUTHOR
 eSpeak was written by Jonathan Duddington <jonsd@jsd.clara.co.uk>. The webpage for this package can be found at http://espeak.sourceforge.net/.
 .PP

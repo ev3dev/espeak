@@ -1,11 +1,44 @@
+espeak (1.43.03-1ubuntu1) maverick; urgency=low
+
+* Merge from debian unstable, remaining changes:
+    - Build big_endian/espeak-phoneme-data.c for use in preparing
+      espeak voice metadata for packaging.
+    - Do not build with -pedantic.
+    - espeak doesn't need to be linked against libstdc++.
+    - update espeak manpage with new command-line arguments
+    - debian/copyright: updated
+    - Build libespeak.a with an additional make call, and copy it from src/
+      as it somehow vanishes during the rest of the build.
+    - Move phondata-manifest to the platforms/big_endian directory so it
+      doesn't get squashed during the package build
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu, 22 Jul 2010 19:19:15 +0200
+
 espeak (1.43.03-1) unstable; urgency=low
 
-  [ Samuel Thibault ]
   * New upstream release (Closes: #564583, #573536).
-  * debian/control: Add misc:Depends to espeak-data.
-  * debian/control: Bump Standards-Version to 3.9.0 (no change needed).
+  * debian/control:
+    - Add misc:Depends to espeak-data.
+    - Bump Standards-Version to 3.9.0 (no change needed).
+    - Set Maintainer to debian-accessibility.
+    - Add myself as uploader.
 
  -- Samuel Thibault <sthibault@debian.org>  Sun, 18 Jul 2010 19:54:37 +0200
+
+espeak (1.43.03-0ubuntu1) lucid; urgency=low
+
+  * New upstream bugfix release
+    - Fix crash when embedded control codes are followed by numbers of 5 or more
+      digits.
+    - Fix lang=hu,  First character of an abbreviation is missed after an
+      ordinal number (eg."2. cd")
+    - Fix XML tag not recognized after "..." when announce punctuation is
+      enabled.
+    - Fix lang=zh-yue, 'p' 't' 'k' after a vowel give a long pause.
+    - Fix lang=ru, "o" missing in unstressed syllables.
+  * debian/rules: Hard code version number for point release
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu, 25 Mar 2010 15:34:41 +1100
 
 espeak (1.43-1) unstable; urgency=low
 
@@ -26,6 +59,35 @@ espeak (1.43-1) unstable; urgency=low
 
  -- Mario Lang <mlang@debian.org>  Fri, 19 Feb 2010 19:30:55 +0100
 
+espeak (1.43-0ubuntu1) lucid; urgency=low
+
+  * New upstream release
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Wed, 17 Feb 2010 13:21:43 +1100
+
+espeak (1.42.04-0ubuntu1) lucid; urgency=low
+
+  * New upstream release
+  * Actually build and generate big endian phoneme data
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu, 07 Jan 2010 13:16:45 +1100
+
+espeak (1.41.01-1ubuntu1) lucid; urgency=low
+
+  * Merge from debian testing, remaining changes:
+    - Build big_endian/espeak-phoneme-data.c for use in preparing
+      espeak voice metadata for packaging.
+    - Do not build with -pedantic.
+    - espeak doesn't need to be linked against libstdc++.
+    - update espeak manpage with new command-line arguments
+    - debian/copyright: updated
+    - Build libespeak.a with an additional make call, and copy it from src/
+      as it somehow vanishes during the rest of the build.
+    - Move phondata-manifest to the platforms/big_endian directory so it
+      doesn't get squashed during the package build
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Fri, 06 Nov 2009 16:04:57 +1100
+
 espeak (1.41.01-1) unstable; urgency=low
 
   * New Upstream Version (Closes: Bug#543453)
@@ -33,6 +95,37 @@ espeak (1.41.01-1) unstable; urgency=low
     (Closes: Bug#492000).
 
  -- Mario Lang <mlang@debian.org>  Tue, 25 Aug 2009 17:23:53 +0200
+
+espeak (1.41.01-0ubuntu1) karmic; urgency=low
+
+  * New upstream release
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Wed, 26 Aug 2009 12:53:46 +1000
+
+espeak (1.41-0ubuntu1) karmic; urgency=low
+
+  * New upstream release
+  * debian/rules:
+    - Revert to shell code for determining package version
+    - Disable the use of the endian conversion utility for now, as it
+      causes a buffer overflow when run
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Tue, 25 Aug 2009 16:01:36 +1000
+
+espeak (1.40.02-2ubuntu1) karmic; urgency=low
+
+  * Merge from debian unstable, remaining changes:
+    - Build big_endian/espeak-phoneme-data.c for use in preparing
+      espeak voice metadata for packaging.
+    - Do not build with -pedantic.
+    - espeak doesn't need to be linked against libstdc++.
+    - update espeak manpage with new command-line arguments
+    - debian/control: Konquerer replaced with Konqueror
+    - debian/copyright: updated
+  * Build libespeak.a with an additional make call, and copy it from src/
+    as it somehow vanishes during the rest of the build.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Tue, 09 Jun 2009 11:51:32 +1000
 
 espeak (1.40.02-2) unstable; urgency=low
 
@@ -43,12 +136,72 @@ espeak (1.40.02-2) unstable; urgency=low
 
  -- Mario Lang <mlang@debian.org>  Sun, 24 May 2009 22:55:52 +0200
 
+espeak (1.40.02-1ubuntu1) karmic; urgency=low
+
+  * Merge from debian unstable, remaining changes:
+    - Build big_endian/espeak-phoneme-data.c for use in preparing
+      espeak voice metadata for packaging.
+    - Do not build with -pedantic.
+    - espeak doesn't need to be linked against libstdc++.
+    - update espeak manpage with new command-line arguments
+    - debian/control: Konquerer replaced with Konqueror
+  * debian/copyright: updated
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Tue, 05 May 2009 09:20:56 +1000
+
 espeak (1.40.02-1) unstable; urgency=low
 
   * New upstream release.
   * debian/control: Update Standards-Version to 3.8.0 (no changes).
 
  -- Mario Lang <mlang@debian.org>  Sun, 15 Feb 2009 14:13:26 +0100
+
+espeak (1.40.02-0ubuntu1) jaunty; urgency=low
+
+  * New upstream release.
+  * debian/rules: Temporarily hard-code the version number, to deal with
+    the library soname being only 1.40.
+  * debian/espeak.1: Updated with new command-line arguments.
+  * Build against portaudio v19.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Wed, 14 Jan 2009 10:31:19 +1100
+
+espeak (1.39-0ubuntu1) intrepid; urgency=low
+
+  * New upstream release, FFe granted. (LP: #268390)
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Sat, 20 Sep 2008 13:43:21 +1000
+
+espeak (1.38-0ubuntu2) intrepid; urgency=low
+
+  * Spelling mistake fixed (LP: #250860)
+    - Konquerer replaced with Konqueror in debian/control
+  * Moving Standard-Version to the current version
+    3.7.3 -> 3.8.0 in debian/control
+  * Removing package homepage from package description
+    since it has its own field.
+
+ -- Jad Madi <Jad@Ubuntu.com>  Thu, 28 Aug 2008 11:45:18 +1000
+
+espeak (1.38-0ubuntu1) intrepid; urgency=low
+
+  * New upstream release.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Tue, 26 Aug 2008 09:37:23 +1000
+
+espeak (1.37-1ubuntu1) intrepid; urgency=low
+
+  * Merge from debian unstable, remaining changes:
+  * Merge from debian unstable, remaining changes:
+    - Add conflict/replaces with earlier versions.
+    - Use PortAudio v18.
+    - Build big_endian/espeak-phoneme-data.c for use in preparing
+      espeak voice metadata for packaging.
+    - Do not build with -pedantic.
+    - Update maintainer as per spec.
+  * src/Makefile: Espeak doesn't need to be linked against libstdc++.
+
+ -- Luke Yelavich <luke.yelavich@canonical.com>  Mon, 05 May 2008 12:23:10 +1000
 
 espeak (1.37-1) unstable; urgency=low
 
@@ -61,6 +214,33 @@ espeak (1.36.02-1) unstable; urgency=low
   * New upstream release.
 
  -- Mario Lang <mlang@debian.org>  Tue, 18 Mar 2008 17:32:49 +0100
+
+espeak (1.36-0ubuntu1) hardy; urgency=low
+
+  * New upstream release, FF exception granted. (LP: #200370)
+  * Patches from upstream to fix speech intonation, and buffer overflows that
+    were found thanks to stack smashing.
+
+ -- Luke Yelavich <luke.yelavich@canonical.com>  Fri, 14 Mar 2008 09:54:49 +1100
+
+espeak (1.32-0ubuntu1) hardy; urgency=low
+
+  * New upstream release.
+
+ -- Luke Yelavich <luke.yelavich@canonical.com>  Wed, 05 Mar 2008 12:37:19 +1100
+
+espeak (1.31-0ubuntu1) hardy; urgency=low
+
+  * New upstream release. (LP: #190860)
+  * Merge from debian unstable, remaining changes:
+    - Add conflict/replaces with earlier versions.
+    - Use PortAudio v18.
+    - Build big_endian/espeak-phoneme-data.c for use in preparing
+      espeak voice metadata for packaging.
+    - Do not build with -pedantic.
+    - Update maintainer as per spec.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Mon, 11 Feb 2008 17:33:17 +1100
 
 espeak (1.30-1) unstable; urgency=low
 
@@ -81,6 +261,40 @@ espeak (1.29-1) unstable; urgency=low
 
  -- Mario Lang <mlang@debian.org>  Sun, 14 Oct 2007 12:51:29 +0200
 
+espeak (1.29-0ubuntu3) gutsy; urgency=low
+
+  * Build against PortAudio v18, due to v19 causing speech output
+    headaches. (LP: #140673)
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu, 04 Oct 2007 21:31:10 +1000
+
+espeak (1.29-0ubuntu2) gutsy; urgency=low
+
+  * Do not build with -pedantic. LP: #138569.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 13 Sep 2007 14:02:48 +0000
+
+espeak (1.29-0ubuntu1) gutsy; urgency=low
+
+  * New upstream release. (LP: #128137)
+  * debian/copyright: Adjust for license change.
+  * debian/rules: Update location of endian conversion utility.
+  * Update espeak manpage.
+
+ -- Luke Yelavich <luke@themuso.com>  Tue, 28 Aug 2007 17:07:43 +1000
+
+espeak (1.26-1ubuntu1) gutsy; urgency=low
+
+  * Merge with Debian; remaining changes:
+    - Build-depend on dpatch.
+    - Add conflict/replaces with earlier versions.
+    - Build big_endian/espeak-phoneme-data.c for use in preparing
+      espeak voice metadata for packaging.
+    - Modified debian/copyright to mention big_endian/espeak-phoneme-data.c.
+    - Patch to ensure compilation uses externally specified C(XX)FLAGS.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu, 14 Jun 2007 09:24:23 +1000
+
 espeak (1.26-1) unstable; urgency=low
 
   * New upstream release.
@@ -95,6 +309,25 @@ espeak (1.25-1) unstable; urgency=low
 
  -- Mario Lang <mlang@debian.org>  Sun, 20 May 2007 16:12:39 +0200
 
+espeak (1.25-0ubuntu1) gutsy; urgency=low
+ 
+  * New upstream release.
+  * debian/rules: Grab the upstream version using dpkg-parsechangelog.
+  * Build big_endian/espeak-phoneme-data.c for use in preparing
+    espeak voice metadata for packaging.
+  * Modified debian/copyright to mention
+    big_endian/espeak-phoneme-data.c.
+  * Patch to ensure compilation uses externally specified C(XX)FLAGS.
+  * debian/rules:
+    - Bump version number.
+    - Build big_endian/espeak-phoneme-data.c for use in preparing
+      espeak voice metadata for packaging.
+    - Fixed up ordering of dh_makeshlibs and dh_shlibdeps, and added
+      arguments to dh_shlibdeps to ensure the proper library
+      dependencies.
+ 
+ -- Luke Yelavich <themuso@ubuntu.com>  Sun, 20 May 2007 21:37:19 +1000
+
 espeak (1.22-1) unstable; urgency=low
 
   * New upstream release.
@@ -105,6 +338,13 @@ espeak (1.22-1) unstable; urgency=low
   * Change espeak-data to Arch: any.
 
  -- Mario Lang <mlang@debian.org>  Sat, 14 Apr 2007 22:42:03 +0200
+
+espeak (1.21-0ubuntu1) feisty; urgency=low
+
+  * New upstream release
+  * debian/rules: Updated version number.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu,  8 Mar 2007 22:10:29 +1100
 
 espeak (1.19-2) unstable; urgency=low
 
@@ -117,6 +357,88 @@ espeak (1.19-1) unstable; urgency=low
   * New upstream release (Closes: Bug#406840, Bug#408741).
 
  -- Mario Lang <mlang@debian.org>  Sun, 28 Jan 2007 23:58:18 +0100
+
+espeak (1.19-0ubuntu4) feisty; urgency=low
+
+  * debian/copyright: Added copyright holders.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu,  1 Feb 2007 14:42:52 +1100
+
+espeak (1.19-0ubuntu3) feisty; urgency=low
+
+  * Rebuild package files, due to odd FTBFS when attempting to apply 
+    patch.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu,  1 Feb 2007 12:05:48 +1100
+
+espeak (1.19-0ubuntu2) feisty; urgency=low
+
+  * debian/patches/01_roundl_fix.dpatch:
+    - Change roundl() to round() in src/wave.cpp, Thanks to Mario Lang.
+  * debian/control: Added dpatch to build-depends.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu,  1 Feb 2007 11:29:35 +1100
+
+espeak (1.19-0ubuntu1) feisty; urgency=low
+
+  * New upstream release.
+  * debian/control:
+    - Changed espeak-data to be architecture specific.
+    - The espeak package now depends on libespeak1.
+    - Added homepage to all package descriptions.
+  * debian/rules:
+    - Use the espeak binary for the espeak package.
+    - Add a check for big endian architectures, (currently only ppc) to
+      ensure the proper espeak-data is copied into place.
+    - Bump package version to 1.19.
+    - Move location of espeak_lib.h to /usr/include/espeak.
+   * Packaging fixes from Mario Lang:
+     - Fix first-person description.
+     - Add missing dh_makeshlibs and fix misplaced dh_installdeb call.
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Sat, 27 Jan 2007 12:47:27 +1100
+
+espeak (1.18-0ubuntu1) feisty; urgency=low
+
+  * New upstream release:
+    - Asynchronous modes added to libespeak. Speech can either be played or 
+      retrieved asynchonously.
+    - eSpeak API changed to accommodate asynchonous modes, see speak_lib.h.
+    - Changed eSpeak library functions and speak_lib.h to use C compatible 
+      function calls.
+    - Two versions of the command-line program: espeak, which uses the 
+      libespeak library. speak, which is a standalone program.
+    - Windows SAPI5 version made, with installer.
+    - Added "voice variants" feature, so that different sounding voices can 
+      be used with any language. See "docs/voices.html"
+    - Added languages (* naive initial draft only): Romanian, French, 
+      Swedish *, Norwegian, Hindi, Vietnamese
+    - Improved langugages: Afrikaans, German.
+  * debian/rules:
+    - bumped 'version'.
+
+ -- Daniel Holbach <daniel.holbach@ubuntu.com>  Mon, 22 Jan 2007 12:02:57 +0100
+
+espeak (1.18-0ubuntu1) feisty; urgency=low
+
+  * New upstream release:
+    - Asynchronous modes added to libespeak. Speech can either be played or 
+      retrieved asynchonously.
+    - eSpeak API changed to accommodate asynchonous modes, see speak_lib.h.
+    - Changed eSpeak library functions and speak_lib.h to use C compatible 
+      function calls.
+    - Two versions of the command-line program: espeak, which uses the 
+      libespeak library. speak, which is a standalone program.
+    - Windows SAPI5 version made, with installer.
+    - Added "voice variants" feature, so that different sounding voices can 
+      be used with any language. See "docs/voices.html"
+    - Added languages (* naive initial draft only): Romanian, French, 
+      Swedish *, Norwegian, Hindi, Vietnamese
+    - Improved langugages: Afrikaans, German.
+  * debian/rules:
+    - bumped 'version'.
+
+ -- Daniel Holbach <daniel.holbach@ubuntu.com>  Mon, 22 Jan 2007 12:02:57 +0100
 
 espeak (1.16-2) unstable; urgency=low
 
