@@ -1,6 +1,25 @@
-espeak (1.43.03-1ubuntu1) maverick; urgency=low
+espeak (1.43.03-2ubuntu1) UNRELEASED; urgency=low
 
 * Merge from debian unstable, remaining changes:
+    - update espeak manpage with new command-line arguments
+    - debian/copyright: updated
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Fri, 06 Aug 2010 09:41:01 +1000
+
+espeak (1.43.03-2) unstable; urgency=medium
+
+  * debian/control:
+    - Bump Standards-Version to 3.9.0 (no change needed).
+  * debian/patches/big-endian.diff: New patch to fix phoneme index on
+    big-endian machines (Closes: #585654).
+  * debian/rules: Use portaudio19.h for building, but revert to upstream
+    portaudio18.h on cleaning.
+
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 01 Aug 2010 22:30:18 +0200
+
+espeak (1.43.03-1ubuntu1) maverick; urgency=low
+
+  * Merge from debian unstable, remaining changes:
     - Build big_endian/espeak-phoneme-data.c for use in preparing
       espeak voice metadata for packaging.
     - Do not build with -pedantic.

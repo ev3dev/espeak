@@ -1,0 +1,13 @@
+diff --git a/platforms/big_endian/espeak-phoneme-data.c b/platforms/big_endian/espeak-phoneme-data.c
+index 24155cd..c0abbca 100644
+--- a/platforms/big_endian/espeak-phoneme-data.c
++++ b/platforms/big_endian/espeak-phoneme-data.c
+@@ -288,7 +288,7 @@ void swap_phonindex (const char *infile, const char *outfile)
+ {//==========================================================
+     FILE *in, *out;
+     char buf_4[4];
+-    unsigned int val;
++    unsigned short val;
+ 
+     in = fopen (infile, "rb");
+     if (in == NULL) {

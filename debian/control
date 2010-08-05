@@ -8,11 +8,11 @@ Vcs-Browser: http://git.debian.org/?p=pkg-a11y/espeak.git;a=summary
 Vcs-Git: git://git.debian.org/git/pkg-a11y/espeak.git
 Homepage: http://espeak.sourceforge.net/
 Build-Depends: debhelper (>= 5.0.0), portaudio19-dev
-Standards-Version: 3.9.0
+Standards-Version: 3.9.1
 
 Package: espeak
 Architecture: any
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: A multi-lingual software speech synthesizer
  eSpeak is a software speech synthesizer for English, and some other
  languages.
@@ -54,7 +54,7 @@ Description: A multi-lingual software speech synthesizer: speech data files
 Package: libespeak1
 Architecture: any
 Section: libs
-Depends: ${shlibs:Depends}, espeak-data (= ${binary:Version})
+Depends: ${shlibs:Depends}, ${misc:Depends}, espeak-data (= ${binary:Version})
 Description: A multi-lingual software speech synthesizer: shared library
  eSpeak is a software speech synthesizer for English, and some other
  languages. This package contains the espeak program in a shared library.
@@ -62,7 +62,7 @@ Description: A multi-lingual software speech synthesizer: shared library
 Package: libespeak-dev
 Architecture: any
 Section: libdevel
-Depends: libespeak1 (= ${binary:Version})
+Depends: ${misc:Depends}, libespeak1 (= ${binary:Version})
 Description: A multi-lingual software speech synthesizer: development files
  eSpeak is a software speech synthesizer for English, and some other
  languages. This package contains the eSpeak development files needed to
