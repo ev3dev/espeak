@@ -1,6 +1,6 @@
 espeak (1.43.03-2ubuntu1) UNRELEASED; urgency=low
 
-* Merge from debian unstable, remaining changes:
+  * Merge from debian unstable, remaining changes:
     - update espeak manpage with new command-line arguments
     - debian/copyright: updated
   * Add gbp.conf for use with git buildpackage
