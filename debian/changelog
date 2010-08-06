@@ -4,8 +4,9 @@ espeak (1.43.03-2ubuntu1) UNRELEASED; urgency=low
     - update espeak manpage with new command-line arguments
     - debian/copyright: updated
   * Add gbp.conf for use with git buildpackage
+  * More updates to copyright file
 
- -- Luke Yelavich <themuso@ubuntu.com>  Fri, 06 Aug 2010 09:44:38 +1000
+ -- Luke Yelavich <themuso@ubuntu.com>  Fri, 06 Aug 2010 10:14:06 +1000
 
 espeak (1.43.03-2) unstable; urgency=medium
 
