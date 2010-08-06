@@ -1,4 +1,4 @@
-espeak (1.43.03-2ubuntu1) UNRELEASED; urgency=low
+espeak (1.43.03-2ubuntu1) maverick; urgency=low
 
   * Merge from debian unstable, remaining changes:
     - update espeak manpage with new command-line arguments
@@ -7,7 +7,7 @@ espeak (1.43.03-2ubuntu1) UNRELEASED; urgency=low
   * More updates to copyright file
   * Update the explanation of the -b command-line flag in the espeak manpage
 
- -- Luke Yelavich <themuso@ubuntu.com>  Fri, 06 Aug 2010 10:41:02 +1000
+ -- Luke Yelavich <themuso@ubuntu.com>  Fri, 06 Aug 2010 10:42:46 +1000
 
 espeak (1.43.03-2) unstable; urgency=medium
 
