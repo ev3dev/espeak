@@ -1,55 +1,71 @@
 // This file is UTF-8 encoded
 
 .group a
-          _) a (_         a:
              a            a:
-             a (CC        A
-             a (C_        A
+             a (CK        A
+             a (x         A
              aa           a:
              aai          a:j
+             ae           E:
              au           VU
              ay           a:j
 
+          _) aan (@P3     'a:n
+             aa (rd_      'a:
+             aa (t_       'a:
+          _) af (C@P2     'Af
+             age (_       'a:Z@
+             ages (_S1    s
+             age (_$w_alt a:Q@
+             aire (_      'E:r
+
 
 .group b
-          _) b (_         be:
-             b            b
+             b            b     // auto-devoice at end-of-word
              bb           b
-             b (_N        p
              bs (_N       ps
 
+          &) baar (_      =ba:r
           _) be (@P2      b@
           _) b (ee+       b
           _) be (ren      bI:
           _) be (ter      be:
+          _) be (ven_     be:
+          _) bever        be:v@r
+          _) be (zem      be:
           _) beu          bY:
+          _) bij (C@P3    b'EI
 
 
 .group c
-          _) c (_         se:
              c (e         s
              c (i         s
+             c (y         s
              c            k
-          a) ch           x
-          o) ch           x
-             ch           C
+             ch           x
+          _) ch           S
+          _) ch (arit     x
+          _) ch (arter    tS
+          _) ch (emi      x
+          _) ch (ip       tS
+          _) ch (olest    x
+          _) ch (r        x
+             ck           k
 
 
 .group d
-          _) d (_         de:
-             d            d
+             d            d     // auto-devoice at end-of-word
              dd           d
              dt           t
-             d (_N        t
              ds (_N       ts
 
 
 .group e
-          _) e (_         e:
              e            e:
-          C) e (_         @
-             e (CC        E
-             e (C_        E
+         &C) e (_S1q      @
+             e (_         @
+             e (CK        E
+             e (x         E
              e (r         I:
              eï (+        @_I
              ei (+        EI
@@ -57,39 +73,57 @@
              ee           e:
              eeuw         eU
              eu           Y:
-          @) el (_        @l
-          @) ele (_       @l@
-          @) en (_        @n
-          @) er (_        @r
-          @) ere (_       @r@
-          @) eren (_      @r@n
+          @) ee (l_       'e:
+          @) ee (m_       'e:
+          @) ee (r_       'I:
+          @) ee (rt_      'I:
+          @) ee (rd_      'I:
+          @) ee (rde_     'I:
+          @) ee (rden_    'I:
+         it) eit (_       'EIt
+          &) el (_        @l
+          &) eld (_       @ld
+          &) ele (_       @l@
+          &) em (_        @m
+          &) en (_S2q     @n
+          &) ens (_S3q    @ns
+          &) end (_       @nd
+          &) ende (_      @nd@
+          &) er (_        @r
+          &) ere (_       @r@
+          &) er (en_$p_alt @r     // where 'eren' is not a verb ending
+             eren (_      'I:r@n
+          &) es (_        @s
+
              eau          o: //words with French origin
 
           _) er (@P2      Er
+          @) e (raar_     @
 
           &) e (nB@       @
+         id) e (nt        E
           &) e (rC@       @
 
 
 .group f
-          _) f (_         Ef
              f            f
              ff           f
 
 
 .group g
-          _) g (_         Qe:
-             g            x
-          _) g            Q
-             gg           g
+             g            Q    // ph_dutch changes to [x] before unvoiced, NULL after [x]
+             gg           Q
 
           _) ge (@P2      Q@
           _) gee          Qe:
+             gener (aal   Q,e:n@r
+             gelijk       Q@lEIk
           _) geu          QY:
+          _) ge (ven      Qe:
+          _) ge (ving     Qe:
 
 
 .group h
-          _) h (_         ha:
              h            h
           C) h (K
 
@@ -97,55 +131,71 @@
 
 
 .group i
-          _) i (_         i:
              i            i
              ij (+        EI
-             i (CC        I
-             i (C_        I
+             i (CK        I
+             i (x         I
              ie           i
              ieuw         iw
 
-          @) ig (_        @x
+          d) ie (_        'i
+          g) ie (_        'i
+          m) ie (_        'i
+          p) ie (_        'i
+
+             ie (f_       'i
+             ie (r_       'i
+             ie (rd_      'i
+          @) ig (_S2d     @x
+          @) ige (_       @Q@
+          _) in (C@P2     'In
+//        _) in (gP2      'In
+             io (nage     iO
+          @) isch (_      =is
+          @) ische (_     =is@
 
 
 .group j
-          _) j (_         je:
              j            j
 
 
 .group k
-          _) k (_         ka:
              k            k
              kk           k
 
+         _) koning        k'o:nIN  // in compounds
+         _) koningin      ko:nIQ'In
+
 
 .group l
-          _) l (_         El
              l            l
              ll           l
-          @) lijk         lIk
+          &) lijk (_S4    l@k
+          &) lijke (_S5   l@k@
           &) laan (_S4    la:n
+          @) loog (_      lo:x
 
 
 .group m
-          _) m (_         Em
              m            m
              mm           m
 
+         _) mee (@P3      m'e:
+
 
 .group n
-          _) n (_         En
              n            n
              nn           n
-             ng (_        N
+             ng           N
              nj           n^
+
+          _) na (C@@P2    n'a:
 
 
 .group o
-          _) o (_         o:
              o            o:
-             o (CC        O
-             o (C_        O
+             o (CK        O
+             o (x         O
              o (r         o:
              oo (r        O:     // ?? or just for word-final "oor" ?
              ooi          o:j
@@ -153,95 +203,164 @@
              oe           u
              oei          uj
              ou           VU
+             ou (rage     u
 
+      telef) oo (n        'o:
+          _) op (@@P2     'Op
+          _) open (@P4    'o:p@n
+          _) over (@P4    'o:v@r
+
+
+.group on
+          _) onaan (@P5   On'a:n
+          _) onder (@P5   'Ond@r
+          _) onge (@P4    ,OnQ@
           _) ont (@P3     Ont
+          _) on (te@P2    On	// ontegecht
           _) onder        Ond@r
+
+          _) ong (aarn    ,OnQ'
+          _) ong (ans     ,OnQ'
+          _) ong (rijpbaar  ,OnQ'
+          _) ong (rond    ,OnQ'
+          _) ong (unstig  ,OnQ'
+          _) ong (uur     ,OnQ'
+
+          _) onge (diert  OnQ@   // stress on 'on', not after 'ge'
+          _) onge (loof   OnQ@
+          _) onge (luk    OnQ@
+          _) onge (mak    OnQ@
+          _) onge (nade   OnQ@
+          _) onge (rief   OnQ@
+          _) onge (val    OnQ@
+
 
 
 .group p
-          _) p (_         pe:
              p            p
              pp           p
+          _) ph           f
+             ph (K        f
 
 
 .group q
-          _) q (_         ky
              q            k
              qu           kv
+          @) qu (eer      k
+          @) qu (eren_    k
 
 
 .group r
-          _) r (_         Er
              r            r
           A) r (A       *
           C) r (A       @-*
              rr         *r
 
+.group re
+          _) re (geren    r@
+          _) re (geer     r@
+          _) re (cent     r@
+          _) re (cept     r@
+          _) re (ceptief  re:
+          _) re (serve_   r@
 
 .group s
-          _) s (_         Es
              s            s
              ss           s
              sch          sx
              sch (_       s
              sch (e_      s
+          _) sh           S
+             sh (K        S
              sj           S
+         @@) s (_S1       s
 
 
 .group t
-          _) t (_         te:
              t            t
              tt           t
              tie (_       tsi
+          c) tie (_       si
              tj           t;
              tsj          tS
+          _) th           t
+             th           t
+             t (haar      t	// th is not [t]
+             t (hav       t
+          _) toe (@P3     t'u
+
+
+.group te
+          _) tegen (P5    t'e:Q@n
+          _) terug (P5    t@r'8x
+          _) te (gelijk   t@
+          _) te (gemoetP2 t@
+          _) te (goed     t@
+          _) te (hui      t@	// tehuis
+          _) te (keer     t@
+          _) te (kort     t@
+          _) te (leur     t@
+          _) te (loor     t@
+          _) te (meer     t@
+          _) te (midd     t@	// temidden
+          _) te (na       t@
+          _) te (neer     t@
+          _) te (recht    t@
+          _) te (sam      t@	// tesamen
+          _) te (veel     t@
+          _) te (vergeefP2  t@
+          _) te (voorschijn t@
+          _) te (vor      t@	// tevoren
+          _) te (vred     t@	// tevreden
+          _) teweeg (P6   t@v#'e:x
 
 
 .group u
-          _) u (_         y
              u            y
-             u (CC        8
-             u (C_        8
+             u (CK        8
+             u (x         8
              uu           y
              ui           Wy
              uw           yU
              uw (_        yU
 
+         _) uit (@P3      'Wyt
+
 
 .group v
-          _) v (_         fe:
              v            v
 
           _) ver (@P3     v@r
+          _) ver (sie_    vEr
+          _) ver (der_    vEr
+          _) voort (@P5   v'O:rt
 
 
 .group w
-          _) w (_         ve:
-             w            v2
+             w            v#
+             w (X         w
+             w (CK        w
+
+          _) weg (@P3     v#'Ex
 
 
 .group x
-          _) x (_         Iks
              x            ks
 
 
 .group y
-          _) y (_         EI
              y            i
 
 
 .group z
-          _) z (_         zEt
              z            z
 
 
 
 .group
+            é             e:
             éé            e:
             $             d'OlAr
             , (D          k'Oma:
         __) - (_D         m'In
 
-             .            p8nt
-             . (.        _:
-        \.)  .

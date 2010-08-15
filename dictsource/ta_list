@@ -33,6 +33,20 @@ U+bcd	ot.RU
 
 ஏ	je:
 
+// combining vowels, precede by a click so they can be distinguished from stand-alone vowels
+ா	#X2a::
+ி	#X1i
+ீ	#X2i::
+ு	#X1u
+ூ	#X2u::
+ெ	#X1e
+ே	#X2e::
+ை	#X2aI
+ொ	#X1o
+ோ	#X2o::
+ௌ	#X2aU
+
+
 
 // speak Latin letters as English
 a	e:j
@@ -151,9 +165,7 @@ _8C	;en.n.u:t.t.Ri
 _9C	tol.l.a:jirVttU
 
 _0M1x	a:jirVm
-_1M1x	a:jirVm
 _0M1	a:jirVttU
-_1M1	a:jirVttU
 
 _0M2x	lVd.tSVm	// 100,000
 _1M2x	orUlVd.tSVm
@@ -174,8 +186,6 @@ tamil	தமிழ்	$text
 
 // exceptions
 பாபு	$alt	// initial ப as [b]
-பவானி	$alt
-பகவதி	$alt
 பானம்	$alt
 பாணம்	$alt
 பாறம்	$alt
@@ -196,7 +206,6 @@ tamil	தமிழ்	$text
 பாகவதம்	$alt
 பகவத்	$alt
 பங்கம்	$alt
-பீதி	$alt
 பேகம்	$alt
 பார்லி	$alt
 பிக்கினி	$alt
@@ -230,6 +239,13 @@ tamil	தமிழ்	$text
 பாக்கித்	$alt
 பாக்கிச்	$alt
 பர்மிய	$alt
+பலே	$alt
+பூம்	$alt
+பரத	$alt
+பலத்தில்	$alt
+பலத்தின்	$alt
+பைக்ல	$alt
+பாவ்லா	$alt
 (பி . ஏ)	bije:
 
 
@@ -266,11 +282,22 @@ tamil	தமிழ்	$text
 துருவம்	$alt
 தீரமுள்ள	$alt
 தீரமற்ற	$alt
+தலாய்	$alt
+தேசிங்கு	$alt
+தேச	$alt
+தேசப்	$alt
+தானம்	$alt
+தீரமும்	$alt
+தீரத்தோடு	$alt
+தவத்தில்	$alt
+தவத்தின்	$alt
+தவத்தினால்	$alt
 
 
 	// initial ட
 டார்ச்	t.a:rtS
-
+டிவி	t.ivi
+டி 	t.i
 
 	// initial ச as [tS]
 சீ		$alt
@@ -279,6 +306,7 @@ tamil	தமிழ்	$text
 சீச்சீ 		$alt
 சிட்டாய் 		$alt
 சேச்சே		$alt
+சிரம்		sirVm
 
 
 கக	$alt	// initial க as [g]
@@ -296,7 +324,6 @@ tamil	தமிழ்	$text
 கோபி 	$alt
 கச்சாமி	$alt
 குரு	$alt
-கோர	$alt
 கும்	$alt
 கும்மென்று	$alt
 கும்முனு	$alt
@@ -309,6 +336,10 @@ tamil	தமிழ்	$text
 கம்னு	$alt
 கம்மென்று	$alt
 குதி	$alt
+கம்	$alt
+காந்தம்	$alt
+கான	$alt
+கோத்திர	$alt
 
 
 // p as [f]
@@ -334,3 +365,7 @@ tamil	தமிழ்	$text
 தாங்ஸ்	Ta:Nks		// thanks
 டிபுடி	d.EpjUt.i	// deputy
 டிபன்	t.ifVn
+ஆகா	a:Ha:
+ஓகோ	o:Ho:
+கப்	kVp
+செட்	set.

@@ -46,16 +46,17 @@
 #define FLAG_STRESS_END2    0x1000  /* full stress if at end of clause, or only followed by unstressed */
 #define FLAG_UNSTRESS_END   0x2000  /* reduce stress at end of clause */
 #define FLAG_ATEND          0x4000  /* use this pronunciation if at end of clause */
-#define FLAG_SPELLWORD      0x8000  // re-translate the word as individual letters, separated by spaces
-
+#define FLAG_ATSTART        0x8000  // use this pronunciation if at start of clause
+#define FLAG_SPELLWORD     0x10000  // re-translate the word as individual letters, separated by spaces
 #define FLAG_ABBREV        0x20000  // spell as letters, even with a vowel, OR use specified pronunciation rather than split into letters
 #define FLAG_STEM          0x40000  // must have a suffix
 
 #define FLAG_DOUBLING      0x80000  // doubles the following consonant
+#define BITNUM_FLAG_ALT         19  // bit number of FLAG_ALT_TRANS - 1 
 #define FLAG_ALT_TRANS    0x100000  // language specific
 #define FLAG_ALT2_TRANS   0x200000  // language specific
-#define FLAG_COMBINE      0x400000  // combine with the next word
-#define FLAG_ALT3_TRANS   0x800000  // language specific
+#define FLAG_ALT3_TRANS   0x400000  // language specific
+#define FLAG_COMBINE      0x800000  // combine with the next word
 
 #define FLAG_ALLOW_DOT  0x01000000  // ignore '.' after word (abbreviation)
 #define FLAG_NEEDS_DOT  0x02000000  // only if the word is followed by a dot
@@ -81,6 +82,7 @@
 #define FLAG_ALLCAPS         0x400  // only if the word is all capitals
 #define FLAG_ACCENT          0x800  // character name is base-character name + accent name
 #define FLAG_HYPHENATED     0x1000  // multiple-words, but needs hyphen between parts 1 and 2
+#define FLAG_SENTENCE       0x2000  // only if the clause is a sentence
 #define BITNUM_FLAG_ALLCAPS   0x2a
 #define BITNUM_FLAG_HYPHENATED  0x2c
 
@@ -106,9 +108,13 @@
 #define FLAG_HAS_DOT       0x10000  // dot after this word
 #define FLAG_COMMA_AFTER   0x20000  // comma after this word
 #define FLAG_MULTIPLE_SPACES 0x40000  // word is preceded by multiple spaces, newline, or tab
+#define FLAG_INDIVIDUAL_DIGITS 0x80000  // speak number as individual digits
 
+#define FLAG_SUFFIX_VOWEL  0x08000000   // remember an initial vowel from the suffix
 #define FLAG_NO_TRACE      0x10000000   // passed to TranslateRules() to suppress dictionary lookup printout
 #define FLAG_NO_PREFIX     0x20000000
+#define FLAG_UNPRON_TEST   0x80000000   // do unpronounability test on the beginning of the word
+
 
 // prefix/suffix flags (bits 8 to 14, bits 16 to 22) don't use 0x8000, 0x800000
 #define SUFX_E        0x0100   // e may have been added
@@ -120,6 +126,10 @@
 #define SUFX_Q        0x4000   // don't retranslate
 #define SUFX_T        0x10000   // don't affect the stress position in the stem
 #define SUFX_B        0x20000  // break, this character breaks the word into stem and suffix (used with SUFX_P)
+#define SUFX_A        0x40000  // remember that the suffix starts with a vowel
+
+#define SUFX_UNPRON     0x8000   // used to return $unpron flag from *_rules
+
 
 #define FLAG_ALLOW_TEXTMODE  0x02  // allow dictionary to translate to text rather than phonemes
 #define FLAG_SUFX       0x04
@@ -154,7 +164,7 @@
 #define RULE_NO_SUFFIX  24   // N
 #define RULE_NOTVOWEL   25   // K
 #define RULE_IFVERB     26   // V
-#define RULE_ALT1       28   // T word has $alt attribute
+#define RULE_DOLLAR     28   // $ commands
 #define RULE_NOVOWELS   29   // X no vowels up to word boundary
 #define RULE_SPELLING   31   // W while spelling letter-by-letter
 #define RULE_LAST_RULE   31
@@ -185,18 +195,18 @@
 #define PUNCT_SAY_NAME       0x200000
 #define CLAUSE_DOT           0x400000
 
-#define CLAUSE_NONE         0 + 0x04000
-#define CLAUSE_PARAGRAPH   70 + 0x80000
-#define CLAUSE_EOF         40 + 0x90000
-#define CLAUSE_VOICE        0 + 0x24000
-#define CLAUSE_PERIOD      40 + 0x80000
-#define CLAUSE_COMMA       20 + 0x41000
-#define CLAUSE_SHORTCOMMA   4 + 0x41000
-#define CLAUSE_SHORTFALL    4 + 0x40000
-#define CLAUSE_QUESTION    40 + 0x82000
-#define CLAUSE_EXCLAMATION 45 + 0x83000
-#define CLAUSE_COLON       30 + 0x40000
-#define CLAUSE_SEMICOLON   30 + 0x41000
+#define CLAUSE_NONE        ( 0 + 0x04000)
+#define CLAUSE_PARAGRAPH   (70 + 0x80000)
+#define CLAUSE_EOF         (40 + 0x90000)
+#define CLAUSE_VOICE       ( 0 + 0x24000)
+#define CLAUSE_PERIOD      (40 + 0x80000)
+#define CLAUSE_COMMA       (20 + 0x41000)
+#define CLAUSE_SHORTCOMMA  ( 4 + 0x41000)
+#define CLAUSE_SHORTFALL   ( 4 + 0x40000)
+#define CLAUSE_QUESTION    (40 + 0x82000)
+#define CLAUSE_EXCLAMATION (45 + 0x83000)
+#define CLAUSE_COLON       (30 + 0x40000)
+#define CLAUSE_SEMICOLON   (30 + 0x41000)
 
 #define SAYAS_CHARS     0x12
 #define SAYAS_GLYPHS    0x13
@@ -216,9 +226,9 @@
 typedef const char *  constcharptr;
 
 typedef struct {
-	int points;
+	int  points;
 	const char *phonemes;
-	int end_type;
+	int  end_type;
 	char *del_fwd;
 } MatchRecord;
 	
@@ -257,6 +267,7 @@ extern const int param_defaults[N_SPEECH_PARAM];
  // bit 1=LANG=ru,  don't propagate over [v]
  // bit 2=don't propagate acress word boundaries
  // bit 3=LANG=pl,  propagate over liquids and nasals
+ // bit 4=devoice word-final consonants
 #define LOPT_REGRESSIVE_VOICING  4
 
  // 0=default, 1=no check, other allow this character as an extra initial letter (default is 's')
@@ -268,7 +279,7 @@ extern const int param_defaults[N_SPEECH_PARAM];
  // increase this to prevent sonorants being shortened before shortened (eg. unstressed) vowels
 #define LOPT_SONORANT_MIN    7
 
- // don't break vowels at word boundary
+ // bit 0: don't break vowels at word boundary
 #define LOPT_WORD_MERGE      8
 
  // max. amplitude for vowel at the end of a clause
@@ -305,8 +316,8 @@ extern const int param_defaults[N_SPEECH_PARAM];
 	// bit 1, don't break clause before annoucning . ? !
 #define LOPT_ANNOUNCE_PUNCT 17
 
-	// set minimum length for long vowels at fast speeds, to keep a distinction with short vowels
-#define LOPT_MIN_LONG_VOWEL 18
+	// recognize long vowels (0 = don't recognize)
+#define LOPT_LONG_VOWEL_THRESHOLD 18
 
 
 // stress_rule
@@ -338,6 +349,7 @@ typedef struct {
 // bit0=don't stress monosyllables, except at end of clause
 // bit1=don't set diminished stress,
 // bit2=mark unstressed final syllables as diminished
+// bit3=set consecutive unstressed syllables in unstressed words to diminished, but not in stressed words
 // bit4=don't allow secondary stress on last syllable
 // bit5-don't use automatic secondary stress
 // bit6=light syllable followed by heavy, move secondary stress to the heavy syllable. LANG=Finnish
@@ -376,15 +388,17 @@ typedef struct {
 #define NUM_DFRACTION_3  0x6000
 #define NUM_DFRACTION_4  0x8000
 #define NUM_DFRACTION_5  0xa000
-#define NUM_ORDINAL_DOT  0x10000
-#define NUM_ROMAN        0x20000
-#define NUM_ROMAN_UC     0x40000
-#define NUM_NOPAUSE      0x80000
-#define NUM_AND_HUNDRED  0x100000
-#define NUM_ROMAN_AFTER  0x200000
-#define NUM_VIGESIMAL    0x400000
-#define NUM_ROMAN_ORDINAL 0x800000
-#define NUM_ROMAN_CAPITALS 0x1000000
+#define NUM_ORDINAL_DOT   0x10000
+#define NUM_NOPAUSE       0x20000
+#define NUM_AND_HUNDRED   0x40000
+#define NUM_THOUSAND_AND  0x80000
+#define NUM_VIGESIMAL     0x100000
+#define NUM_OMIT_1_THOUSAND 0x200000
+
+#define NUM_ROMAN         0x1000000
+#define NUM_ROMAN_CAPITALS 0x2000000
+#define NUM_ROMAN_AFTER   0x4000000
+#define NUM_ROMAN_ORDINAL 0x8000000
 
 	// bits0-1=which numbers routine to use.
 	// bit2=  thousands separator must be space
@@ -399,15 +413,18 @@ typedef struct {
 	// bit11=say 19** as nineteen hundred
 	// bit12=allow space as thousands separator (in addition to langopts.thousands_sep)
 	// bits13-15  post-decimal-digits 0=single digits, 1=(LANG=it) 2=(LANG=pl) 3=(LANG=ro)
-	// bit16=dot after number indicates ordinal
-	// bit17=recognize roman numbers
-	// bit18=Roman numbers only if upper case
-	// bit19=don't add pause after a number
-	// bit20='and' before hundreds
-	// bit21= say "roman" after the number, not before
-	// bit22= vigesimal number, if tens are not found
-	// bit23=Roman numbers are ordinal numbers
-	// bit24=Roman numbers must be capital letters
+
+	// bit16= dot after number indicates ordinal
+	// bit17= don't add pause after a number
+	// bit18= 'and' before hundreds
+	// bit19= 'and' after thousands if there are no hundreds
+	// bit20= vigesimal number, if tens are not found
+	// bit21= omit "one" before "thousand"
+
+	// bit24= recognize roman numbers
+	// bit25= Roman numbers only if upper case
+	// bit26= say "roman" after the number, not before
+	// bit27= Roman numbers are ordinal numbers
 	int numbers;
 
 	// bits 1-4  use variant form of numbers before thousands,millions,etc.
@@ -423,12 +440,15 @@ typedef struct {
 	int min_roman;
 	int thousands_sep;
 	int decimal_sep;
+	int max_digits;    // max number of digits which can be spoken as an integer number (rather than individual digits)
+	const char *ordinal_indicator;   // UTF-8 string
 
 	// bit 0, accent name before the letter name, bit 1 "capital" after letter name
 	int accents;
 
 	int tone_language;          // 1=tone language
 	int intonation_group;
+	unsigned char tunes[6];
 	int long_stop;          // extra mS pause for a lengthened stop
 	int phoneme_change;     // TEST, change phonemes, after translation
 	char max_initial_consonants;
@@ -461,18 +481,19 @@ typedef struct {
 #define NUM_SEP_SPACE  0x1000    // allow space as thousands separator (in addition to langopts.thousands_sep)
 #define NUM_DEC_IT     0x2000    // (LANG=it) speak post-decimal-point digits as a combined number not as single digits
 
-struct Translator
-{//=============
+typedef struct
+{//===========
 
 	LANGUAGE_OPTIONS langopts;
 	int translator_name;
-	int transpose_offset;
 	int transpose_max;
 	int transpose_min;
+	char dictionary_name[40];
 
 	char phon_out[300];
 	char phonemes_repeat[20];
-	int phonemes_repeat_count;
+	int  phonemes_repeat_count;
+	int  phoneme_tab_ix;
 
 	unsigned char stress_amps[8];
 	unsigned char stress_amps_r[8];
@@ -508,6 +529,7 @@ struct Translator
 	
 	unsigned char groups2_count[256];    // number of 2 letter groups for this initial letter
 	unsigned char groups2_start[256];    // index into groups2
+	const short *frequent_pairs;   // list of frequent pairs of letters, for use in compressed *_list
 	
 	
 	int expect_verb;
@@ -526,7 +548,8 @@ struct Translator
 	int prepause_timeout;
 	int end_stressed_vowel;  // word ends with stressed vowel
 	int prev_dict_flags;     // dictionary flags from previous word
-}; //  end of class Translator
+	int clause_terminator;
+} Translator;
 
 
 extern int option_tone2;
@@ -536,6 +559,7 @@ extern int option_tone_flags;
 extern int option_waveout;
 extern int option_quiet;
 extern int option_phonemes;
+extern int option_mbrola_phonemes;
 extern int option_phoneme_events;
 extern int option_linelength;     // treat lines shorter than this as end-of-clause
 extern int option_multibyte;
@@ -584,7 +608,7 @@ extern int (* phoneme_callback)(const char *);
 extern void SetLengthMods(Translator *tr, int value);
 
 void LoadConfig(void);
-int TransposeAlphabet(char *text, int offset, int min, int max);
+int TransposeAlphabet(Translator *tr, char *text);
 int utf8_in(int *c, const char *buf);
 int utf8_in2(int *c, const char *buf, int backwards);
 int utf8_out(unsigned int c, char *buf);
@@ -608,13 +632,13 @@ void DeleteTranslator(Translator *tr);
 int Lookup(Translator *tr, const char *word, char *ph_out);
 int LookupFlags(Translator *tr, const char *word);
 
-int TranslateNumber(Translator *tr, char *word1, char *ph_out, unsigned int *flags, WORD_TAB *wtab);
+int TranslateNumber(Translator *tr, char *word1, char *ph_out, unsigned int *flags, WORD_TAB *wtab, int control);
 int TranslateRoman(Translator *tr, char *word, char *ph_out, WORD_TAB *wtab);
 
 void ChangeWordStress(Translator *tr, char *word, int new_stress);
 void SetSpellingStress(Translator *tr, char *phonemes, int control, int n_chars);
 int TranslateLetter(Translator *tr, char *letter, char *phonemes, int control);
-void LookupLetter(Translator *tr, unsigned int letter, int next_byte, char *ph_buf);
+void LookupLetter(Translator *tr, unsigned int letter, int next_byte, char *ph_buf, int control);
 void LookupAccentedLetter(Translator *tr, unsigned int letter, char *ph_buf);
 
 int LoadDictionary(Translator *tr, const char *name, int no_error);
@@ -635,7 +659,7 @@ void SetWordStress(Translator *tr, char *output, unsigned int *dictionary_flags,
 int TranslateRules(Translator *tr, char *p, char *phonemes, int size, char *end_phonemes, int end_flags, unsigned int *dict_flags);
 int TranslateWord(Translator *tr, char *word1, int next_pause, WORD_TAB *wtab);
 void *TranslateClause(Translator *tr, FILE *f_text, const void *vp_input, int *tone, char **voice_change);
-int ReadClause(Translator *tr, FILE *f_in, char *buf, short *charix, int *charix_top, int n_buf, int *tone_type);
+int ReadClause(Translator *tr, FILE *f_in, char *buf, short *charix, int *charix_top, int n_buf, int *tone_type, char *voice_change);
 
 void SetVoiceStack(espeak_VOICE *v);
 void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_DATA *phdata);

@@ -1,6 +1,6 @@
 /
 // ***************************************************************************
-// *   Copyright (C) 2005 to 2007 by Jonathan Duddington                     *
+// *   Copyright (C) 2005 to 2010 by Jonathan Duddington                     *
 // *   email: jonsd@users.sourceforge.net                                    *
 // *                                                                         *
 // *   This program is free software; you can redistribute it and/or modify  *
@@ -24,7 +24,7 @@
 
 // 2006-11-18  Gilles Casse  <gcasse@oralux.org>
 //
-// Updated 2010-03-05 Michel Such  <michel.such@free.fr>
+// Updated 2010-07-25 Michel Such  <michel.such@free.fr>
 //
 //	* Numbers, a few abbreviations and exceptions.
 //
@@ -83,8 +83,8 @@ z	zEd
 
 // accent names
 _lig	ligat'yr
-_acu	aksA~tE2g'y
-_ac2	dublaksA~tE2g'y
+_acu	aksA~tEg'y
+_ac2	dublaksA~tEg'y
 _brv	br'Ev
 _ced	sed'ij
 _cir	aksA~sirkO~fl'Eks
@@ -93,7 +93,7 @@ _dot	pwE~syskr'i
 _grv	aksA~gr'av
 _hac	kar'O~
 _mcn	makr'O~
-_ogo	OgOn'Ek
+_ogo	ogon'Ek
 _rng	rO~t2A~S'Ef
 _stk	b'ar
 _tld	t'ild
@@ -102,63 +102,63 @@ _tld	t'ild
 
 _cap	maZysk'yl
 _?A	l'Etr
-_??	sE~b'Oll
+_??	sE~b'oll
 _#9	tabylasiO~
-_#32	E2spas
+_#32	Espas
 
 
-_"   gijmE2
+_"   gijmE
 _#   djEz
 _'   apostr'Of
 
-_(   'uvr@-parA~t'Ez
-_)   f'Erm parA~t'Ez
+_(   parA~tEz_goS
+_)   parA~tEz_drwat
 _,   virgyl
-_-   tirE2
+_-   tirE
 _.   _|pw%E~
-_/   bar||o2blik
+_/   baroblik
 _:   d'Y||pw'E~
 _;   pwE~||virg'yl
-_<   E~feri-Wr
+_<   E~feriWr
 _=   egal
-_>   syperi-Wr
-_?   pwE~||dE~tE2rogasj'O~
+_>   syperiWr
+_?   pwE~||dE~tErogasj'O~
 _!	pwE~||dEksklamasj'O~
-_[   uvr@-_kroSE2
-_\   b'aksl'aS
-_]   f'Erm_kroS'E2
-_^   sirkOnflEks
+_[   krOSE_goS
+_\   bakslaS
+_]   krOSE_drwa
+_^   sirkO~flEks
 __   sulin^e
 _`   aks'A~_gr'av
-_{   uvr_akOlad
+_{   akOlad_goS
 _|   bar_vErtik'al
-_}   f'Erm_akOl'ad
-²    pw^is'A~s||d'Y
-_«	uvre||gijm'E2
-_»	fErme||gijm'E2
+_}   akOlad_drwat
+²    pyis'A~s||d'Y
+_«	uvre||gijm'E
+_»	fErme||gijm'E
 _’	apostr'Of
 _‘	apostr'Of
 _µ	mikr'o
 _§	sEksj'O~
 
 // symbols that are normally spoken when reading text
-@	_!arobaz
+@	_::arobaz
 %	pursA~		$max3
 &	e $u $brk
-_&	_e_komErsi-'al
+_&	_e_komErsi'al
 *	asterisk:	$max3
 +	plys		$max3
 ~	tilde
-€	@ro
+€	@r'o $u+
 ¢	sEnt
 ¥	iEn
 £	livr
 ±	pl'yz_'u_mw'E~
-×	myltipli:'e_p'ar
+×	myltipli'e_p'ar
 ÷	diviz'e_p'ar
 ¼	W~_k'ar
 ½	W~_d@m'i
-¾	trua_k'ar
+¾	trwa_k'ar
 ©	_^_EN
 ®	mark||depoz'e
 
@@ -168,12 +168,12 @@ _&	_e_komErsi-'al
 _0	zero $u+
 _1	W~
 _2	dYz2
-_3	truaz2
+_3	trwaz2
 _4	katr
 _5	sE~k
 _6	siz3
 _7	sEt
-_8	_|w^it3
+_8	_|yit3
 _9	nWf
 _10	diz3
 _11	_|O~z
@@ -182,18 +182,18 @@ _13	trEz
 _14	katOrz
 _15	kE~z
 _16	sEz
-_17	dis:Et
-_18	dizw^it3
+_17	disEt
+_18	dizyit3
 _19	diznWf
-_20	vE~
+_20	vE~t2
 _21	vE~te:W~
 _22	vE~tdYz2
-_23	vE~t:truaz2
+_23	vE~ttrwaz2
 _24	vE~tkatr
 _25	vE~tsE~k
 _26	vE~tsiz3
 _27	vE~tsEt
-_28	vE~tw^it3
+_28	vE~tyit3
 _29	vE~tnWf
 _3X	trA~t
 _31	trA~te:W~
@@ -201,9 +201,9 @@ _4X	karA~t
 _41	karA~te:W~
 _5X	sE~kA~t
 _51	sE~kA~te:W~
-_6X	swAsA~t:
-_61	swAsA~te:W~
-_71	swAsA~te:O~z
+_6X	swasA~t
+_61	swasA~te:W~
+_71	swasA~te:O~z
 _8X	katr@vE~:
 _80	katr@vE~z2
 _0C	sA~
@@ -214,6 +214,7 @@ _0M2	miljO~
 _0M3	miljar
 _0and	e
 _dpt	virgyl
+_roman	rom'E~
 
 //some numbers have special pronunciation in Belgium and Switzerland
 ?2 _7X	sEptA~t
@@ -221,12 +222,12 @@ _dpt	virgyl
 ?2 _9X	nonA~t
 ?2 _91	nonA~te:W~
 
-(21 ème)	vE~te:yni-Em
-(31 ème)	trA~te:yni-Em
-(41 ème)	karA~te:yni-Em
-(51 ème)	sE~kA~te:yni-Em
-(61 ème)	swAsA~te:yni-Em
-(81 ème)	katr@vE~:yni-Em
+(21 ème)	vE~te:yniEm
+(31 ème)	trA~te:yniEm
+(41 ème)	karA~te:yniEm
+(51 ème)	sE~kA~te:yniEm
+(61 ème)	swasA~te:yniEm
+(81 ème)	katr@vE~:yniEm
 
 // ABBREVIATIONS
 //**************
@@ -234,14 +235,15 @@ _dpt	virgyl
 abc		$abbrev
 ac		$abbrev
 acrobat	acrobate $text
-adn		adeEn
-adsl		adeEsEl
+adn		ad,eEn
+adsl		ad,eEsEl
 alt	_::alt
-amd		aEmde
-aol	aoEl
-api		apei
+amd		a,Emde
+aol	a,oEl
+api		ap,ei
+ascii	aski
 avg	$abbrev
-avh		aveaS
+avh		av,eaS
 bay	_^_en
 bd	boulevard $text
 brltty	$abbrev
@@ -249,33 +251,34 @@ cci              $abbrev
 cia		$abbrev
 cio		$abbrev
 cm		centimètre $text
-collins	kolins
+collins	_^_en
 cpu	$abbrev
-ctrl		_::kO~tro2l
-dept		depart@mA~
+ctrl		_::kO~trOl
+dept		département $text
 divx	diviks
 ebay	_^_en
 (e bay)	ebay $text
-edf		@deEf
-eml	@EmEl
-etc		E2tsetera
+ebcdic	@besedik
+edf		@d,eEf
+eml	@,EmEl
+etc		Etsetera
+fyi	fWr||jWr||InfWrm'EjSWn
 ghz		ZigaErts
 (g hz)		ZigaErts
-hmm		h@m
+hmm		hWm
 (http ://)	aSt,et,ep'e_
 hz		_|Erts
-ibm		ibeEm
+ibm		ib,e'Em
 ide		$abbrev
 ip		ipe
-irc	i:_!Er_!se
-jaws		dZo3:z
+irc	I,Er_|se
 kbit	kilobit
 kde		$abbrev
 kg		kilogramme $text
 khz		kiloErts
 km		kilomètre $text
-(km player)	ka,EmplE2j'Wr
-(kmplayer)	ka,EmplE2j'Wr
+(km player)	ka,EmplEj'Wr
+(kmplayer)	ka,EmplEj'Wr
 kw		kilowatt $text
 m.		m@siY
 mbit  		megabit
@@ -287,16 +290,16 @@ mm	millimètre $text
 mme		madame $text
 mn	minyt
 mns	minytz2
-(mp 3)	_!Empetrua
+(mp 3)	_|Empetrwa
 mr		m@siY
 nsi             $abbrev
 nsis             $abbrev
 nti             $abbrev
 nvda             $abbrev
-ocr             oseEr
+ocr             os,eEr
 oem	_!,o_!,@_!'Em
-ogm	oZeEm
-ong             oEnZe
+ogm	oZ,eEm
+ong             o,EnZe
 pci             $abbrev
 pcmcia	$abbrev
 pda             $abbrev
@@ -309,13 +312,14 @@ riaa	$abbrev
 riscos	riskoEs
 sap	$abbrev
 scsi		$abbrev
+solaris	solaris
 sos	$abbrev
-s.t.p		silt@:pl'E2
-s.v.p		silvu:pl'E2
+s.t.p		silt@:pl'E
+s.v.p		silvu:pl'E
 st		s'E~t2
 ste		s'E~t
-stp		silt@:pl'E2
-svp		silvu:pl'E2
+stp		silt@:pl'E
+svp		silvu:pl'E
 tva	$abbrev
 uk	$abbrev
 ups	ypeEs
@@ -327,13 +331,12 @@ u.s	y:Es
 virgin	virZin
 vip	v,i||,aj||p'i
 (web visum)	webvisum $text
-windows	windo3z
 wma		$abbrev
 xfce		iksEfse@
 xy		$abbrev
 
 
-dr               dOktWr       $dot $capital
+dr               doktYr       $dot $capital
 prof                           $dot
 pr		professeur $text *dot $capital
 
@@ -341,7 +344,8 @@ pr		professeur $text *dot $capital
 // articles
 le	$nounf $u+
 le  $verb $verbextend $u
-el	$u
+el	$u+
+los	los $u+
 la $nounf $u+
 la	$verb $verbextend $u
 les	lez2 $nounf $u+
@@ -353,9 +357,9 @@ une	$nounf $u+
 // conjonctions
 mais	$u+
 ou	u $u $brk
-eh	 $u $brk
+eh	 $u+ $brk
 en	$u
-et	e $u $brk
+et	e $u+
 ni	$u
 car	$u
 car	$noun
@@ -369,13 +373,15 @@ ainsi $u+
 alors	alOr $u+
 aussi $u+
 encore	$u+
+enfin	$u+
 depuis $u+
+lors	$u+
 
 
 certes	$u+
 dont	   dO~t2 $u
 lorsque	   lOrsk=@ $u+
-puisque	   pw^isk=@ $u+
+puisque	   pyisk=@ $u+
 presque	   prEsk=@ $u+
 que	  $u+
 (parce que) 	   parsk@ $u+
@@ -408,25 +414,29 @@ te	$u $verbf
 se	$u $verbf
 moi	$u+
 toi	$u+
+soi	$u+
 lui	$u+ $verbf
 ça	$u+ $verbf
 
 ca	sa $u+ $capital $verbf
 ce	$u+ $nounf
+ceux	$u+
+celle	$u+
+celles	$u+
 ceci	$u+ $verbf
 cela	$u+ $verbf
-voici	$u+
-voilà	$u+
 cet	$u $nounf
 cette	$u $nounf
 ces	sez2 $u $nounf
-(celle ci)	sEl||si $verbf
-(celle là)	sEl||la $verbf
-(ceux ci)	sY||si $verbf
-(ceux là)	sY||la $verbf
-(celles ci)	sEl||si $verbf
-(celles là)	sEl||la $verbf
+(celle ci)	sEl||si $verbf $u+
+(celle là)	sEl||la $verbf $u+
+(ceux ci)	sY||si $verbf $u+
+(ceux là)	sY||la $verbf $u+
+(celles ci)	sEl||si $verbf $u+
+(celles là)	sEl||la $verbf $u+
 plupart	$u+
+voici	$u+
+voilà	$u+
 
 // possessives
 ma	$u $nounf
@@ -443,14 +453,14 @@ notre	$u $nounf
 votre	$u $nounf
 leur	$u $nounf
 leur	$u $verb $verbextend
-(la leur)	la||lWr $u+ $verbf
-(le leur)	l@||lWr $u+ $verbf
+(la leur)	la||lYr $u+ $verbf
+(le leur)	l@||lYr $u+ $verbf
 nos	$u $nounf
 vos	$u $nounf
 leurs	$u+ $nounf
 leurs	$u $verb $verbextend
-(les leur)	le||lWr $u+ $verbf
-(les leurs)	le||lWr $u+ $verbf
+(les leur)	le||lYr $u+ $verbf
+(les leurs)	le||lYr $u+ $verbf
 
 // prepositions
 de $u $nounf
@@ -458,7 +468,7 @@ du	$u $nounf
 des	dez2 $u $nounf
 
 
-à	a $u
+à	a $u+
 au	$u $nounf
 aux	$u $nounf
 
@@ -470,7 +480,7 @@ vers	vEr $u+
 vers	$noun
 en	$u+
 en	$u+ $verb $verbextend
-(en suspens) A~||sysp'A~
+suspense syspEns
 (en tous) A~||tuz2 $u+
 par	$u+
 parmi	$u+
@@ -482,6 +492,7 @@ entre	$u+
 entre	$verb
 contre	$u+
 chaque	$u+
+chez $u+
 plusieurs $u+
 durant	$u+
 avec	$u+ $brk
@@ -503,22 +514,23 @@ point	$noun
 plus	$u+
 guère	$u+
 jamais $u+
+toujours	$u+
 non	nO~ $u+
-oui	$u+
+oui	_|wi $u+
 
 // questions
 quand	   kA~t2 $u+
 quoi	   $u+
 où	$u+
-comme	kO2m	$u+
+comme	kOm	$u+
 comment	$u+
 pourquoi	$u+
 pourtant	$u+
 
 // auxillary verbs  (be, have, can, etc)
 suis		 $u+ $verb
-es		E2z2  $u+
-est	E2t2 $u+
+es		Ez2  $u+
+est	Et2 $u+
 sommes	$u+ $verb
 êtes	$u+ $verb
 sont	$u+ $verb
@@ -534,7 +546,7 @@ sois	$u+	$verb
 soit	$u+
 
 ai	$u+	$verb
-(ai je)	E2Z	$u+
+(ai je)	EZ	$u+
 as	as
 as	az2	$u+	$verb
 (as tu)	aty
@@ -573,14 +585,19 @@ quelques	kElk=@z2 $u+
 tel	$u+
 telle	$u+
 telles	$u+
-tout	t'ut2
-rien	ri-'E~n2
+tout	t'ut2 $u+
+tous	$u+
+toute	t'ut $u+
+toutes	t'utz2 $u+
+(tout le monde)	tulmO~d
+(tout le temps)	tultA~
+rien	ri'E~n2 $u+
 
 // Letters which can be words
 //===========================
 a	a $atend $only
 à	$atend $accent $only
-y       igr'Ek $atend $only
+y       _|igr'Ek $atend $only
 ô	$atend $accent
 
 
@@ -591,7 +608,7 @@ scient           si
 coing     kwE~
 convent       kO~vA~
 dessous          d@su
-hareng          _!arA~
+hareng          _|arA~
 pastis     pastis
 poing     pwE~
 ressent          r@s'A~t2
@@ -613,9 +630,6 @@ tunis           tynis
 (1 èrement)	pr@mjErmA~
 
 
-monsieur         m@sjY
-messieurs         mesjYz2
-montréal         mO~real
 (n'est ce pas)   n'Es||p'az2
 (qu'est ce que)  kEsk@ $u
 absent        absA~
@@ -626,88 +640,113 @@ adsltv	adeEs'El||tev'e
 agenda	aZE~da
 airbus	      airbuss $text
 alan	alan
-albinos	albinoss $text
+albinos	albinos
 alleluia alelui'a
 alterego	altErego
 anis	anis
-any	Eni $u
+armageddon	armagedO~
 auvent     ovA~
 beta	beta
-bien	      bi-E~n2
+bien	      biE~n2
 bis	      bis
 bissus    bisys
 blues	_^_en
+blum	blum
 broglie	breuil $text
 browglie	breuil $text
-buffer	bWfWr
+buffer	bYfWr
 bus	      bys
 bus	      by  $verb
 cancer	kA~sEr
-canyon	kanjO2n
+canyon	kanjOn
+charles	Sarl
 (chef d'oeuvre)	chédeuvre $text
 (chef d'oeuvres)	chédeuvres $text
 choeur        kWr
-cocus     koky
+cinema	sinema
+cocus     kOky
 couscous	kuskus
 delete	_^_en
 dernier    dErnjer2
+doppler	dOplEr
+dot	dOt
 éloquent     elokA~t2
 enfer	A~fEr
+fahrenheit	far@najt
 faut	fot2 $u+
+feldspath	fEldspat
 fier	      fjer $verb
-francis	franciss $text
+for	$u+
+francis	frA~sis
 fred	frEd
-free	fri:
+free	_^_en
 fuel	      fjul
 gangster	gA~gstEr
 gars	      ga
+genesis	Zenezis
+georges	ZOrZ
+gilles	Zil
 gin	dZin
-granit	granitt $text
-gulf	gWlf
+gulf	gOlf
 gus	gys
 gym	Zim
+han	_|A~
 hélas 		elas $u+
+jacques	Zak
 karaoke	karaoke
+kevin	kevin
+laetitia	letisja
 laser	      lazEr
-listbox	listbO2ks
+listbox	listbOks
+louis	lwi
 malus      malys
-mai	mE2
-mailto	mEjltu_
+mai	mE
 mapper	_^_en
 mars	      mars
+mas	mas
+mat	mat
+matthias	matjas
 merguez	mErgEz
-mieux	mi-Y $u+
+messieurs         mesjYz2
+mieux	miY $u+
+monsieur         m@sjY
 mrs	_^_en
+oasis	oazis
 ours	urs
 pataquès	patakEs
-peter	pi:tWr
+peter	_^_en
 phallus    falys
 polder    pOldEr
 premier    pr@mjer2
 program	_^_en
-(program files)	program||fajlz
-query	kueri
-queries	kueri
+query	_^_en
+queries	_^_en
+quid	kwid $u+
 quit	_^_en
-recorder	ricordeur $text
-requiem	rekw^ijEm
+recorder	_^_en
+requiem	rekyijEm
 revolver	revOlvEr
-scan	skan
+sas	sas
+scan	_^_en
 scanner	skaner2 $verb
 scanner	skanWr $noun
 scanners	skanWr
 shampoing	SA~pwE~
-sir           _^_EN
+sir	_^_en
 souris       suri
 stocker	stoker2
 sus       sys
 sus       sy $verb
-to	_^_en
+sushi	suSi
+thierry	tjEri
+to	tu $u+
+tramway	tramwE:
 tuttiquanti       tutikw'anti
 vaut	$u+
 vaux	$u+
 vénus       venys
 vot       vOt
+yves	iv
 
 
 gens	      ZA~
@@ -715,7 +754,7 @@ mens	      mA~z2
 sens	      sA~s
 sens	      sA~z2 $verb
 (sud est)       sydEst
-(nord est)      nOrEst
+(nord est)      norEst
 
 // ut (t is said)
 août		ut
@@ -731,49 +770,43 @@ rut		ryt
 scorbut		scorbutt $text
 scout		skut
 stout		staut
-uppercut	ypErkyt
+uppercut	ypErkWt
 ut		yt
 zut		zyt
 
 
 // et (t is said)
 
-exocet		E2gzOsEt
+exocet		EgzosEt
 fret		fr'Et
-budget		bydZE2
-hamlet		hamlEt
+budget		bydZE
+hamlet		_|amlEt
 knesset		knesEt
-lazaret		lazarE2
+lazaret		lazarE
 margaret	margarEt
 net		nEt
 offset		OfsEt
 set		sEt
 soviet		soviEt
-stewart	sti:wart
 
 // urt (t is said)
 kurt		kurt
-yaourt		_!i-aurt
-yoghourt	_!i-ogurt
-yogourt		_!i-ogurt
+yaourt		_|iaurt
+yoghourt	_|iogurt
+yogourt		_|iogurt
 
 // ort (t said)
 short		SOrt
 
 // art (t said)
-steward		stiwart
 stuttgart	Stutgart
 hart		art
 kart		kart
 smart		smart
 
 // irt
-(sweat shirt)	swEtSWrt
-(sweat shirts)	swEtSWrt
-(tee shirt)	t,i:S'Wrt
-(tee shirts)	t,i:S'Wrt
-(t shirt)	t,i:S'Wrt
-(t shirts)	t,i:S'Wrt
+(t shirt)	_^_en
+(t shirts)	_^_en
 
 
 // words from other languages
@@ -782,35 +815,38 @@ acer             asEr
 and             _^_en
 amazon		amaz'On
 apple		_^_en
-at		at $u+
-(audible manager) od,ibl||manadZ'Wr
+at		_^_en
+(audible manager) _^_en
+balabolka	balabOlka
+be	_^_en
+better	_^_en
 bin		bin
 bit		bit
-bluetooth 		blut'us
+bluetooth 		_^_en
 computer		_^_en
 (cyber link) 		_^_en
 debian		debjan
+do	_^_en
 edit		_^_en
-emacs		E2maks
-emacspeak	E2makspi:k
+emacs		_^_en
 end             _^_en
-epson		E2psOn
-espeak		@spi:k
 ethernet	etErnEt
 exit	egzit
-(file zilla)		f,ajl||zij'a
-from	frO2m $u
+(file zilla)		_^_en
+from	_^_en
 get		_^_en
-google		gug=Wl
+google		_^_en
 gnome		gnOm
 gnu		$abbrev
-hamburger		_!A~b@rgWr
+hamburger		_|A~b@rgWr
+he		_^_en
+her		_^_en
 help		_^_en
 hot		_^_en
-in		in $u+
-inside		_^_en
+in		_^_en
 internet E~tErn'Et
-(internet explorer) E~tErn'Et||E2ksplOr'Wr
+(internet explorer) E~tErn'Et||EksplOr'Wr
+it	_^_en
 klaxon          klaksOn
 let 		_^_en
 lite 		_^_en
@@ -818,29 +854,29 @@ login 		_^_en
 logon 		_^_en
 (mac os x)	makoEsiks
 made	_^_en
+mail	_^_en
+mailto	_^_en
 media     		medja
-messenger 		mE2sEnZWr
-my		maj $u+
+messenger 		_^_en
 nat		nat
 not		_^_en
 null	_^_en
 ok         oke $u+
-open            op'Wn
-(open source)	op,Wn||s'urs
-outlook         autlu:k
+open            _^_en
+outlook         _^_en
 paint    		_^_en
 paper    		_^_en
 people    		_^_en
-redhat		rEdat
+redhat		_^_en
 same		_^_en
 sametime	_^_en
-schubert	SubEr
+she	_^_en
 sun		_^_en
-(text aloud) tEkst||@la=wd
+(text aloud) _^_en
 ubuntu		ubuntu
 up		_^_en
-win	win $u+
 yes		_^_en
+yet		_^_en
 
 
 // tions (tjO~ instead of sjO~)
@@ -848,12 +884,12 @@ constations	kO~statjO~z2
 contentions	kO~tA~tjO~z2
 dations		datjO~z2
 désertions	dezErtjO~z2 $verb
-exploitions	EksplwAtjO~z2
-heurtions	hWrtjO~z2
+exploitions	EksplwatjO~z2
+heurtions	_|WrtjO~z2
 partions	partjO~z2
 rations		ratjO~z2 $verb
 tentions	tA~tjO~z2
-votions		votjO~z2
+votions		vOotjO~z2
 étions		etjO~z2
 évitions	evitjO~z2
 
@@ -865,41 +901,49 @@ vincent		vE~sA~
 
 // Some countries, areas and languages
 afrikaans	afrikans
+aix	Eks
+aruba	aruba
 bahamas	baamas
 bangladesh	bA~gladES
 bayeux	bajY
 bélarus	belarys
 belize	beliz
 bissau	bisa'o
-(burkina faso)	byrkina||faso
+brazzaville	brazavil
+(burkina faso)	burkina||faso
 burundi	burundi
 calvados	calvadoss $text
 christmas	krismas
 croatie	kroasi
-esperanto	E2sperA~to
+esperanto	EsperA~to
 groenland	groEnlA~d
-guatemala	gwAtemala
-honduras	_!O~dyras
+guatemala	gwatemala
+hindi	_|indi
+honduras	_|O~dyras
 kenya	kenja
-laos	laO2s
-lesotho	lezoto
-liechtenstein	liStEnStajn
-malawi	malaui
-mayotte	majO2t
+koweït	kowEjt
+laos	laOs
+leone	leOn
+lesotho	lezOto
+libye	libi
+liechtenstein	liStWnStajn
+angeles	A~nZelEs
+malawi	malawi
+mayotte	majOt
+montréal         mO~real
+montserrat	mO~sera
 nevis	nevis
 niger	niZEr
 oman	oman
-palaos	palaO2s
+palaos	palaOs
 samoa	samoa
-swaziland	swAzilA~d
-leone	leO2n
-koweït	kowEjt
-taïwan	tajwAn
-texas	tE2ks'as
+swaziland	swazilA~d
+taïwan	tajwan
+texas	tEks'as
 tuvalu	tuvalu
 vanuatu	vanuatu
-venezuela	venezyela
-(viêt nam)	vi-Etnam
-wallis	wAlis
+venezuela	venezyEla
+(viêt nam)	vjEtnam
+wallis	walis
 futuna	futuna
 zimbabwe	zimbabwe

@@ -24,9 +24,6 @@
 #define N_SEQ_FRAMES   25           // max frames in a spectrum sequence (real max is ablut 8)
 #define STEPSIZE  64                // 2.9mS at 22 kHz sample rate
 
-#define    PITCHfall   0
-#define    PITCHrise   1
-
 // flags set for frames within a spectrum sequence
 #define FRFLAG_KLATT           0x01   // this frame includes extra data for Klatt synthesizer
 #define FRFLAG_VOWEL_CENTRE    0x02   // centre point of vowel
@@ -37,6 +34,7 @@
 #define FRFLAG_FORMANT_RATE    0x20   // Flag5 allow increased rate of change of formant freq
 #define FRFLAG_MODULATE        0x40   // Flag6 modulate amplitude of some cycles to give trill
 #define FRFLAG_DEFER_WAV       0x80   // Flag7 defer mixing WAV until the next frame
+#define FRFLAG_LEN_MOD2      0x4000   // reduce effect of length adjustment, used for the start of a vowel
 #define FRFLAG_COPIED        0x8000   // This frame has been copied into temporary rw memory
 
 #define SFLAG_SEQCONTINUE      0x01   // a liquid or nasal after a vowel, but not followed by a vowel
@@ -64,8 +62,9 @@
 #define EMBED_U    11   // audio uri
 #define EMBED_B    12   // break
 #define EMBED_F    13   // emphasis
+#define EMBED_C    14   // capital letter indication
 
-#define N_EMBEDDED_VALUES    14
+#define N_EMBEDDED_VALUES    15
 extern int embedded_value[N_EMBEDDED_VALUES];
 extern int embedded_default[N_EMBEDDED_VALUES];
 
@@ -178,6 +177,7 @@ int mix_wavefile_offset;
 
 int amplitude;
 int amplitude_v;
+int amplitude_fmt;   // percentage amplitude adjustment for formant synthesis
 } WGEN_DATA;
 
 
@@ -226,21 +226,21 @@ typedef struct {
 // The first section is a copy of PHONEME_LIST2
 	unsigned char phcode;
 	unsigned char stresslevel;
-	unsigned char wordstress;
+	unsigned char wordstress;  // the highest level stress in this word
 	unsigned char tone_ph;    // tone phoneme to use with this vowel
 	unsigned short synthflags;
 	unsigned short sourceix;  // ix into the original source text string, only set at the start of a word
 
 	PHONEME_TAB *ph;
+	short length;  // length_mod
 	unsigned char env;    // pitch envelope number
 	unsigned char type;
 	unsigned char prepause;
 	unsigned char postpause;
 	unsigned char amp;
 	unsigned char newword;   // bit 0=start of word, bit 1=end of clause, bit 2=start of sentence
-	short length;  // length_mod
-	short pitch1;  // pitch, 0-4095 within the Voice's pitch range
-	short pitch2;
+	unsigned char pitch1;
+	unsigned char pitch2;
 } PHONEME_LIST;
 
 
@@ -251,9 +251,10 @@ typedef struct {
 #define pd_ADDWAV 4
 
 #define N_PHONEME_DATA_PARAM 16
+#define pd_INSERTPHONEME   i_INSERT_PHONEME
 #define pd_APPENDPHONEME   i_APPEND_PHONEME
-#define pd_CHANGEPHONEME    i_CHANGE_PHONEME
-#define pd_LENGTHMOD      i_SET_LENGTH
+#define pd_CHANGEPHONEME   i_CHANGE_PHONEME
+#define pd_LENGTHMOD       i_SET_LENGTH
 
 #define pd_FORNEXTPH     0x2
 #define pd_DONTLENGTHEN  0x4
@@ -266,6 +267,7 @@ typedef struct {
 	int vowel_transition[4];
 	int pitch_env;
 	int amp_env;
+	char ipa_string[18];
 } PHONEME_DATA;
 
 
@@ -274,6 +276,7 @@ typedef struct {
 	int use_vowelin;
 	int fmt_addr;
 	int fmt_length;
+	int fmt_amp;
 	int fmt2_addr;
 	int fmt2_lenadj;
 	int wav_addr;
@@ -289,7 +292,7 @@ typedef struct {
 #define i_RETURN        0x0001
 #define i_CONTINUE      0x0002
 
-// Group 0 instrcutions with 8 bit operand.  These value go into bits 8-15 if the instruction
+// Group 0 instrcutions with 8 bit operand.  These values go into bits 8-15 of the instruction
 #define i_CHANGE_PHONEME 0x01
 #define i_REPLACE_NEXT_PHONEME 0x02
 #define i_INSERT_PHONEME 0x03
@@ -302,6 +305,8 @@ typedef struct {
 #define i_SET_LENGTH     0x0a
 #define i_LONG_LENGTH    0x0b
 #define i_CHANGE_PHONEME2 0x0c  // not yet used
+#define i_IPA_NAME       0x0d
+
 #define i_CHANGE_IF      0x10  // 0x10 to 0x14
 
 #define i_ADD_LENGTH     0x0c
@@ -345,10 +350,16 @@ typedef struct {
 #define i_isFinalVowel 0x8b
 #define i_isVoiced     0x8c
 
+// place of articulation
+#define i_isVel      0x28
 
+// phflags
+#define i_isSibilant   0x45    // bit 5 in phflags
 #define i_isPalatal    0x49    // bit 9 in phflags
 #define i_isRhotic     0x56    // bit 22 in phflags
-
+#define i_isFlag1      0x5c
+#define i_isFlag2      0x5d
+#define i_isFlag3      0x5e
 
 #define i_StressLevel  0x800
 
@@ -371,13 +382,62 @@ typedef struct {
 } MBROLA_TAB;
 
 typedef struct {
-	int speed_factor1;
-	int speed_factor2;
-	int speed_factor3;
+	int pause_factor;
+	int clause_pause_factor;
+	int wav_factor;
+	int lenmod_factor;
+	int lenmod2_factor;
 	int min_sample_len;
+	int loud_consonants;
 	int fast_settings[8];
 } SPEED_FACTORS;
 
+
+typedef struct {
+	char name[12];
+	unsigned char flags[4];
+	signed char head_extend[8];
+
+	unsigned char prehead_start;
+	unsigned char prehead_end;
+	unsigned char stressed_env;
+	unsigned char stressed_drop;
+	unsigned char secondary_drop;
+	unsigned char unstressed_shape;
+
+	unsigned char onset;
+	unsigned char head_start;
+	unsigned char head_end;
+	unsigned char head_last;
+
+	unsigned char head_max_steps;
+	unsigned char n_head_extend;
+
+	signed char unstr_start[3];    // for: onset, head, last
+	signed char unstr_end[3];
+
+	unsigned char nucleus0_env;     // pitch envelope, tonic syllable is at end, no tail
+	unsigned char nucleus0_max;
+	unsigned char nucleus0_min;
+
+	unsigned char nucleus1_env;     //     when followed by a tail
+	unsigned char nucleus1_max;
+	unsigned char nucleus1_min;
+	unsigned char tail_start;
+	unsigned char tail_end;
+
+	unsigned char split_nucleus_env;
+	unsigned char split_nucleus_max;
+	unsigned char split_nucleus_min;
+	unsigned char split_tail_start;
+	unsigned char split_tail_end;
+	unsigned char split_tune;
+	
+	unsigned char spare[10];
+} TUNE;
+
+extern int n_tunes;
+extern TUNE *tunes;
 
 // phoneme table
 extern PHONEME_TAB *phoneme_tab[N_PHONEME_TAB];
@@ -407,6 +467,9 @@ extern unsigned char pitch_adjust_tab[MAX_PITCH_VALUE+1];
 #define WCMD_MARKER	10
 #define WCMD_VOICE   11
 #define WCMD_EMBEDDED 12
+#define WCMD_MBROLA_DATA 13
+#define WCMD_FMT_AMPLITUDE 14
+
 
 
 #define N_WCMDQ   160
@@ -441,6 +504,12 @@ extern int wavefile_amp2;
 extern int vowel_transition[4];
 extern int vowel_transition0, vowel_transition1;
 
+#define N_ECHO_BUF 5500   // max of 250mS at 22050 Hz
+extern int echo_head;
+extern int echo_tail;
+extern int echo_amp;
+extern short echo_buf[N_ECHO_BUF];
+
 extern int mbrola_delay;
 extern char mbrola_name[20];
 
@@ -464,10 +533,16 @@ int  SelectPhonemeTableName(const char *name);
 
 void Write4Bytes(FILE *f, int value);
 int Read4Bytes(FILE *f);
+int Reverse4Bytes(int word);
 int CompileDictionary(const char *dsource, const char *dict_name, FILE *log, char *err_name,int flags);
 
 
-extern unsigned char *envelope_data[18];
+#define ENV_LEN  128    // length of pitch envelopes
+#define    PITCHfall   0  // standard pitch envelopes
+#define    PITCHrise   2
+#define N_ENVELOPE_DATA   20
+extern unsigned char *envelope_data[N_ENVELOPE_DATA];
+
 extern int formant_rate[];         // max rate of change of each formant
 extern SPEED_FACTORS speed;
 
@@ -492,13 +567,18 @@ espeak_ERROR SetVoiceByName(const char *name);
 espeak_ERROR SetVoiceByProperties(espeak_VOICE *voice_selector);
 espeak_ERROR LoadMbrolaTable(const char *mbrola_voice, const char *phtrans, int srate);
 void SetParameter(int parameter, int value, int relative);
-void MbrolaTranslate(PHONEME_LIST *plist, int n_phonemes, FILE *f_mbrola);
-//int MbrolaSynth(char *p_mbrola);
+int MbrolaTranslate(PHONEME_LIST *plist, int n_phonemes, int resume, FILE *f_mbrola);
+int MbrolaGenerate(PHONEME_LIST *phoneme_list, int *n_ph, int resume);
+int MbrolaFill(int length, int resume);
+void MbrolaReset(void);
+void DoEmbedded(int *embix, int sourceix);
+void DoMarker(int type, int char_posn, int length, int value);
 //int DoSample(PHONEME_TAB *ph1, PHONEME_TAB *ph2, int which, int length_mod, int amp);
 int DoSample3(PHONEME_DATA *phdata, int length_mod, int amp);
 int DoSpect2(PHONEME_TAB *this_ph, int which, FMT_PARAMS *fmt_params,  PHONEME_LIST *plist, int modulation);
 int PauseLength(int pause, int control);
 int LookupPhonemeTable(const char *name);
+unsigned char *GetEnvelope(int index);
 
 void InitBreath(void);
 
