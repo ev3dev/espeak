@@ -1,3 +1,117 @@
+espeak 1.44.01
+
+Fix crash with very long numbers.
+Speak very long numbers as individual digits.
+
+
+Unpronouncable word check:
+  Rules for unpronouncable initial letter sequences can now be defined in *_rules files.
+
+  The unpronouncable word check now stops when an apostrophe is found.
+
+
+Phoneme definitions:
+  Optional second parameter to FMT() statement specifies a percentage amplitude.
+
+  Added "ipa" statement to specify the IPA name for a phoneme if the default translation is not correct.
+
+  Add phoneme "equivalents" tables, so that words can be spoken with foreign (eg English) prounuciation rules, but using local phonemes.
+
+  New attributes:  flag1, flag2, flag3
+
+  New attribute: nopause. Prevents the insertion of a short pause when this phoneme starts a word which follows a vowel.
+
+  New conditions: isFlag1, isFlag2, isFlag3, isSibilant.
+
+  New statement: InsertPhoneme()
+
+
+Phonemes: improve syllablic [m-] [n-] [N-]
+
+
+Mbrola:
+  Command-line espeak and the libespeak library now call the mbrola program directly, rather than producing phoneme text which must be piped into mbrola.
+
+  Added --pho command-line option to generate mbrola phoneme information (.pho data).
+
+Phoneme output:
+  Add --ipa command-line option to produce phonemes names using the International Phonetic Alphabet.
+
+  Indicate language changes during phoneme output with: (en)  (fr)  etc.
+
+
+-X command-line option: Show the matching of multiple-word entries in *_list files.
+
+Speak sequences of letters and dots as individual letters and don't speak 'dot' (eg. "u.s.a").
+
+Don't speak punctuation characters inside <audio> ... <audio/>.
+
+Don't speak "dot" if an ellipsis is followed by a dot.
+
+Vowelcharts:  Show the positions for multiple FMT() statements in a vowel phoneme definition.
+
+
+*_rules: add attributes  $p_alt $p_alt2 $p_alt3,  $w_alt $w_alt2 $w_alt3
+
+*_list:  add attributes:  $sentence, $atstart
+
+
+klatt synthesizer: implement echo (defined in voice files).
+
+
+espeakedit:
+  Prosody display: Show stressed and secondary-stress syllables.
+
+  Remember window size and position.
+
+  Change the frame-length field from Spin Control to Text Control to allow better access from screen-readers.
+
+
+Intonation:
+  New file, 'phsource/intonation' to define 'tunes' which can be used from voice files.
+
+  espeakedit: add Compile -> Intonation data
+
+  Intonation: change the internal pitch unit to give finer control, and align with the values displayed in the espeakedit Prosody window.
+
+
+Speed: Increase range to 80 to 450, with default=175.
+Improve speaking at high speeds.
+
+
+Language options: add an option to the Regressive Voicing option to de-voice the final consonant of words.
+
+lang=ta, hi.  Letter-names for combining vowel characters are distinguished from stand-alone vowel characters by adding an initial click sound.
+
+lang=en: Reduce consecutive unstressed syllables to 'diminished' stress, only in unstressed words.
+
+lang=de: Change 'r' phoneme.
+
+lang=es: Improve the rules for reducing 'b', 'd', 'g' to approximants [B] {D] [Q].
+
+Language improvements include: Danish, Dutch.
+
+
+espeak 1.43.03  (bug fixes)
+
+Fix crash when embedded control codes are followed by numbers of 5 or more digits.
+Fix lang=hu,  First character of an abbreviation is missed after an ordinal number (eg."2. cd")
+Fix XML tag not recognized after "..." when announce punctuation is enabled.
+Fix lang=zh-yue, 'p' 't' 'k' after a vowel give a long pause.
+Fix lang=ru, "o" missing in unstressed syllables.
+
+espeak 1.43.02
+
+Language improvements including Danish.
+
+Fix: "  50000" with leading spaces was spoken as "50".
+
+Don't consider multiple spaces as a thousands separator (eg. "2  000").
+
+Fixed phoneme [n^] for klatt synthesizer.
+
+Lang=Hungarian, don't allow dot as thousands separator.
+
 
 
 espeak 1.43

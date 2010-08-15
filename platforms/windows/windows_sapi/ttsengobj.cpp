@@ -178,6 +178,7 @@ int SynthCallback(short *wav, int numsamples, espeak_EVENT *events)
 	// return the events
 	for(event=events; (event->type != 0) && (n_Events < N_EVENTS); event++)
 	{
+
 		audio_latest = event->audio_position + audio_offset;
 
 		if((event->type == espeakEVENT_WORD) && (event->length > 0))
@@ -260,8 +261,8 @@ static int ConvertRate(int new_rate)
 
 	int rate;
 
-	static int rate_table[21] = {80,100,115,124,133,142,151,159,168,174,180,
-				187,196,208,220,240,270,300,335,369,390 };
+	static int rate_table[21] = {80,110,124,133,142,151,159,168,174,180,187,
+				    196,208,220,240,270,300,335,369,390,450 };
 
 	rate = new_rate + master_rate;
 	if(rate < -10) rate = -10;
@@ -402,9 +403,11 @@ STDMETHODIMP CTTSEngObj::SetObjectToken(ISpObjectToken * pToken)
 		espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,100,path_install,1);
 		espeak_SetSynthCallback(SynthCallback);
 		initialised = 1;
-	    g_voice_name[0] = 0;
+//	    g_voice_name[0] = 0;
 	}
 
+	strcpy(g_voice_name, voice_name);
+	espeak_SetVoiceByName(g_voice_name);
 	
 	return hr;
 } /* CTTSEngObj::SetObjectToken */

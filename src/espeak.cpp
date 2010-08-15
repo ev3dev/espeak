@@ -34,7 +34,7 @@
 
 
 static const char *help_text =
-"\nspeak [options] [\"<words>\"]\n\n"
+"\nespeak [options] [\"<words>\"]\n\n"
 "-f <text file>   Text file to speak\n"
 "--stdin    Read text input from stdin instead of a file\n\n"
 "If neither -f nor --stdin, then <words> are spoken, or if none then text\n"
@@ -43,42 +43,44 @@ static const char *help_text =
 "\t   Amplitude, 0 to 200, default is 100\n"
 "-g <integer>\n"
 "\t   Word gap. Pause between words, units of 10mS at the default speed\n"
+"-k <integer>\n"
+"\t   Indicate capital letters with: 1=sound, 2=the word \"capitals\",\n"
+"\t   higher values indicate a pitch increase (try -k20).\n"
 "-l <integer>\n"
 "\t   Line length. If not zero (which is the default), consider\n"
 "\t   lines less than this length as end-of-clause\n"
 "-p <integer>\n"
 "\t   Pitch adjustment, 0 to 99, default is 50\n"
 "-s <integer>\n"
-"\t   Speed in words per minute, 80 to 390, default is 170\n"
+"\t   Speed in words per minute, 80 to 450, default is 175\n"
 "-v <voice name>\n"
 "\t   Use voice file of this name from espeak-data/voices\n"
 "-w <wave file name>\n"
-"\t   Write output to this WAV file, rather than speaking it directly\n"
+"\t   Write speech to this WAV file, rather than speaking it directly\n"
 "-b\t   Input text encoding, 1=UTF8, 2=8 bit, 4=16 bit \n"
 "-m\t   Interpret SSML markup, and ignore other < > tags\n"
 "-q\t   Quiet, don't produce any speech (may be useful with -x)\n"
 "-x\t   Write phoneme mnemonics to stdout\n"
 "-X\t   Write phonemes mnemonics and translation trace to stdout\n"
 "-z\t   No final sentence pause at the end of the text\n"
-"--stdout   Write speech output to stdout\n"
 "--compile=<voice name>\n"
-"\t   Compile the pronunciation rules and dictionary in the current\n"
+"\t   Compile pronunciation rules and dictionary from the current\n"
 "\t   directory. <voice name> specifies the language\n"
+"--ipa      Write phonemes to stdout using International Phonetic Alphabet\n"
 "--path=\"<path>\"\n"
 "\t   Specifies the directory containing the espeak-data directory\n"
+"--pho      Write mbrola phoneme data (.pho) to stdout or to the file in --phonout\n"
 "--phonout=\"<filename>\"\n"
-"\t   Write output from -x -X commands, and mbrola phoneme data, to this file\n"
+"\t   Write phoneme output from -x -X --ipa and --pho to this file\n"
 "--punct=\"<characters>\"\n"
 "\t   Speak the names of punctuation characters during speaking.  If\n"
 "\t   =<characters> is omitted, all punctuation is spoken.\n"
 "--split=\"<minutes>\"\n"
 "\t   Starts a new WAV file every <minutes>.  Used with -w\n"
+"--stdout   Write speech output to stdout\n"
 "--voices=<language>\n"
 "\t   List the available voices for the specified language.\n"
-"\t   If <language> is omitted, then list all voices.\n"
-"-k <integer>\n"
-"\t   Indicate capital letters with: 1=sound, 2=the word \"capitals\",\n"
-"\t   higher values indicate a pitch increase (try -k20).\n";
+"\t   If <language> is omitted, then list all voices.\n";
 
 
 
@@ -87,6 +89,7 @@ int samplerate;
 int quiet = 0;
 unsigned int samples_total = 0;
 unsigned int samples_split = 0;
+unsigned int samples_split_seconds = 0;
 unsigned int wavefile_count = 0;
 
 FILE *f_wavfile = NULL;
@@ -218,15 +221,18 @@ int OpenWavFile(char *path, int rate)
 	else
 		f_wavfile = fopen(path,"wb");
 
-	if(f_wavfile != NULL)
+	if(f_wavfile == NULL)
 	{
-		fwrite(wave_hdr,1,24,f_wavfile);
-		Write4Bytes(f_wavfile,rate);
-		Write4Bytes(f_wavfile,rate * 2);
-		fwrite(&wave_hdr[32],1,12,f_wavfile);
-		return(0);
+		fprintf(stderr,"Can't write to: '%s'\n",path);
+		return(1);
 	}
-	return(1);
+
+
+	fwrite(wave_hdr,1,24,f_wavfile);
+	Write4Bytes(f_wavfile,rate);
+	Write4Bytes(f_wavfile,rate * 2);
+	fwrite(&wave_hdr[32],1,12,f_wavfile);
+	return(0);
 }   //  end of OpenWavFile
 
 
@@ -266,25 +272,40 @@ static int SynthCallback(short *wav, int numsamples, espeak_EVENT *events)
 		return(0);
 	}
 
-	if(samples_split > 0)
+	while(events->type != 0)
 	{
-		// start a new WAV file when this limit is reached, at the next sentence boundary
-		while(events->type != 0)
+		if(events->type == espeakEVENT_SAMPLERATE)
 		{
-			if((events->type == espeakEVENT_SENTENCE) && (samples_total > samples_split))
+			samplerate = events->id.number;
+			samples_split = samples_split_seconds * samplerate;
+		}
+		else
+		if(events->type == espeakEVENT_SENTENCE)
+		{
+			// start a new WAV file when the limit is reached, at this sentence boundary
+			if((samples_split > 0) && (samples_total > samples_split))
 			{
 				CloseWavFile();
 				samples_total = 0;
+				wavefile_count++;
 			}
-			events++;
 		}
+		events++;
 	}
 
 	if(f_wavfile == NULL)
 	{
-		sprintf(fname,"%s_%.2d%s",wavefile,++wavefile_count,filetype);
-		if(OpenWavFile(fname, samplerate) != 0)
-			return(1);
+		if(samples_split > 0)
+		{
+			sprintf(fname,"%s_%.2d%s",wavefile,wavefile_count+1,filetype);
+			if(OpenWavFile(fname, samplerate) != 0)
+				return(1);
+		}
+		else
+		{
+			if(OpenWavFile(wavefile, samplerate) != 0)
+				return(1);
+		}
 	}
 
 	if(numsamples > 0)
@@ -332,7 +353,9 @@ int main (int argc, char **argv)
 		{"stdout",  no_argument,       0, 0x105},
 		{"split",   optional_argument, 0, 0x106},
 		{"path",    required_argument, 0, 0x107},
-		{"phonout", required_argument, 0, 0x108}, 
+		{"phonout", required_argument, 0, 0x108},
+		{"pho",     no_argument,       0, 0x109},
+		{"ipa",     no_argument,       0, 0x10a},
 		{0, 0, 0, 0}
 		};
 
@@ -360,7 +383,8 @@ int main (int argc, char **argv)
 	int wordgap = -1;
 	int option_capitals = -1;
 	int option_punctuation = -1;
-	int option_phonemes = -1;
+	int option_phonemes = 0;
+	int option_mbrola_phonemes = 0;
 	int option_linelength = 0;
 	int option_waveout = 0;
 
@@ -550,9 +574,9 @@ int main (int argc, char **argv)
 
 		case 0x106:   // -- split
 			if(optarg2 == NULL)
-				samples_split = 30;  // default 30 minutes
+				samples_split_seconds = 30 * 60;  // default 30 minutes
 			else
-				samples_split = atoi(optarg2);
+				samples_split_seconds = atoi(optarg2) * 60;
 			break;
 
 		case 0x107:  // --path
@@ -566,6 +590,14 @@ int main (int argc, char **argv)
 			}
 			break;
 
+		case 0x109:  // --pho
+			option_mbrola_phonemes = 16;
+			break;
+
+		case 0x10a:  // --ipa
+			option_phonemes = 3;
+			break;
+
 		default:
 			exit(0);
 		}
@@ -576,7 +608,7 @@ int main (int argc, char **argv)
 	{
 		// writing to a file (or no output), we can use synchronous mode
 		samplerate = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,0,data_path,0);
-		samples_split = (samplerate * samples_split) * 60;
+		samples_split = samplerate * samples_split_seconds;
 
 		espeak_SetSynthCallback(SynthCallback);
 		if(samples_split)
@@ -588,12 +620,6 @@ int main (int argc, char **argv)
 				strcpy(filetype,extn);
 				*extn = 0;
 			}
-		}
-		else
-		if(option_waveout)
-		{
-			if(OpenWavFile(wavefile,samplerate) != 0)
-				exit(4);
 		}
 	}
 	else
@@ -641,7 +667,7 @@ int main (int argc, char **argv)
 		espeak_SetParameter(espeakLINELENGTH,option_linelength,0);
 	if(option_punctuation == 2)
 		espeak_SetPunctuationList(option_punctlist);
-	espeak_SetPhonemeTrace(option_phonemes,f_phonemes_out);
+	espeak_SetPhonemeTrace(option_phonemes | option_mbrola_phonemes,f_phonemes_out);
 
 	if(filename[0]==0)
 	{

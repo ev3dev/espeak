@@ -75,42 +75,44 @@ static const char *help_text =
 "\t   Amplitude, 0 to 200, default is 100\n"
 "-g <integer>\n"
 "\t   Word gap. Pause between words, units of 10mS at the default speed\n"
+"-k <integer>\n"
+"\t   Indicate capital letters with: 1=sound, 2=the word \"capitals\",\n"
+"\t   higher values indicate a pitch increase (try -k20).\n"
 "-l <integer>\n"
 "\t   Line length. If not zero (which is the default), consider\n"
 "\t   lines less than this length as end-of-clause\n"
 "-p <integer>\n"
 "\t   Pitch adjustment, 0 to 99, default is 50\n"
 "-s <integer>\n"
-"\t   Speed in words per minute 80 to 390, default is 170\n"
+"\t   Speed in words per minute, 80 to 450, default is 175\n"
 "-v <voice name>\n"
 "\t   Use voice file of this name from espeak-data/voices\n"
 "-w <wave file name>\n"
-"\t   Write output to this WAV file, rather than speaking it directly\n"
+"\t   Write speech to this WAV file, rather than speaking it directly\n"
 "-b\t   Input text encoding, 1=UTF8, 2=8 bit, 4=16 bit \n"
 "-m\t   Interpret SSML markup, and ignore other < > tags\n"
 "-q\t   Quiet, don't produce any speech (may be useful with -x)\n"
 "-x\t   Write phoneme mnemonics to stdout\n"
 "-X\t   Write phonemes mnemonics and translation trace to stdout\n"
 "-z\t   No final sentence pause at the end of the text\n"
-"--stdout   Write speech output to stdout\n"
 "--compile=<voice name>\n"
-"\t   Compile the pronunciation rules and dictionary in the current\n"
+"\t   Compile pronunciation rules and dictionary from the current\n"
 "\t   directory. <voice name> specifies the language\n"
+"--ipa      Write phonemes to stdout using International Phonetic Alphabet\n"
 "--path=\"<path>\"\n"
 "\t   Specifies the directory containing the espeak-data directory\n"
+"--pho      Write mbrola phoneme data (.pho) to stdout or to the file in --phonout\n"
 "--phonout=\"<filename>\"\n"
-"\t   Write output from -x -X commands, and mbrola phoneme data, to this file\n"
+"\t   Write phoneme output from -x -X --ipa and --pho to this file\n"
 "--punct=\"<characters>\"\n"
 "\t   Speak the names of punctuation characters during speaking.  If\n"
 "\t   =<characters> is omitted, all punctuation is spoken.\n"
 "--split=\"<minutes>\"\n"
 "\t   Starts a new WAV file every <minutes>.  Used with -w\n"
+"--stdout   Write speech output to stdout\n"
 "--voices=<language>\n"
 "\t   List the available voices for the specified language.\n"
-"\t   If <language> is omitted, then list all voices.\n"
-"-k <integer>\n"
-"\t   Indicate capital letters with: 1=sound, 2=the word \"capitals\",\n"
-"\t   higher values indicate a pitch increase (try -k20).\n";
+"\t   If <language> is omitted, then list all voices.\n";
 
 
 void DisplayVoices(FILE *f_out, char *language);
@@ -214,7 +216,9 @@ void DisplayVoices(FILE *f_out, char *language)
 }   //  end of DisplayVoices
 
 
-
+void WVoiceChanged(voice_t *wvoice)
+{
+}
 
 static int OpenWaveFile(const char *path, int rate)
 //=================================================
@@ -472,7 +476,9 @@ int main (int argc, char **argv)
 		{"stdout",  no_argument,       0, 0x105},
 		{"split",   optional_argument, 0, 0x106},
 		{"path",    required_argument, 0, 0x107},
-		{"phonout", required_argument, 0, 0x108}, 
+		{"phonout", required_argument, 0, 0x108},
+		{"pho",     no_argument,       0, 0x109},
+		{"ipa",     no_argument,       0, 0x10a},
 		{0, 0, 0, 0}
 		};
 
@@ -485,7 +491,7 @@ int main (int argc, char **argv)
 	int option_index = 0;
 	int c;
 	int value;
-	int speed=170;
+	int speed=175;
 	int ix;
 	char *optarg2;
 	int amp = 100;     // default
@@ -700,6 +706,14 @@ int main (int argc, char **argv)
 				fprintf(stderr,"Can't write to: %s\n",optarg2);
 				f_trans = stderr;
 			}
+			break;
+
+		case 0x109:  // --pho
+			option_mbrola_phonemes = 16;
+			break;
+
+		case 0x10a:  // --ipa
+			option_phonemes = 3;
 			break;
 
 		default:
