@@ -1,9 +1,13 @@
-espeak (1.43.03-3) UNRELEASED; urgency=low
+espeak (1.44.02-1) UNRELEASED; urgency=low
 
+  [ Luke Yelavich ]
   * debian/copyright: update
   * Update manpage to add command-line flags and fix some errors
 
- -- Luke Yelavich <themuso@ubuntu.com>  Fri, 06 Aug 2010 10:59:34 +1000
+  [ Mario Lang ]
+  * New upstream version
+
+ -- Mario Lang <mlang@debian.org>  Sun, 15 Aug 2010 18:44:24 +0200
 
 espeak (1.43.03-2) unstable; urgency=medium
 

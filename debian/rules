@@ -6,7 +6,7 @@
 
 soname=libespeak.so.1
 #version=$(shell dpkg-parsechangelog|sed -n -e 's/^Version: //p'|cut -d- -f1)
-version=1.43
+version=1.44
 
 CFLAGS = -Wall -g
 
