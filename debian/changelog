@@ -15,6 +15,7 @@ espeak (1.44.02-1) UNRELEASED; urgency=low
   * Remove empty postinst and postrm.
   * Add ${misc:Depends} to espeak-data-udeb, update the description to mention
     d-i.
+  * Use Package-Type instead of XC-Package-Type.
 
  -- Mario Lang <mlang@debian.org>  Sun, 15 Aug 2010 18:44:24 +0200
 
