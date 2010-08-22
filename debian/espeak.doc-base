@@ -2,7 +2,7 @@ Document: espeak-documentation
 Title: eSpeak text to speech
 Author: (email) jonsd at users dot sourceforge.net
 Abstract: The espeak program and library allow to convert a text from a
-  natural language to sounds or to a wave file.
+ natural language to sounds or to a wave file.
 Section: Sound
 
 Format: HTML
