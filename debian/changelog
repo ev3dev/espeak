@@ -9,6 +9,7 @@ espeak (1.44.02-1) UNRELEASED; urgency=low
 
   [ Nicolas Boulenguez ]
   * Made the html docs a subdir.
+  * Referenced it in doc-base.
 
  -- Mario Lang <mlang@debian.org>  Sun, 15 Aug 2010 18:44:24 +0200
 
