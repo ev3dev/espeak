@@ -38,7 +38,9 @@ Depends: ${misc:Depends}
 Recommends: espeak (= ${binary:Version})
 Description: A multi-lingual software speech synthesizer: speech data files
  eSpeak is a software speech synthesizer for English, and some other
- languages. This package contains necessary synthesizer data files needed
+ languages.
+ .
+ This package contains necessary synthesizer data files needed
  for the espeak program, and the shared library.
 
 Package: espeak-data-udeb
@@ -47,7 +49,9 @@ Architecture: any
 XC-Package-Type: udeb
 Description: A multi-lingual software speech synthesizer: speech data files
  eSpeak is a software speech synthesizer for English, and some other
- languages. This package contains necessary synthesizer data files needed
+ languages.
+ .
+ This package contains necessary synthesizer data files needed
  for the espeak program, and the shared library.
 
 Package: libespeak1
@@ -56,7 +60,9 @@ Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}, espeak-data (= ${binary:Version})
 Description: A multi-lingual software speech synthesizer: shared library
  eSpeak is a software speech synthesizer for English, and some other
- languages. This package contains the espeak program in a shared library.
+ languages.
+ .
+ This package contains the espeak program in a shared library.
 
 Package: libespeak-dev
 Architecture: any
@@ -64,5 +70,7 @@ Section: libdevel
 Depends: ${misc:Depends}, libespeak1 (= ${binary:Version})
 Description: A multi-lingual software speech synthesizer: development files
  eSpeak is a software speech synthesizer for English, and some other
- languages. This package contains the eSpeak development files needed to
+ languages.
+ .
+ This package contains the eSpeak development files needed to
  build against the espeak shared library.
