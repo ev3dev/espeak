@@ -46,13 +46,15 @@ Description: A multi-lingual software speech synthesizer: speech data files
 Package: espeak-data-udeb
 Section: debian-installer
 Architecture: any
+Depends: ${misc:Depends}
 XC-Package-Type: udeb
-Description: A multi-lingual software speech synthesizer: speech data files
+Description: A multi-lingual software speech synthesizer: data for d-i
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
  This package contains necessary synthesizer data files needed
- for the espeak program, and the shared library.
+ for the espeak program, and the shared library, packed for the Debian
+ Installer.
 
 Package: libespeak1
 Architecture: any
