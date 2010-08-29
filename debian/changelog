@@ -17,6 +17,9 @@ espeak (1.44.02-1) UNRELEASED; urgency=low
     d-i.
   * Use Package-Type instead of XC-Package-Type.
 
+  [ Samuel Thibault ]
+  * debian/copyright: Fix Jonathan's mail.
+
  -- Mario Lang <mlang@debian.org>  Sun, 15 Aug 2010 18:44:24 +0200
 
 espeak (1.43.03-2) unstable; urgency=medium
