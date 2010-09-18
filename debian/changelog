@@ -1,11 +1,11 @@
-espeak (1.44.02-1) UNRELEASED; urgency=low
+espeak (1.44.05-1) UNRELEASED; urgency=low
 
   [ Luke Yelavich ]
   * debian/copyright: update
   * Update manpage to add command-line flags and fix some errors
 
   [ Mario Lang ]
-  * New upstream version
+  * New upstream version (Closes: Bug#594872)
 
   [ Nicolas Boulenguez ]
   * Made the html docs a subdir.
