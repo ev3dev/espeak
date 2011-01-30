@@ -19,8 +19,10 @@ espeak (1.44.05-1) UNRELEASED; urgency=low
 
   [ Samuel Thibault ]
   * debian/copyright: Fix Jonathan's mail.
+  * debian/control: Add espeak-dbg package.
+  * debian/rules: Put debugging symbols into espeak-dbg (Closes: Bug#608984).
 
- -- Mario Lang <mlang@debian.org>  Sun, 15 Aug 2010 18:44:24 +0200
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 30 Jan 2011 20:41:59 +0100
 
 espeak (1.43.03-2) unstable; urgency=medium
 
