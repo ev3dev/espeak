@@ -1,4 +1,4 @@
-espeak (1.44.05-1) UNRELEASED; urgency=low
+espeak (1.44.05-1) unstable; urgency=low
 
   [ Luke Yelavich ]
   * debian/copyright: update
