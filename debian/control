@@ -79,7 +79,8 @@ Description: A multi-lingual software speech synthesizer: development files
 
 Package: espeak-dbg
 Architecture: any
-Section: libs
+Section: debug
+Priority: extra
 Depends: ${shlibs:Depends}, ${misc:Depends}, espeak (= ${binary:Version}), libespeak1 (= ${binary:Version})
 Description: A multi-lingual software speech synthesizer: shared library
  eSpeak is a software speech synthesizer for English, and some other
