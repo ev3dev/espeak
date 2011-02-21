@@ -2,7 +2,7 @@
 .\" First parameter, NAME, should be all caps
 .\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
 .\" other parameters are allowed: see man(7), man(1)
-.TH ESPEAK 1 "July 25, 2007"
+.TH ESPEAK 1 "August 6, 2010"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -16,7 +16,7 @@
 .\" .sp <n>    insert n+1 empty lines
 .\" for manpage-specific macros, see man(7)
 .SH NAME
-espeak \- A multi-lingual software speech synthesizer.
+espeak \- A multi\-lingual software speech synthesizer.
 .SH SYNOPSIS
 .B espeak
 .RI [ options ]\ [ "<words>" ]
@@ -34,17 +34,17 @@ Text file to speak
 .B \-\-stdin
 Read text input from stdin instead of a file
 .TP
-If neither -f nor --stdin, <words> are spoken, or if none then text is spoken from stdin, each line separately.
+If neither \-f nor \-\-stdin, <words> are spoken, or if none then text is spoken from stdin, each line separately.
 .TP
 .B \-q
-Quiet, don't produce any speech (may be useful with -x)
+Quiet, don't produce any speech (may be useful with \-x)
 .TP
 .B \-a <integer>
 Amplitude, 0 to 20, default is 10
 .TP
 .B \-l <integer>
 Line length. If not zero (which is the default), consider
-lines less than this length as and-of-clause
+lines less than this length as and\-of\-clause
 .TP
 .B \-p <integer>
 Pitch adjustment, 0 to 99, default is 50
@@ -53,7 +53,10 @@ Pitch adjustment, 0 to 99, default is 50
 Speed in words per minute, default is 160
 .TP
 .B \-v <voice name>
-Use voice file of this name from espeak-data/voices
+Use voice file of this name from espeak\-data/voices
+.TP
+.B -b
+Input text encoding, 1=UTF8, 2=8 bit, 4=16 bit
 .TP
 .B -b
 Input text encoding, 1=UTF8, 2=8 bit, 4=16 bit
@@ -86,7 +89,7 @@ Write output from -x -X commands and mbrola phoneme data to this file
 Speak the names of punctuation characters during speaking. If =<characters> is omitted, all punctuation is spoken.
 .TP
 .B \-k <integer>
-Indicate capital letters with: 1=sound, 2=the word "capitals", higher values = a pitch increase (try -k20).
+Indicate capital letters with: 1=sound, 2=the word "capitals", higher values = a pitch increase (try \-k20).
 .TP
 .B \-\-voices[=<language code>]
 Lists the available voices. If =<language code> is present then only those voices which are suitable for that language are listed.

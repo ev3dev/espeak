@@ -28,7 +28,6 @@ _9X       kilEntsvEn
 _0C       sa:z
 
 _0M1      EzER2
-_1M1      EzER2
 _2M1      ke:tEzER2
 _0M2      millio:
 _1M2      EJmillio:
@@ -82,7 +81,7 @@ _30o	hAR2_mintsAdik
 _60o	hAtvAnAdik
 _80o	n^oltsvAnAdik
 _0Co	sa:zAdik
-_2Co	ke:tsa:zAdik
+_2Co	ke:t|sa:zAdik
 _0M1o	EzR2Edik
 _1M1o	EzR2Edik
 _2M1o	ke:tEzR2Edik
@@ -112,7 +111,7 @@ _30q	hAR2_mintsAdikA
 
 _#-a	A	$alt2
 _#-i	Ei	$alt2
-_#-e	E	$alt2
+_#-e	E
 _#-án	a:n	//Need remove the $alt2 tag with this line, because some 
 //time with the book the sentences beginning with this form, and need
 //spokening ordinal number alwais. For example: In 20th, the rain is raining.
@@ -129,21 +128,36 @@ _#-től	e:tY:l	$alt2
 _#-tól	a:to:l	$alt2
 _#-ig	e:ig	$alt2 //special date ordinal numbers for example elsejéig, negyedikéig etc.
 _#-éről	e:R2Y:l	
-_#-áról	a:R2o:l	$alt2
+_#-áról	a:R2o:l
 
-_#-ától	a:to:l	$alt2
+_#-ától	a:to:l
 _#-ről	e:R2Y:l	$alt2
 _#-ról	a:R2o:l	$alt2
-_#-ével	e:vEl	$alt2
-_#-ával	a:vAl	$alt2
-_#-éig	e:ig	$alt2
-_#-áig	a:ig	$alt2
+_#-ével	e:vEl
+_#-ával	a:vAl
+_#-éig	e:ig
+_#-áig	a:ig
 _#-étől	e:tY:l	$alt2
 _#-ét	e:t	$alt2
 _#-át	a:t	$alt2
 _#-ének	e:nEk
 _#-ának	a:nAk
-
+_#-vel	e:vEl	$alt2
+_#-val	a:vAl	$alt2
+_#-ánál	a:na:l	$alt2
+_#-énél	e:ne:l	$alt2
+_#-ik || //This is not a mistake. This is a special ordinal number suffix, with not need insert replace word suffix. For example:
+//If a string containing the 17-ik string, need spokening tizenhetedik phoneme. If the suffix rule not containing the || rule but containing another
+//replace word, the spokened suffix is mistaked, for example tizenhetedikedik if this rule containing the Edik phoneme, not || phoneme.
+_#-iki	i
+_#-ike	E
+_#-ikei	Ei
+_#-ika	A
+_#-ikai	Ai
+_#-éhez	e:hEz
+_#-ához	a:hoz
+_#-ikének	e:nEk
+_#-ikának	a:nAk
 (1-e)	elseje		$text $alt2
 (1-én)	elsején 	$text $alt2
 (1-jén)	elsején 	$text $alt2
@@ -155,8 +169,8 @@ _#-ának	a:nAk
 (1-ig)	elsejéig	$text $alt2
 (1-éről) elsejéről	$text $alt2
 (1-ről) elsejéről	$text $alt2
-(1-ével)	elsejével	$text $alt2
-(1-éig) elsejéig	$text $alt2
+(1-ével)	elsejével	$text
+(1-éig) elsejéig	$text
 (1-étől) elsejétől	$text $alt2
 (1-ét) elsejét	$text $alt2
 (1-je)	elseje	$text $alt2
@@ -166,8 +180,17 @@ _#-ának	a:nAk
 (1-jétől)	elsejétől	$text $alt2
 (1-jéig)	elsejéig	$text $alt2
 (1-ének)	elsejének	$text $alt2
+(1-vel) elsejével	$text $alt2
+(1-jénél) elsejénél	$text $alt2
+(1-énél) elsejénél	$text $alt2
+(1-iki)	elsejei	$text $alt2
+(1-ike)	elseje	$text $alt2
+(1-ikei) elsejei	$text $alt2
+(1-éhez)	elsejéhez	$text $alt2
 (2-i)	másodikai	$text $alt2
 (2-ig)	másodikáig	$text $alt2
+(2-étől)	másodikától	$text $alt2 //this is not mistake, don't change!
+(2-től)	másodikától	$text $alt2 //this is not a mistake, don't change!
 (3-i)	hAR2_mAdikAi	$alt2
 (3-ig)	harmadikáig	$text $alt2
 (6-i)	hAtodikAi	$alt2
@@ -203,23 +226,47 @@ _#-ának	a:nAk
 (00-s) nul:Anul:a:S
 (0-át) nul:a:t
 (0-ától) nul:a:to:l
+(0-at) nul:a:t
+(0-an) nul:a:n
+(0-ában) nul:a:bAn
+(0-ába) nul:a:bA
+(0-áson) nul:a:Son
+(0-tól)	nul:a:to:l
+(00-tól)	nul:Anul:a:to:l
+(0-n) nul:a:n
+(00-n) nul:Anul:a:n
+(0-ról)	nul:a:R2o:l
 (1-gyet) EJ:Et
 (1-gyes) EJ:ES
 (2-őt) kEt:Y:t
-
+(2-őn) kEt:Y:n
+(2-n) kEt:Y:n
+(2-m) kEt:Y:m
+(2-el)	kEt:Y:vEl
 // entries with a single digit such as (2-i) also apply to 22, 32, etc, unless $only
 (30-cal) hAR2mints:Al
 (3-al) ha:R2om:Al
-
+(3-on)	ha:R2mon
+(3-adik) hAR2mAdik //special exception
+(3-adikat) hAR2mAdikAt	//special exception
+(3-adikon)	hAR2mAdikon	//special exception
+(3-adikkal)	hAR2mAdik:Al	//special exception
+(3-t) ha:R2mAt
+(3-mas) ha:R2mAS
 //4 number suffixes
 (4-el) ne:J:El //Nneed J: phoneme, not J phoneme contains one suffix) 
 (4-gyel) ne:J:El //Need J: phoneme, not J phoneme
 (4-t) ne:JEt //special number suffix exception
+(4-edik)	nEJEdik	//special exception
+(4-ediket)	nEJEdikEt	//special exception
+(4-ediken)	nEJEdikEn	//special exception
+(4-edikkel)	nEJEdik:El	//special exception
 (5-tel) Yt:El
 (5-el) Yt:El
 (5-től) Yt:Y:l
 (5-től) YtYdike:tY:l	$alt2
 (5-t) YtYt
+(5-ször)	Yts:YR2
 (6-al) hAt:Al
 (6-tal) hAt:Al
 (6-tól) hAt:o:l
@@ -229,15 +276,17 @@ _#-ának	a:nAk
 (7-től)	hEtEdike:tY:l	$alt2
 (7-tel) he:t:El
 (7-el) he:t:El
+(7-sekre) hEtESEkR2E
+(7-sel) hEtES:El
 (8-cal) n^olts:Al
 (8-al) n^olts:Al
 (9-el) kilEnts:El
+(9-cel) kilEnts:El
 _10e	tiz
 _20e	hus
 (10-szer) ti:s:ER2
 (10-szeres) ti:s:ER2ES
-
-
+(10-t) tizEt
 
 
 //special number exceptions
@@ -251,6 +300,17 @@ _20e	hus
 (80-al) n^oltsvAn:Al
 (90-el) kilEntsvEn:El
 
+//Special roman number suffixes and exceptions
+(XVI-ig)	tizEnhAtodikig //Special roman number suffix exception
+(II-el) kEt:Y:vEl
+(III-al) ha:R2om:Al
+(IV-el)	ne:J:El
+(5-el)	Yt:El	//this exception not working, Espeak always spokening YtEl phoneme, but Yt:El phoneme is right
+(VI-al)	hAt:Al
+(VII-el)	he:t:El
+(VIII-al)	n^olts:Al
+(IX-el)	kilEnts:El
+(CD-ellenőrzést)	tse:de:El:EnY:R2ze:St //this is not a mistake, default Espeak spokening roman number before the ellenőrzés word
 
 // These words mean that a dot after number, immediately preceding, does not mean an ordinal number
 január		$alt
@@ -304,6 +364,11 @@ tavaszi	$alt
 nyári	$alt
 őszi	$alt
 téli	$alt
+végén	$alt
+elején	$alt
+folyamán	$alt
+úton	$alt
+út	$alt
 
 // accent names
 _lig	ligAtu:R2A
@@ -359,9 +424,9 @@ LST	ElESte:	$allcaps
 BAR	bAR2	$allcaps
 //SS	EsEs	$allcaps
 
-a.m	An^n^i||m'int  $dot
+(a . m .)	An^n^i||m'int
 ún	u:JnEvEzEt:	$hasdot
-dr	doktoR2  $dot
+dr	doktoR2  $hasdot
 mr	mistER2 $hasdot //in hungarian we not use, but lot of books contains this word.
 mrs	misis	$hasdot //In hungarian we not use, but lot of book contains this word.
 miss	mis: $hasdot
@@ -371,7 +436,7 @@ MB	mEgAba:jt	$allcaps
 OK	ok	$allcaps
 mvgyosz Emve:Je:oEs
 OTP o:te:pe:	$allcaps
-id	idY:SEb:  $hasdot
+id	idY:SEb:  $hasdot $only
 ill	illEtvE  $hasdot
 ifj	ifjAb:  $hasdot
 mta	$abbrev
@@ -380,7 +445,7 @@ stb	SAtYb:i  $hasdot
 u.n	u:JnEvEzEt:   $hasdot
 ú.n	u:JnEvEzEt:   $hasdot
 vö	v'EZd||_'Yss2E
-
+(u . i .) $abbrew
 
 
 
@@ -537,7 +602,7 @@ vel     $unstressend
 
 ellen	$unstressend	// against
 //elé	$u	// before
-óta	$alt $alt3	// since. Not a bug both $alt $alt3 attribute,
+óta	$unstressend $alt $alt3	// since. Not a bug both $alt $alt3 attribute,
 //because if only a year is present, need spokening normal number, not
 //ordinal number. For example:
 //2004. óta meaning since 2004 and need spokening normal number.
@@ -807,7 +872,7 @@ látszik	$unstressend
 látszott	$unstressend
 látszanak	$unstressend
 látszotok	$unstressend
-körül	$unstressend
+körül	$unstressend $alt $alt3
 dőlt	$unstressend
 vér	$unstressend
 sót	$unstressend
@@ -938,7 +1003,193 @@ brit	$unstressend
 természetes	$u $1
 front	$unstressend
 szerezni	$unstressend
-
+képekben	$alt3
+vélte	$unstressend
+vélték	$unstressend
+lép	$unstressend
+pénzt	$unstressend
+pénz	$unstressend
+nép	$unstressend
+lennék	$unstressend
+lennél	$unstressend
+lennénk	$unstressend
+lennétek	$unstressend
+hitt	$unstressend
+fő	$unstressend
+dúl	$unstressend
+dúlt	$unstressend
+kapott	$unstressend
+nyakú	$unstressend
+rúgást	$unstressend
+kapni	$unstressend
+kulcs	$unstressend
+nyit	$unstressend
+lő	$unstressend
+támad	$unstressend
+halt	$unstressend
+ész	$unstressend
+kapta	$unstressend
+kaptak	$unstressend
+kék	$unstressend
+kelt	$unstressend
+kárt	$unstressend
+gróf	$unstressend
+grófot	$unstressend
+lakik	$unstressend
+laknak	$unstressend
+laktak	$unstressend
+kapsz	$unstressend
+tudta	$unstressend
+kapnak	$unstressend
+tért	$unstressend
+törtek	$unstressend
+tört	$unstressend
+vész	$unstressend
+park	$unstressend
+tartja	$unstressend
+válik	$unstressend
+rajta	$unstressend
+merült	$unstressend
+zuhant	$unstressend
+jöttek	$unstressend
+leltem	$unstressend
+múlva	$unstressend
+várta	$unstressend
+ház	$unstressend
+állnak	$unstressend
+idején	$unstressend
+néznek	$unstressend
+sért	$unstressend
+adózású	$unstressend
+kötelezni	$unstressend
+lehetőség	$unstressend
+mondtuk	$unstressend
+kellene	$unstressend
+szerte	$unstressend
+hozta	$unstressend
+kezdte	$unstressend
+lökte	$unstressend
+benne	$unstressend
+fenn	$unstressend
+elő	$unstressend
+javasolták	$unstressend
+kezdjen	$unstressend
+látta	$unstressend
+látták	$unstressend
+nyomát	$unstressend
+került	$unstressend
+várták	$unstressend
+közbe	$unstressend
+látott	$unstressend
+tartanak	$unstressend
+ejt	$unstressend
+önnek	$unstressend
+álljon	$unstressend
+szálljon	$unstressend
+üljön	$unstressend
+jónak	$unstressend
+hisz	$unstressend
+elől	$unstressend
+vágy	$unstressend
+vitték	$unstressend
+küldött	$unstressend
+mentén	$unstressend
+venni	$unstressend
+múlik	$unstressend
+indít	$unstressend
+nála	$unstressend
+vizsgálata	$unstressend
+vizsgálatot	$unstressend
+indítottak	$unstressend
+vizsgált	$unstressend
+javult	$unstressend
+része	$unstressend
+írni	$unstressend
+téren	$unstressend
+terén	$unstressend
+menni	$unstressend
+fogja	$unstressend
+teszik	$unstressend
+tömni	$unstressend
+nyel	$unstressend
+érzi	$unstressend
+annak	$unstressend
+dolog	$unstressend
+számít	$unstressend
+aránya	$unstressend
+helyzetük	$unstressend
+kifogásolták	$unstressend
+kifogásolta	$unstressend
+fogalmaz	$unstressend
+szóló	$unstressend
+gyártott	$unstressend
+írta	$unstressend
+rúgták	$unstressend
+esett	$unstressend
+marad	$unstressend
+tulajdonú	$unstressend
+KFT	$unstressend
+folytatja	$unstressend
+államokban	$unstressend
+című	$unstressend
+senkit	$unstressend
+abban	$unstressend
+tegyük	$unstressend
+szar	$unstressend
+gond	$unstressend
+megy	$unstressend
+ebből	$unstressend
+abból	$unstressend
+ebben	$unstressend
+mondom	$unstressend
+akar	$unstressend
+akarsz	$unstressend
+távra	$unstressend
+jog	$unstressend
+járunk	$unstressend
+szólni	$unstressend
+ró	$unstressend
+kérni	$unstressend
+építést	$unstressend
+adni	$unstressend
+részén	$unstressend
+érni	$unstressend
+lap	$unstressend
+írja	$unstressend
+írtak	$unstressend
+stressz	$unstressend
+nyújtózni	$unstressend
+éve	$unstressend
+tartott	$unstressend
+attól	$unstressend
+utast	$unstressend
+szint	$unstressend
+minőségű	$unstressend
+beszélt	$unstressend
+kerületben	$unstressend
+gáz	$unstressend
+épült	$unstressend
+építésű	$unstressend
+együttes	$unstressend
+távon	$unstressend
+híg	$unstressend
+szőr	$unstressend
+diagnosztizálható 	$unstressend
+működik	$unstressend
+hat	$unstressend
+mutatnak	$unstressend
+rés	$unstressend
+szélén	$unstressend
+lógott	$unstressend
+tűnő	$unstressend
+kötni	$unstressend
+lopni	$unstressend
+döntöttem	$unstressend
+szerzett	$unstressend
+érted	$unstressend
+járni	$unstressend
+döntöttek	$unstressend
+írt	$unstressend
 
 // word pairs
 
@@ -951,21 +1202,23 @@ szerezni	$unstressend
 
 vagyok    $u  // to be, present
 vagy      $u
-van       $unstressend
+van       $unstressend $alt3
+percről	$alt3
+percre	$alt3
 vagyunk   $unstressend
 vagytok   $unstressend
 vannak    $unstressend
 
 voltam    $u  // to be, past
 voltál    $u
-volt      $u $alt3
+volt      $unstressend $alt3
 voltunk   $u
 voltatok  $u
-voltak    $u
+voltak    $unstressend
 
 leszek    $u  // to be, future
 leszel    $u
-lesz      $u
+lesz      $u $alt3
 leszünk   $u
 lesztek   $u
 lesznek   $u
@@ -975,7 +1228,7 @@ kell      $unstressend  // should
 
 szabad    $u+  // can (allowed)
 
-fog       $u+  // going to
+fog       $unstressend  // going to
 fogok     $u+
 fogsz     $u+
 fogunk    $u+
@@ -1078,7 +1331,7 @@ _{	k'EzdY:kAptSoS	$max3
 _}	v'e:gkAptSoS	$max3
 _…	pontpontpont
 
-_•	fElSoR2ola:SjEl
+_•	liStAjEl
 _|	fyg:Y:lEgESvonAl
 _>	nAJob
 _<	kiSSEb
@@ -1122,13 +1375,14 @@ _″	duplA|ApostR2o:f
 ∞	vEgtElEn
 ≠	nEmEJEnlY:
 _ˇ	lEfEle:n^i:l
+_¡	AlSo:indEks
+
 
 // Main Exceptions List
 //=====================
 
 nato	na:to:
 (end-of line) u:jS,oR2
-
 
 
 $textmode
@@ -1147,6 +1401,8 @@ egyezség	eggyesség
 (cd-n) cédén
 (cd-d) cédéd
 (CD-d) cédéd
+CD-m) cédém
+(cd-m) cédém
 (db-os) darabos
 (db-ot) darabot
 (LST-k) elesték
@@ -1160,6 +1416,8 @@ egyezség	eggyesség
 //after word and don't disturb Orca working.
 (PC-n) pécén
 (USB-n) úesbén
+(usb-n) úesbén
+(usb-t) úesbét
 (USA-ból) usából
 (USA-nak) usának
 (DVD-k) dévédék
@@ -1168,10 +1426,11 @@ egyezség	eggyesség
 (dvd-n) dévédén
 (dvd-d) dévédéd
 (DVD-d) dévédéd
+(DVD-m) dévédét
+(dvd-m) dévédém
 (USA-éval) usáéval
 (ubuntu-n) ubuntun
 (hu-n) hun
 (USA-ban) usában
-
-
-
+(USA-ba) usába
+(pc-n) pécén

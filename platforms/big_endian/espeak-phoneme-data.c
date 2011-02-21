@@ -1,13 +1,17 @@
 
 
-
+// 14.09.10  Recognize long and short frames in phondata
+// 02.09.10  Fix: Q sections were omitted from the converted phondata
+// 13.08.10  jonsd: Added Q lines.  Use Address to set the displacement in phondata file.
 // 13.02.10  jonsd: Changed for eSpeak version 1.43
 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 
 #if defined(BYTE_ORDER) && BYTE_ORDER == BIG_ENDIAN
 #define IS_BIG_ENDIAN 1
@@ -55,7 +59,8 @@ typedef struct {
 
 
 // This is a new format for eSpeak 1.41
-typedef struct {  // 44 bytes
+#define FRFLAG_KLATT           0x01   // this frame includes extra data for Klatt synthesizer
+typedef struct {  // 64 bytes
 	short frflags;
 	short ffreq[7];
 	unsigned char length;
@@ -68,28 +73,29 @@ typedef struct {  // 44 bytes
 	unsigned char klattp2[5];   // continuation of klattp[],  Avp, Fric, FricBP, Turb
 	unsigned char klatt_ap[7];  // Klatt parallel amplitude
 	unsigned char klatt_bp[7];  // Klatt parallel bandwidth  /2
+	unsigned char spare;        // pad to multiple of 4 bytes
 } frame_t;   //  with extra Klatt parameters for parallel resonators
 
+typedef struct {  // 44 bytes
+	short frflags;
+	short ffreq[7];
+	unsigned char length;
+	unsigned char rms;
+	unsigned char fheight[8];
+	unsigned char fwidth[6];          // width/4  f0-5
+	unsigned char fright[3];          // width/4  f0-2
+	unsigned char bw[4];        // Klatt bandwidth BNZ /2, f1,f2,f3
+	unsigned char klattp[5];    // AV, FNZ, Tilt, Aspr, Skew
+} frame_t2;
 
-#ifdef deleted
-// This is the previous format for versions before 1.41
-typedef struct {
-    short frflags;
-    unsigned char length;
-    unsigned char rms;
-    short ffreq[9];
-    unsigned char fheight[9];
-    unsigned char fwidth[6];
-    unsigned char fright[6];
-} frame_t;
-#endif
+
 
 #define N_SEQ_FRAMES   25
 
 typedef struct {
    short length;
    unsigned char  n_frames;
-   unsigned char  flags;
+   unsigned char  sqflags;
    frame_t  frame[N_SEQ_FRAMES];
 } SPECT_SEQ;
 
@@ -100,6 +106,24 @@ void swap_phonindex (const char *infile, const char *outfile);
 void swap_phontab   (const char *infile, const char *outfile);
 
 void usage (const char *program_name);
+
+int xread;  // prevent compiler warning from fread()
+
+
+int GetFileLength(const char *filename)
+{//====================================
+	struct stat statbuf;
+	
+	if(stat(filename,&statbuf) != 0)
+		return(0);
+	
+	if((statbuf.st_mode & S_IFMT) == S_IFDIR)
+		//	if(S_ISDIR(statbuf.st_mode))
+		return(-2);  // a directory
+	
+	return(statbuf.st_size);
+}  // end of GetFileLength
+
 
 
 
@@ -144,6 +168,19 @@ int main (int argc, char *argv[])
     printf ("Host seems to be little-endian ..\n");
 #endif
 
+    sprintf (f1, "%s/phondata", indir);
+    sprintf (f2, "%s/temp_1", outdir);
+
+    printf ("Processing phondata ..\n");
+    swap_phondata (f1, f2, manifest);
+    if(GetFileLength(f1) != GetFileLength(f2))
+    {
+      fprintf(stderr, "Error: phondata length is different from the original\n");
+      exit(1);
+    }
+    sprintf (f1, "%s/phondata", outdir);
+    rename (f2, f1);
+
     sprintf (f1, "%s/phontab", indir);
     sprintf (f2, "%s/temp_1", outdir);
 
@@ -160,14 +197,6 @@ int main (int argc, char *argv[])
     sprintf (f1, "%s/phonindex", outdir);
     rename (f2, f1);
 
-    sprintf (f1, "%s/phondata", indir);
-    sprintf (f2, "%s/temp_1", outdir);
-
-    printf ("Processing phondata ..\n");
-    swap_phondata (f1, f2, manifest);
-    sprintf (f1, "%s/phondata", outdir);
-    rename (f2, f1);
-
     free (f1);
     free (f2);
 
@@ -181,6 +210,7 @@ void swap_phondata  (const char *infile, const char *outfile,
                 const char *manifest)
 {//==========================================================
     FILE *in, *mfest, *out;
+    int displ;
     char line[1024];
     unsigned char buf_4[4];
 
@@ -202,47 +232,59 @@ void swap_phondata  (const char *infile, const char *outfile,
         exit (1);
     }
 
-    fread (buf_4, 4, 1, in);
-    fwrite (buf_4, 4, 1, out);
+    xread = fread(buf_4, 4, 1, in);
+    fwrite(buf_4, 4, 1, out);
 
-    while (fgets (line, 1024, mfest)) {
+    while (fgets (line, sizeof(line), mfest))
+    {
+        if(!isupper(line[0])) continue;
+
+        sscanf(&line[2],"%x",&displ);
+        fseek(in, displ, SEEK_SET);
+
         if (line[0] == 'S') {
             SPECT_SEQ buf_spect;
-            size_t ix;
+            size_t frame_start;
             int n;
 
-            fread (&buf_spect.length, 2, 1, in);
-            fread (&buf_spect.n_frames, 1, 1, in);
-            fseek (in, -3, SEEK_CUR);
-
-            ix = (char *)(&buf_spect.frame[buf_spect.n_frames]) -
-                (char *)(&buf_spect);
-            ix = (ix+3) & 0xfffc;
-
-            fread (&buf_spect, ix, 1, in);
-
+            xread = fread(&buf_spect, 4, 1, in);
             buf_spect.length = (short) SWAP_USHORT (buf_spect.length);
+            fwrite(&buf_spect, 4, 1, out);
+
             for (n = 0; n < buf_spect.n_frames; n++) {
                 int k;
 
-                buf_spect.frame[n].frflags = (short)
-                    SWAP_USHORT (buf_spect.frame[n].frflags);
+                frame_start = ftell(in);
+                xread = fread(&buf_spect.frame[0], sizeof(frame_t), 1, in);
+
+                buf_spect.frame[0].frflags = (short)
+                    SWAP_USHORT (buf_spect.frame[0].frflags);
 
 // Changed for eSpeak 1.41
                 for (k = 0; k < 7; k++) {
-                    buf_spect.frame[n].ffreq[k] = (short)
-                        SWAP_USHORT (buf_spect.frame[n].ffreq[k]);
+                    buf_spect.frame[0].ffreq[k] = (short)
+                        SWAP_USHORT (buf_spect.frame[0].ffreq[k]);
                 }
-            }
 
-            fwrite (&buf_spect, ix, 1, out);
+                // is this a long or a short frame?
+                if(buf_spect.frame[0].frflags & FRFLAG_KLATT)
+                {
+                   fwrite(&buf_spect.frame[0], sizeof(frame_t), 1, out);
+                   fseek(in, frame_start + sizeof(frame_t), SEEK_SET);
+                }
+                else
+                {
+                   fwrite(&buf_spect.frame[0], sizeof(frame_t2), 1, out);
+                   fseek(in, frame_start + sizeof(frame_t2), SEEK_SET);
+                }
+           }
         }
         else if (line[0] == 'W') {
             long pos;
             int length;
             char *wave_data;
 
-            fread (buf_4, 4, 1, in);
+            xread = fread (buf_4, 4, 1, in);
             fwrite (buf_4, 4, 1, out);
 
             length = buf_4[1] * 256 + buf_4[0];
@@ -253,7 +295,7 @@ void swap_phondata  (const char *infile, const char *outfile,
                 exit (1);
             }
 
-            fread (wave_data, 1, length, in);
+            xread = fread (wave_data, 1, length, in);
             fwrite (wave_data, 1, length, out);
 
             pos = ftell (in);
@@ -273,8 +315,26 @@ void swap_phondata  (const char *infile, const char *outfile,
         else if (line[0] == 'E') {
             char env_buf[128];
 
-            fread (env_buf, 1, 128, in);
+            xread = fread (env_buf, 1, 128, in);
             fwrite (env_buf, 1, 128, out);
+        }
+        else if (line[0] == 'Q') {
+            unsigned char pb[4];
+            unsigned length;
+            char *buf;
+
+            xread = fread (pb, 1, 4, in);
+            fwrite (pb, 1, 4, out);
+
+            length = (pb[2] << 8) + pb[3]; // size in words
+            length *= 4;
+
+            buf = (char *) malloc (length);
+
+            xread = fread (buf, length, 1, in);
+            fwrite (buf, length, 1, out);
+
+            free (buf);
         }
     }
 
@@ -288,7 +348,7 @@ void swap_phonindex (const char *infile, const char *outfile)
 {//==========================================================
     FILE *in, *out;
     char buf_4[4];
-    unsigned int val;
+    unsigned short val;
 
     in = fopen (infile, "rb");
     if (in == NULL) {
@@ -302,7 +362,7 @@ void swap_phonindex (const char *infile, const char *outfile)
         exit (1);
     }
 
-    fread (buf_4, 4, 1, in);  // skip first 4 bytes
+    xread = fread (buf_4, 4, 1, in);  // skip first 4 bytes
     fwrite(buf_4, 4, 1, out);
 
     while (! feof (in)) {
@@ -324,7 +384,7 @@ void swap_phonindex (const char *infile, const char *outfile)
 void swap_phontab (const char *infile, const char *outfile)
 {//========================================================
     FILE *in, *out;
-    char buf_4[4];
+    char buf_8[8];
     int i, n_phoneme_tables;
 
     in = fopen (infile, "rb");
@@ -339,26 +399,26 @@ void swap_phontab (const char *infile, const char *outfile)
         exit (1);
     }
 
-    fread (buf_4, 4, 1, in);
-    fwrite (buf_4, 4, 1, out);
-    n_phoneme_tables = buf_4[0];
+    xread = fread (buf_8, 4, 1, in);
+    fwrite (buf_8, 4, 1, out);
+    n_phoneme_tables = buf_8[0];
 
     for (i = 0; i < n_phoneme_tables; i++) {
         int n_phonemes, j;
         char tab_name[N_PHONEME_TAB_NAME];
 
-        fread (buf_4, 4, 1, in);
-        fwrite (buf_4, 4, 1, out);
+        xread = fread (buf_8, 8, 1, in);
+        fwrite (buf_8, 8, 1, out);
 
-        n_phonemes = buf_4[0];
+        n_phonemes = buf_8[0];
 
-        fread (tab_name, N_PHONEME_TAB_NAME, 1, in);
+        xread = fread (tab_name, N_PHONEME_TAB_NAME, 1, in);
         fwrite (tab_name, N_PHONEME_TAB_NAME, 1, out);
 
         for (j = 0; j < n_phonemes; j++) {
             PHONEME_TAB table;
 
-            fread (&table, sizeof (PHONEME_TAB), 1, in);
+            xread = fread (&table, sizeof (PHONEME_TAB), 1, in);
 
             table.mnemonic = SWAP_UINT (table.mnemonic);
             table.phflags = SWAP_UINT (table.phflags);

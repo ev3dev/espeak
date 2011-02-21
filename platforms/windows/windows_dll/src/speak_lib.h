@@ -1,7 +1,7 @@
 #ifndef SPEAK_LIB_H
 #define SPEAK_LIB_H
 /***************************************************************************
- *   Copyright (C) 2005 to 2007 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2010 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -24,11 +24,11 @@
 /* This is the header file for the library version of espeak */
 /*                                                           */
 /*************************************************************/
-#define ESPEAK_API __declspec(dllexport)
 
 #include <stdio.h>
+#include <stddef.h>
 
-#define ESPEAK_API_REVISION  5
+#define ESPEAK_API_REVISION  6
 /*
 Revision 2
    Added parameter "options" to eSpeakInitialize()
@@ -41,21 +41,30 @@ Revision 4
 
 Revision 5
    Added espeakCHARS_16BIT
+
+Revision 6
+  Added macros: espeakRATE_MINIMUM, espeakRATE_MAXIMUM, espeakRATE_NORMAL
 */
          /********************/
          /*  Initialization  */
          /********************/
 
+// values for 'value' in espeak_SetParameter(espeakRATE, value, 0), nominally in words-per-minute
+#define espeakRATE_MINIMUM  80
+#define espeakRATE_MAXIMUM  450
+#define espeakRATE_NORMAL   175
+
 
 typedef enum {
   espeakEVENT_LIST_TERMINATED = 0, // Retrieval mode: terminates the event list.
   espeakEVENT_WORD = 1,            // Start of word
-  espeakEVENT_SENTENCE,            // Start of sentence
-  espeakEVENT_MARK,                // Mark
-  espeakEVENT_PLAY,                // Audio element
-  espeakEVENT_END,                 // End of sentence or clause
-  espeakEVENT_MSG_TERMINATED,      // End of message
-  espeakEVENT_PHONEME              // Phoneme, if enabled in espeak_Initialize()
+  espeakEVENT_SENTENCE = 2,        // Start of sentence
+  espeakEVENT_MARK = 3,            // Mark
+  espeakEVENT_PLAY = 4,            // Audio element
+  espeakEVENT_END = 5,             // End of sentence or clause
+  espeakEVENT_MSG_TERMINATED = 6,  // End of message
+  espeakEVENT_PHONEME = 7,         // Phoneme, if enabled in espeak_Initialize()
+  espeakEVENT_SAMPLERATE = 8       // internal use, set sample rate
 } espeak_EVENT_TYPE;
 
 
@@ -152,7 +161,7 @@ typedef enum {
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API int espeak_Initialize(espeak_AUDIO_OUTPUT output, int buflength, const char *path, int options);
+int espeak_Initialize(espeak_AUDIO_OUTPUT output, int buflength, const char *path, int options);
 /* Must be called before any synthesis functions are called.
    output: the audio data can either be played by eSpeak or passed back by the SynthCallback function.
 
@@ -171,7 +180,7 @@ typedef int (t_espeak_callback)(short*, int, espeak_EVENT*);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API void espeak_SetSynthCallback(t_espeak_callback* SynthCallback);
+void espeak_SetSynthCallback(t_espeak_callback* SynthCallback);
 /* Must be called before any synthesis functions are called.
    This specifies a function in the calling program which is called when a buffer of
    speech sound data has been produced. 
@@ -199,7 +208,7 @@ int SynthCallback(short *wav, int numsamples, espeak_EVENT *events);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API void espeak_SetUriCallback(int (*UriCallback)(int, const char*, const char*));
+void espeak_SetUriCallback(int (*UriCallback)(int, const char*, const char*));
 /* This function may be called before synthesis functions are used, in order to deal with
    <audio> tags.  It specifies a callback function which is called when an <audio> element is
    encountered and allows the calling program to indicate whether the sound file which
@@ -240,7 +249,7 @@ int UriCallback(int type, const char *uri, const char *base);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_ERROR espeak_Synth(const void *text,
+espeak_ERROR espeak_Synth(const void *text,
 	size_t size,
 	unsigned int position,
 	espeak_POSITION_TYPE position_type,
@@ -296,7 +305,7 @@ ESPEAK_API espeak_ERROR espeak_Synth(const void *text,
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_ERROR espeak_Synth_Mark(const void *text,
+espeak_ERROR espeak_Synth_Mark(const void *text,
 	size_t size,
 	const char *index_mark,
 	unsigned int end_position,
@@ -320,7 +329,7 @@ ESPEAK_API espeak_ERROR espeak_Synth_Mark(const void *text,
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_ERROR espeak_Key(const char *key_name);
+espeak_ERROR espeak_Key(const char *key_name);
 /* Speak the name of a keyboard key.
    If key_name is a single character, it speaks the name of the character.
    Otherwise, it speaks key_name as a text string.
@@ -334,7 +343,7 @@ ESPEAK_API espeak_ERROR espeak_Key(const char *key_name);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_ERROR espeak_Char(wchar_t character);
+espeak_ERROR espeak_Char(wchar_t character);
 /* Speak the name of the given character 
 
    Return: EE_OK: operation achieved 
@@ -379,15 +388,16 @@ typedef enum {
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_ERROR espeak_SetParameter(espeak_PARAMETER parameter, int value, int relative);
+espeak_ERROR espeak_SetParameter(espeak_PARAMETER parameter, int value, int relative);
 /* Sets the value of the specified parameter.
    relative=0   Sets the absolute value of the parameter.
    relative=1   Sets a relative value of the parameter.
 
    parameter:
-      espeakRATE:    speaking speed in word per minute.
+      espeakRATE:    speaking speed in word per minute.  Values 80 to 450.
 
-      espeakVOLUME:  volume in range 0-100    0=silence
+      espeakVOLUME:  volume in range 0-200 or more.
+                     0=silence, 100=normal full volume, greater values may produce amplitude compression or distortion
 
       espeakPITCH:   base pitch, range 0-100.  50=normal
 
@@ -415,7 +425,7 @@ ESPEAK_API espeak_ERROR espeak_SetParameter(espeak_PARAMETER parameter, int valu
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API int espeak_GetParameter(espeak_PARAMETER parameter, int current);
+int espeak_GetParameter(espeak_PARAMETER parameter, int current);
 /* current=0  Returns the default value of the specified parameter.
    current=1  Returns the current value of the specified parameter, as set by SetParameter()
 */
@@ -423,7 +433,7 @@ ESPEAK_API int espeak_GetParameter(espeak_PARAMETER parameter, int current);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_ERROR espeak_SetPunctuationList(const wchar_t *punctlist);
+espeak_ERROR espeak_SetPunctuationList(const wchar_t *punctlist);
 /* Specified a list of punctuation characters whose names are to be spoken when the
    value of the Punctuation parameter is set to "some".
 
@@ -438,11 +448,12 @@ ESPEAK_API espeak_ERROR espeak_SetPunctuationList(const wchar_t *punctlist);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API void espeak_SetPhonemeTrace(int value, FILE *stream);
+void espeak_SetPhonemeTrace(int value, FILE *stream);
 /* Controls the output of phoneme symbols for the text
    value=0  No phoneme output (default)
    value=1  Output the translated phoneme symbols for the text
    value=2  as (1), but also output a trace of how the translation was done (matching rules and list entries)
+   value=3  as (1), but produces IPA rather than ascii phoneme names
 
    stream   output stream for the phoneme symbols (and trace).  If stream=NULL then it uses stdout.
 */
@@ -450,7 +461,7 @@ ESPEAK_API void espeak_SetPhonemeTrace(int value, FILE *stream);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API void espeak_CompileDictionary(const char *path, FILE *log, int flags);
+void espeak_CompileDictionary(const char *path, FILE *log, int flags);
 /* Compile pronunciation dictionary for a language which corresponds to the currently
    selected voice.  The required voice should be selected before calling this function.
 
@@ -503,19 +514,19 @@ typedef struct {
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API const espeak_VOICE **espeak_ListVoices(espeak_VOICE *voice_spec);
+const espeak_VOICE **espeak_ListVoices(espeak_VOICE *voice_spec);
 /* Reads the voice files from espeak-data/voices and creates an array of espeak_VOICE pointers.
    The list is terminated by a NULL pointer
 
    If voice_spec is NULL then all voices are listed.
-   If voice spec is give, then only the voices which are compatible with the voice_spec
+   If voice spec is given, then only the voices which are compatible with the voice_spec
    are listed, and they are listed in preference order.
 */
 
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_ERROR espeak_SetVoiceByName(const char *name);
+espeak_ERROR espeak_SetVoiceByName(const char *name);
 /* Searches for a voice with a matching "name" field.  Language is not considered.
    "name" is a UTF8 string.
 
@@ -528,7 +539,7 @@ ESPEAK_API espeak_ERROR espeak_SetVoiceByName(const char *name);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_ERROR espeak_SetVoiceByProperties(espeak_VOICE *voice_spec);
+espeak_ERROR espeak_SetVoiceByProperties(espeak_VOICE *voice_spec);
 /* An espeak_VOICE structure is used to pass criteria to select a voice.  Any of the following
    fields may be set:
 
@@ -548,7 +559,7 @@ ESPEAK_API espeak_ERROR espeak_SetVoiceByProperties(espeak_VOICE *voice_spec);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_VOICE *espeak_GetCurrentVoice(void);
+espeak_VOICE *espeak_GetCurrentVoice(void);
 /* Returns the espeak_VOICE data for the currently selected voice.
    This is not affected by temporary voice changes caused by SSML elements such as <voice> and <s>
 */
@@ -556,7 +567,7 @@ ESPEAK_API espeak_VOICE *espeak_GetCurrentVoice(void);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_ERROR espeak_Cancel(void);
+espeak_ERROR espeak_Cancel(void);
 /* Stop immediately synthesis and audio output of the current text. When this
    function returns, the audio output is fully stopped and the synthesizer is ready to
    synthesize a new message.
@@ -569,14 +580,14 @@ ESPEAK_API espeak_ERROR espeak_Cancel(void);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API int espeak_IsPlaying(void);
+int espeak_IsPlaying(void);
 /* Returns 1 if audio is played, 0 otherwise.
 */
 
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_ERROR espeak_Synchronize(void);
+espeak_ERROR espeak_Synchronize(void);
 /* This function returns when all data have been spoken.
    Return: EE_OK: operation achieved 
 	   EE_INTERNAL_ERROR.
@@ -585,7 +596,7 @@ ESPEAK_API espeak_ERROR espeak_Synchronize(void);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API espeak_ERROR espeak_Terminate(void);
+espeak_ERROR espeak_Terminate(void);
 /* last function to be called.
    Return: EE_OK: operation achieved 
 	   EE_INTERNAL_ERROR.
@@ -595,7 +606,7 @@ ESPEAK_API espeak_ERROR espeak_Terminate(void);
 #ifdef __cplusplus
 extern "C"
 #endif
-ESPEAK_API const char *espeak_Info(void* ptr);
+const char *espeak_Info(void* ptr);
 /* Returns the version number string.
    The parameter is for future use, and should be set to NULL
 */

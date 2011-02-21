@@ -39,7 +39,8 @@
 #define L_qa   0x716100
 #define L_grc  0x677263   // grc  Ancient Greek
 #define L_jbo  0x6a626f   // jbo  Lojban
-#define L_pap  0x706170   // pap  Papiamento
+#define L_pap  0x706170   // pap  Papiamento]
+#define L_shs  0x736873   // shs  Shuswap / Secwepemctsin
 #define L_zhy  0x7a6879   // zhy
 
 // start of unicode pages for character sets
@@ -56,6 +57,8 @@
 #define OFFSET_KOREAN 0x1100
 
 static void Translator_Russian(Translator *tr);
+
+
 
 static void SetLetterVowel(Translator *tr, int c)
 {//==============================================
@@ -107,6 +110,7 @@ static Translator* NewTranslator(void)
 	static const short stress_lengths2[8] = {182,140, 220,220, 220,240, 260,280};
 	static const wchar_t empty_wstring[1] = {0};
 	static const wchar_t punct_in_word[2] = {'\'', 0};  // allow hyphen within words
+	static const unsigned char default_tunes[6] = {0, 1, 2, 3, 0, 0};
 
 	tr = (Translator *)Alloc(sizeof(Translator));
 	if(tr == NULL)
@@ -118,14 +122,16 @@ static Translator* NewTranslator(void)
 	tr->data_dictrules = NULL;     // language_1   translation rules file
 	tr->data_dictlist = NULL;      // language_2   dictionary lookup file
 
-	tr->transpose_offset = 0;
+	tr->transpose_min = 'a';
+	tr->transpose_max = 'z';
+	tr->frequent_pairs = NULL;
 
 	// only need lower case
 	tr->letter_bits_offset = 0;
 	memset(tr->letter_bits,0,sizeof(tr->letter_bits));
 	memset(tr->letter_groups,0,sizeof(tr->letter_groups));
 
-	// 0-5 sets of characters matched by A B C E F G in pronunciation rules
+	// 0-5 sets of characters matched by A B C H F G Y  in pronunciation rules
 	// these may be set differently for different languages
 	SetLetterBits(tr,0,"aeiou");  // A  vowels, except y
 	SetLetterBits(tr,1,"bcdfgjklmnpqstvxz");      // B  hard consonants, excluding h,r,w
@@ -153,14 +159,15 @@ static Translator* NewTranslator(void)
 	tr->langopts.unstressed_wd1 = 1;
 	tr->langopts.unstressed_wd2 = 3;
 	tr->langopts.param[LOPT_SONORANT_MIN] = 95;
+	tr->langopts.param[LOPT_LONG_VOWEL_THRESHOLD] = 190/2;
 	tr->langopts.param[LOPT_MAXAMP_EOC] = 19;
 	tr->langopts.param[LOPT_UNPRONOUNCABLE] = 's';    // don't count this character at start of word
 	tr->langopts.param[LOPT_BRACKET_PAUSE] = 4;      // pause at bracket
 	tr->langopts.param2[LOPT_BRACKET_PAUSE] = 2;    // pauses when announcing bracket names
-	tr->langopts.param[LOPT_MIN_LONG_VOWEL] = 40;
 	tr->langopts.max_initial_consonants = 3;
 	tr->langopts.replace_chars = NULL;
 	tr->langopts.ascii_language = "";    // Non-Latin alphabet languages, use this language to speak Latin words, default is English
+
 
 	SetLengthMods(tr,201);
 //	tr->langopts.length_mods = length_mods_en;
@@ -173,11 +180,52 @@ static Translator* NewTranslator(void)
 	tr->langopts.thousands_sep = ',';
 	tr->langopts.decimal_sep = '.';
 	tr->langopts.break_numbers = BREAK_THOUSANDS;   // 1000, 1000,000  1,000,000 etc
+	tr->langopts.max_digits = 14;
 
 	memcpy(tr->punct_to_tone, punctuation_to_tone, sizeof(tr->punct_to_tone));
 
+	memcpy(tr->langopts.tunes, default_tunes, sizeof(tr->langopts.tunes));
+
 	return(tr);
 }
+
+// common letter pairs, encode these as a single byte
+//  2 bytes, using the transposed character codes
+static const short pairs_ru[] = { 
+0x010c, //  ла   21052  0x23
+0x010e, //  на   18400
+0x0113, //  та   14254
+0x0301, //  ав   31083
+0x030f, //  ов   13420
+0x060e, //  не   21798
+0x0611, //  ре   19458
+0x0903, //  ви   16226
+0x0b01, //  ак   14456
+0x0b0f, //  ок   17836
+0x0c01, //  ал   13324
+0x0c09, //  ил   16877
+0x0e01, //  ан   15359
+0x0e06, //  ен   13543  0x30
+0x0e09, //  ин   17168
+0x0e0e, //  нн   15973
+0x0e0f, //  он   22373
+0x0e1c, //  ын   15052
+0x0f03, //  во   24947
+0x0f11, //  ро   13552
+0x0f12, //  со   16368
+0x100f, //  оп   19054
+0x1011, //  рп   17067
+0x1101, //  ар   23967
+0x1106, //  ер   18795
+0x1109, //  ир   13797
+0x110f, //  ор   21737
+0x1213, //  тс   25076
+0x1220, //  яс   14310
+0x7fff};
+//0x040f  ог   12976
+//0x1306  ет   12826
+//0x0f0d  мо   12688
+
 
 
 static const unsigned int replace_cyrillic_latin[] = 
@@ -216,6 +264,33 @@ static const unsigned int replace_cyrillic_latin[] =
 	0x45c,0x107,
 0};  // ѓ  ѕ  ќ
 
+static void SetCyrillicLetters(Translator *tr)
+{//===========================================
+	// character codes offset by 0x420
+	static const char ru_vowels[] = {0x10,0x15,0x31,0x18,0x1e,0x23,0x2b,0x2d,0x2e,0x2f,0};
+	static const char ru_consonants[] = {0x11,0x12,0x13,0x14,0x16,0x17,0x19,0x1a,0x1b,0x1c,0x1d,0x1f,0x20,0x21,0x22,0x24,0x25,0x26,0x27,0x28,0x29,0x2a,0x2c,0};
+	static const char ru_soft[] = {0x2c,0x19,0x27,0x29,0};   // letter group B  [k ts; s;]
+	static const char ru_hard[] = {0x2a,0x16,0x26,0x28,0};   // letter group H  [S Z ts]
+	static const char ru_nothard[] = {0x11,0x12,0x13,0x14,0x17,0x19,0x1a,0x1b,0x1c,0x1d,0x1f,0x20,0x21,0x22,0x24,0x25,0x27,0x29,0x2c,0};
+	static const char ru_voiced[] = {0x11,0x12,0x13,0x14,0x16,0x17,0};    // letter group G  (voiced obstruents)
+	static const char ru_ivowels[] = {0x2c,0x2e,0x2f,0x31,0};   // letter group Y  (iotated vowels & soft-sign)
+	tr->charset_a0 = charsets[18];   // KOI8-R
+	tr->transpose_min = 0x430;  // convert cyrillic from unicode into range 0x01 to 0x22
+	tr->transpose_max = 0x451;
+	tr->frequent_pairs = pairs_ru;
+
+	tr->letter_bits_offset = OFFSET_CYRILLIC;
+	memset(tr->letter_bits,0,sizeof(tr->letter_bits));
+	SetLetterBits(tr,LETTERGP_A,ru_vowels);
+	SetLetterBits(tr,1,ru_soft);
+	SetLetterBits(tr,2,ru_consonants);
+	SetLetterBits(tr,3,ru_hard);
+	SetLetterBits(tr,4,ru_nothard);
+	SetLetterBits(tr,5,ru_voiced);
+	SetLetterBits(tr,6,ru_ivowels);
+	SetLetterBits(tr,LETTERGP_VOWEL2,ru_vowels);
+}  // end of SetCyrillicLetters
+
 
 void SetIndicLetters(Translator *tr)
 {//=================================
@@ -237,6 +312,7 @@ void SetIndicLetters(Translator *tr)
 	tr->langopts.param[LOPT_UNPRONOUNCABLE] = 1;   // disable check for unpronouncable words
 	tr->langopts.suffix_add_e = tr->letter_bits_offset + 0x4d;   //virama
 }
+
 
 void SetupTranslator(Translator *tr, const short *lengths, const unsigned char *amps)
 {//==================================================================================
@@ -282,6 +358,19 @@ Translator *SelectTranslator(const char *name)
 	case L('a','r'):   // Arabic
 			tr->letter_bits_offset = OFFSET_ARABIC;
 			tr->langopts.param[LOPT_UNPRONOUNCABLE] = 1;   // disable check for unpronouncable words
+		break;
+
+	case L('b','g'):  //Bulgarian
+		{
+			SetCyrillicLetters(tr);
+			SetLetterVowel(tr,0x2a);
+			tr->langopts.param[LOPT_UNPRONOUNCABLE] = 0x432;    // [v]  don't count this character at start of word
+			tr->langopts.param[LOPT_REGRESSIVE_VOICING] = 0x10;  // devoice at end of word
+			tr->langopts.param[LOPT_REDUCE] = 2;
+			tr->langopts.stress_rule = STRESSPOSN_2R;
+			tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_ALLOW_SPACE | NUM_OMIT_1_HUNDRED | NUM_HUNDRED_AND | NUM_AND_UNITS | NUM_SINGLE_AND | NUM_ROMAN | NUM_ROMAN_ORDINAL | NUM_ROMAN_CAPITALS ;
+			tr->langopts.thousands_sep = ' ';   // don't allow dot as thousands separator
+		}
 		break;
 
 	case L('b','n'):  // Bengali
@@ -330,27 +419,31 @@ Translator *SelectTranslator(const char *name)
 
 	case L('d','a'):  // Danish
 		{
-			static const short stress_lengths_da[8] = {160,140, 200,200, 0,0, 220,210};
+			static const short stress_lengths_da[8] = {160,140, 200,200, 0,0, 220,230};
 			SetupTranslator(tr,stress_lengths_da,NULL);
 
 			tr->langopts.stress_rule = STRESSPOSN_1L;
+			tr->langopts.param[LOPT_PREFIXES] = 1;
 			SetLetterVowel(tr,'y');
-			tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_SWAP_TENS | NUM_HUNDRED_AND | NUM_OMIT_1_HUNDRED | NUM_ORDINAL_DOT | NUM_1900;
+			tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_SWAP_TENS | NUM_HUNDRED_AND | NUM_OMIT_1_HUNDRED | NUM_ORDINAL_DOT | NUM_1900 | NUM_ROMAN | NUM_ROMAN_CAPITALS | NUM_ROMAN_ORDINAL;
 		}
 		break;
 
 
 	case L('d','e'):
 		{
-			static const short stress_lengths_de[8] = {150,130, 200,200,  0, 0, 260,275};
+			static const short stress_lengths_de[8] = {150,130, 200,200,  0, 0, 250,260};
 			tr->langopts.stress_rule = STRESSPOSN_1L;
 			tr->langopts.word_gap = 0x8;   // don't use linking phonemes
 			tr->langopts.vowel_pause = 0x30;
 			tr->langopts.param[LOPT_PREFIXES] = 1;
+			tr->langopts.param[LOPT_REGRESSIVE_VOICING] = 0x10;  // devoice at end of word
+			tr->langopts.param[LOPT_LONG_VOWEL_THRESHOLD] = 175/2;
 			memcpy(tr->stress_lengths,stress_lengths_de,sizeof(tr->stress_lengths));
 		
-			tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_SWAP_TENS | NUM_OMIT_1_HUNDRED | NUM_ALLOW_SPACE | NUM_ORDINAL_DOT | NUM_ROMAN;
+			tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_SWAP_TENS | NUM_OMIT_1_HUNDRED | NUM_OMIT_1_THOUSAND | NUM_ALLOW_SPACE | NUM_ORDINAL_DOT | NUM_ROMAN;
 			SetLetterVowel(tr,'y');
+			tr->langopts.param[LOPT_UNPRONOUNCABLE] = 2;   // use de_rules for unpronouncable rules
 		}
 		break;
 
@@ -360,9 +453,12 @@ Translator *SelectTranslator(const char *name)
 			SetupTranslator(tr,stress_lengths_en,NULL);
 
 			tr->langopts.stress_rule = STRESSPOSN_1L;
+			tr->langopts.stress_flags = 0x08;
 			tr->langopts.numbers = NUM_HUNDRED_AND | NUM_ROMAN | NUM_1900;
 			tr->langopts.param[LOPT_COMBINE_WORDS] = 2;       // allow "mc" to cmbine with the following word
 			tr->langopts.suffix_add_e = 'e';
+			tr->langopts.param[LOPT_UNPRONOUNCABLE] = 2;   // use en_rules for unpronouncable rules
+			SetLetterBits(tr,6,"aeiouy");  // Group Y: vowels, including y
 		}
 		break;
 
@@ -387,6 +483,7 @@ Translator *SelectTranslator(const char *name)
 			tr->letter_bits_offset = OFFSET_GREEK;
 			memset(tr->letter_bits,0,sizeof(tr->letter_bits));
 			SetLetterBits(tr,LETTERGP_A,el_vowels);
+			SetLetterBits(tr,LETTERGP_VOWEL2,el_vowels);
 			SetLetterBits(tr,LETTERGP_B,el_voiceless);
 			SetLetterBits(tr,LETTERGP_C,el_consonants);
 			SetLetterBits(tr,LETTERGP_Y,el_fvowels);    // front vowels: ε η ι υ
@@ -452,7 +549,7 @@ Translator *SelectTranslator(const char *name)
 			tr->langopts.unstressed_wd2 = 2;
 			tr->langopts.param[LOPT_SONORANT_MIN] = 120;  // limit the shortening of sonorants before short vowels
 
-			tr->langopts.numbers = NUM_SINGLE_STRESS | NUM_DECIMAL_COMMA | NUM_AND_UNITS | NUM_OMIT_1_HUNDRED | NUM_ROMAN | NUM_ROMAN_AFTER;
+			tr->langopts.numbers = NUM_SINGLE_STRESS | NUM_DECIMAL_COMMA | NUM_AND_UNITS | NUM_OMIT_1_HUNDRED | NUM_OMIT_1_THOUSAND | NUM_ROMAN | NUM_ROMAN_AFTER;
 
 			if(name2 == L('c','a'))
 			{
@@ -463,6 +560,10 @@ Translator *SelectTranslator(const char *name)
 			if(name2 == L_pap)
 			{
 				tr->langopts.stress_flags = 0x100 | 0x6 | 0x30;  // stress last syllable unless word ends with a vowel
+			}
+			else
+			{
+				tr->langopts.param[LOPT_UNPRONOUNCABLE] = 2;   // use es_rules for unpronouncable rules
 			}
 		}
 		break;
@@ -499,7 +600,6 @@ Translator *SelectTranslator(const char *name)
 			tr->langopts.stress_flags = 0x56;  // move secondary stress from light to a following heavy syllable
 			tr->langopts.param[LOPT_IT_DOUBLING] = 1;
 			tr->langopts.long_stop = 130;
-			tr->langopts.param[LOPT_MIN_LONG_VOWEL] = 65;
 
 			tr->langopts.numbers = NUM_DECIMAL_COMMA + NUM_ALLOW_SPACE;
 			SetLetterVowel(tr,'y');
@@ -509,18 +609,20 @@ Translator *SelectTranslator(const char *name)
 		}
 		break;
 
-
 	case L('f','r'):  // french
 		{
-			static const short stress_lengths_fr[8] = {190, 170,  190, 200,  0, 0,  235, 240};
-			static const unsigned char stress_amps_fr[8] = {18,16, 20,20, 20,22, 22,21 };
+			static const short stress_lengths_fr[8] = {190, 170,  190, 200,  0, 0,  190, 240};
+			static const unsigned char stress_amps_fr[8] = {18,16, 20,20, 20,22, 18,18 };
 
 			SetupTranslator(tr,stress_lengths_fr,stress_amps_fr);
 			tr->langopts.stress_rule = STRESSPOSN_1R;      // stress on final syllable
 			tr->langopts.stress_flags = 0x0024;  // don't use secondary stress
 			tr->langopts.param[LOPT_IT_LENGTHEN] = 1;    // remove lengthen indicator from unstressed syllables
+			tr->langopts.length_mods0 = tr->langopts.length_mods;  // don't lengthen vowels in the last syllable
+			tr->langopts.accents = 2;   // Say "Capital" after the letter.
+			tr->langopts.vowel_pause = 0;
 
-			tr->langopts.numbers = NUM_SINGLE_STRESS | NUM_DECIMAL_COMMA | NUM_ALLOW_SPACE | NUM_OMIT_1_HUNDRED | NUM_NOPAUSE | NUM_ROMAN | NUM_VIGESIMAL | NUM_DFRACTION_4;
+			tr->langopts.numbers = NUM_SINGLE_STRESS | NUM_DECIMAL_COMMA | NUM_ALLOW_SPACE | NUM_OMIT_1_HUNDRED | NUM_NOPAUSE | NUM_ROMAN | NUM_ROMAN_CAPITALS | NUM_ROMAN_AFTER | NUM_VIGESIMAL | NUM_DFRACTION_4;
 			SetLetterVowel(tr,'y');
 		}
 		break;
@@ -572,13 +674,22 @@ Translator *SelectTranslator(const char *name)
 			tr->langopts.spelling_stress = 1;
 			tr->langopts.accents = 1;
 
-			tr->langopts.numbers = NUM_SINGLE_STRESS | NUM_HUNDRED_AND | NUM_OMIT_1_HUNDRED | NUM_DECIMAL_COMMA | NUM_THOUS_SPACE | NUM_DFRACTION_2 | NUM_ROMAN_UC;
+			tr->langopts.numbers = NUM_SINGLE_STRESS | NUM_HUNDRED_AND | NUM_OMIT_1_HUNDRED | NUM_DECIMAL_COMMA | NUM_THOUS_SPACE | NUM_DFRACTION_2 | NUM_ROMAN_CAPITALS;
 			tr->langopts.numbers2 = 0x4a;  // variant numbers before thousands,milliards
 			tr->langopts.replace_chars = replace_cyrillic_latin;
 
 			SetLetterVowel(tr,'y');
 			SetLetterVowel(tr,'r');
 		}
+		break;
+
+
+	case L('h','t'):  // Haitian Creole
+//			static const short stress_lengths_fr[8] = {190, 170,  190, 200,  0, 0,  235, 240};
+//			memcpy(tr->stress_lengths,stress_lengths_fr,sizeof(tr->stress_lengths));
+			tr->langopts.stress_rule = STRESSPOSN_1R;      // stress on final syllable
+			tr->langopts.stress_flags = 0x0024;  // don't use secondary stress
+			tr->langopts.numbers = NUM_SINGLE_STRESS | NUM_OMIT_1_HUNDRED | NUM_NOPAUSE | NUM_ROMAN | NUM_VIGESIMAL | NUM_DFRACTION_4;
 		break;
 
 
@@ -596,11 +707,11 @@ Translator *SelectTranslator(const char *name)
 			tr->langopts.unstressed_wd1 = 2;
 			tr->langopts.param[LOPT_IT_DOUBLING] = 1;
 			tr->langopts.param[LOPT_ANNOUNCE_PUNCT] = 2;  // don't break clause before announcing . ? !
-			tr->langopts.param[LOPT_MIN_LONG_VOWEL] = 65;
 
-			tr->langopts.numbers = NUM_DFRACTION_5 | NUM_ALLOW_SPACE | NUM_ROMAN | NUM_ROMAN_ORDINAL | NUM_ROMAN_CAPITALS | NUM_ORDINAL_DOT | NUM_OMIT_1_HUNDRED;
+			tr->langopts.numbers = NUM_DFRACTION_5 | NUM_ALLOW_SPACE | NUM_ROMAN | NUM_ROMAN_ORDINAL | NUM_ROMAN_CAPITALS | NUM_ORDINAL_DOT | NUM_OMIT_1_HUNDRED | NUM_OMIT_1_THOUSAND;
 			tr->langopts.thousands_sep = ' ';   // don't allow dot as thousands separator
 			tr->langopts.decimal_sep = ',';
+			tr->langopts.max_roman = 899;
 			tr->langopts.min_roman = 1;
 			SetLetterVowel(tr,'y');
 			tr->langopts.spelling_stress = 1;
@@ -621,6 +732,7 @@ SetLengthMods(tr,3);  // all equal
 			tr->letter_bits_offset = OFFSET_ARMENIAN;
 			memset(tr->letter_bits,0,sizeof(tr->letter_bits));
 			SetLetterBits(tr,LETTERGP_A,hy_vowels);
+			SetLetterBits(tr,LETTERGP_VOWEL2,hy_vowels);
 			SetLetterBits(tr,LETTERGP_C,hy_consonants);
 			tr->langopts.max_initial_consonants = 6;
 			tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_OMIT_1_HUNDRED;
@@ -771,10 +883,10 @@ SetLengthMods(tr,3);  // all equal
 
 			SetupTranslator(tr,stress_lengths_mk,stress_amps_mk);
 			tr->charset_a0 = charsets[5];   // ISO-8859-5
-			tr->letter_groups[0] = vowels_cyrillic;
+			tr->letter_groups[0] = tr->letter_groups[7] = vowels_cyrillic;
 
 			tr->langopts.stress_rule = STRESSPOSN_3R;   // antipenultimate
-			tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_AND_UNITS | NUM_OMIT_1_HUNDRED | NUM_DFRACTION_2;
+			tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_AND_UNITS | NUM_OMIT_1_HUNDRED | NUM_OMIT_1_THOUSAND | NUM_DFRACTION_2;
 			tr->langopts.numbers2 = 0x8a;  // variant numbers before thousands,milliards
 		}
 		break;
@@ -785,12 +897,14 @@ SetLengthMods(tr,3);  // all equal
 			static const short stress_lengths_nl[8] = {160,135, 210,210,  0, 0, 260,280};
 
 			tr->langopts.stress_rule = STRESSPOSN_1L;
-			tr->langopts.vowel_pause = 1;
+			tr->langopts.vowel_pause = 0x30;  // ??
 			tr->langopts.param[LOPT_DIERESES] = 1;
 			tr->langopts.param[LOPT_PREFIXES] = 1;
+			tr->langopts.param[LOPT_REGRESSIVE_VOICING] = 0x10;  // devoice at end of word
 			SetLetterVowel(tr,'y');
-		
+
 			tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_SWAP_TENS | NUM_OMIT_1_HUNDRED | NUM_ALLOW_SPACE | NUM_1900 | NUM_ORDINAL_DOT;
+			tr->langopts.ordinal_indicator = "e";
 			memcpy(tr->stress_lengths,stress_lengths_nl,sizeof(tr->stress_lengths));
 		}
 		break;
@@ -917,6 +1031,17 @@ SetLengthMods(tr,3);  // all equal
 		}
 		break;
 
+	case L('s','l'):  // Slovenian
+			tr->charset_a0 = charsets[2];   // ISO-8859-2
+			tr->langopts.stress_rule = STRESSPOSN_2R;   // Temporary
+			tr->langopts.stress_flags = 0x20;
+			tr->langopts.param[LOPT_REGRESSIVE_VOICING] = 0x13;
+			tr->langopts.numbers =  NUM_DECIMAL_COMMA | NUM_ALLOW_SPACE | NUM_SWAP_TENS | NUM_OMIT_1_HUNDRED | NUM_DFRACTION_2 | NUM_ORDINAL_DOT | NUM_ROMAN;
+			tr->langopts.numbers2 = 0x100;   // plural forms of millions etc
+			tr->langopts.thousands_sep = ' ';   // don't allow dot as thousands separator
+			SetLetterVowel(tr,'r');
+		break;
+
 	case L('s','q'):  // Albanian
 		{
 			static const short stress_lengths_sq[8] = {150, 150,  180, 180,  0, 0,  300, 300};
@@ -981,7 +1106,7 @@ SetLengthMods(tr,3);  // all equal
 			if(name2 == L('t','a'))
 			{
 				tr->letter_bits_offset = OFFSET_TAMIL;
-				tr->langopts.numbers = 0x1;
+				tr->langopts.numbers =  NUM_OMIT_1_THOUSAND ;
 			}
 			if(name2 == L('m','r'))
 			{
@@ -1023,8 +1148,8 @@ SetLengthMods(tr,3);  // all equal
 
 	case L('t','r'):   // Turkish
 		{
-			static const unsigned char stress_amps_tr[8] = {18,18, 20,20, 20,22, 22,21 };
-			static const short stress_lengths_tr[8] = {190,190, 190,190, 0,0, 250,270};
+			static const unsigned char stress_amps_tr[8] = {18,16, 20,21, 20,21, 21,20 };
+			static const short stress_lengths_tr[8] = {190,180, 200,230, 0,0, 240,250};
 
 			SetupTranslator(tr,stress_lengths_tr,stress_amps_tr);
 			tr->charset_a0 = charsets[9];   // ISO-8859-9 - Latin5
@@ -1032,7 +1157,7 @@ SetLengthMods(tr,3);  // all equal
 			tr->langopts.stress_rule = 7;   // stress on the last syllable, before any explicitly unstressed syllable
 			tr->langopts.stress_flags = 0x20;  //no automatic secondary stress
 
-			tr->langopts.numbers = NUM_SINGLE_STRESS | NUM_DECIMAL_COMMA | NUM_ALLOW_SPACE | NUM_OMIT_1_HUNDRED | NUM_DFRACTION_2;
+			tr->langopts.numbers = NUM_SINGLE_STRESS | NUM_DECIMAL_COMMA | NUM_ALLOW_SPACE | NUM_OMIT_1_HUNDRED | NUM_OMIT_1_THOUSAND | NUM_DFRACTION_2;
 			tr->langopts.max_initial_consonants = 2;
 		}
 		break;
@@ -1068,7 +1193,7 @@ SetLengthMods(tr,3);  // all equal
 			tr->langopts.stress_rule = STRESSPOSN_1L;
 			tr->langopts.word_gap = 0x21;   // length of a final vowel is less dependent on the next consonant, don't merge consonant with next word
 //			tr->langopts.vowel_pause = 4;
-			tr->letter_groups[0] = vowels_vi;
+			tr->letter_groups[0] = tr->letter_groups[7] = vowels_vi;
 			tr->langopts.tone_language = 1;   // Tone language, use  CalcPitches_Tone() rather than CalcPitches()
 			tr->langopts.unstressed_wd1 = 2;
 			tr->langopts.numbers = NUM_DECIMAL_COMMA | NUM_HUNDRED_AND | NUM_DFRACTION_4;
@@ -1127,38 +1252,16 @@ SetLengthMods(tr,3);  // all equal
 
 
 
+
 static void Translator_Russian(Translator *tr)
 {//===========================================
 	static const unsigned char stress_amps_ru[] = {16,16, 18,18, 20,24, 24,22 };
 	static const short stress_lengths_ru[8] = {150,140, 220,220, 0,0, 260,280};
-
-
-	// character codes offset by 0x420
-	static const char ru_vowels[] = {0x10,0x15,0x31,0x18,0x1e,0x23,0x2b,0x2d,0x2e,0x2f,0};
-	static const char ru_consonants[] = {0x11,0x12,0x13,0x14,0x16,0x17,0x19,0x1a,0x1b,0x1c,0x1d,0x1f,0x20,0x21,0x22,0x24,0x25,0x26,0x27,0x28,0x29,0x2a,0x2c,0};
-	static const char ru_soft[] = {0x2c,0x19,0x27,0x29,0};   // letter group B  [k ts; s;]
-	static const char ru_hard[] = {0x2a,0x16,0x26,0x28,0};   // letter group H  [S Z ts]
-	static const char ru_nothard[] = {0x11,0x12,0x13,0x14,0x17,0x19,0x1a,0x1b,0x1c,0x1d,0x1f,0x20,0x21,0x22,0x24,0x25,0x27,0x29,0x2c,0};
-	static const char ru_voiced[] = {0x11,0x12,0x13,0x14,0x16,0x17,0};    // letter group G  (voiced obstruents)
-	static const char ru_ivowels[] = {0x2c,0x15,0x31,0x18,0x2e,0x2f,0};   // letter group Y  (iotated vowels & soft-sign)
+	static const char ru_ivowels2[] = {0x2c,0x15,0x18,0x2e,0x2f,0};   // add more vowels to letter group Y  (iotated vowels & soft-sign)
 
 	SetupTranslator(tr,stress_lengths_ru,stress_amps_ru);
-
-	tr->charset_a0 = charsets[18];   // KOI8-R
-	tr->transpose_offset = 0x42f;  // convert cyrillic from unicode into range 0x01 to 0x22
-	tr->transpose_min = 0x430;
-	tr->transpose_max = 0x451;
-
-	tr->letter_bits_offset = OFFSET_CYRILLIC;
-	memset(tr->letter_bits,0,sizeof(tr->letter_bits));
-	SetLetterBits(tr,0,ru_vowels);
-	SetLetterBits(tr,1,ru_soft);
-	SetLetterBits(tr,2,ru_consonants);
-	SetLetterBits(tr,3,ru_hard);
-	SetLetterBits(tr,4,ru_nothard);
-	SetLetterBits(tr,5,ru_voiced);
-	SetLetterBits(tr,6,ru_ivowels);
-	SetLetterBits(tr,7,ru_vowels);
+	SetCyrillicLetters(tr);
+	SetLetterBits(tr,6,ru_ivowels2);
 
 	tr->langopts.param[LOPT_UNPRONOUNCABLE] = 0x432;    // [v]  don't count this character at start of word
 	tr->langopts.param[LOPT_REGRESSIVE_VOICING] = 1;

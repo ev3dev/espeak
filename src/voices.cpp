@@ -92,6 +92,7 @@ enum {
 // these override defaults set by the translator
 	V_WORDGAP,
 	V_INTONATION,
+	V_TUNES,
 	V_STRESSLENGTH,
 	V_STRESSAMP,
 	V_STRESSADD,
@@ -116,7 +117,6 @@ enum {
 static MNEM_TAB options_tab[] = {
 	{"reduce_t",  LOPT_REDUCE_T},
 	{"bracket", LOPT_BRACKET_PAUSE},
-	{"fastLongVowel", LOPT_MIN_LONG_VOWEL},
 	{NULL,   -1} };
 
 static MNEM_TAB keyword_tab[] = {
@@ -133,6 +133,7 @@ static MNEM_TAB keyword_tab[] = {
 	{"stressAmp",  V_STRESSAMP},
 	{"stressAdd",  V_STRESSADD},
 	{"intonation", V_INTONATION},
+	{"tunes",      V_TUNES},
 	{"dictrules",	V_DICTRULES},
 	{"stressrule", V_STRESSRULE},
 	{"charset",    V_CHARSET},
@@ -192,6 +193,20 @@ static char *fgets_strip(char *buf, int size, FILE *f_in)
 
 	return(buf);
 }
+
+
+static int LookupTune(const char *name)
+{//====================================
+	int ix;
+
+	for(ix=0; ix<n_tunes; ix++)
+	{
+		if(strcmp(name, tunes[ix].name) == 0)
+			return(ix);
+	}
+	return(-1);
+}  // end of LookupTune
+
 
 
 static void SetToneAdjust(voice_t *voice, int *tone_pts)
@@ -393,6 +408,7 @@ void VoiceReset(int tone_only)
 	voice->voicing = 64;
 	voice->consonant_amp = 100;
 	voice->consonant_ampv = 100;
+	voice->samplerate = 22050;
 	memset(voice->klattv,0,sizeof(voice->klattv));
 	memset(speed.fast_settings,0,sizeof(speed.fast_settings));
 
@@ -539,6 +555,7 @@ voice_t *LoadVoice(const char *vname, int control)
 	int stress_amps[8];
 	int stress_lengths[8];
 	int stress_add[8];
+	char names[8][40];
 
 	int pitch1;
 	int pitch2;
@@ -761,6 +778,21 @@ voice_t *LoadVoice(const char *vname, int control)
 				langopts->intonation_group = option_tone_flags & 0xff;
 			break;
 
+		case V_TUNES:
+			n = sscanf(p,"%s %s %s %s %s %s",names[0],names[1],names[2],names[3],names[4],names[5]);
+			langopts->intonation_group = 0;
+			for(ix=0; ix<n; ix++)
+			{
+				if(strcmp(names[ix],"NULL")==0)
+					continue;
+
+				if((value = LookupTune(names[ix])) < 0)
+					fprintf(stderr,"Unknown tune '%s'\n",names[ix]);
+				else
+					langopts->tunes[ix] = value;
+			}
+			break;
+
 		case V_DICTRULES:   // conditional dictionary rules and list entries
 			while(*p != 0)
 			{
@@ -889,7 +921,11 @@ voice_t *LoadVoice(const char *vname, int control)
 
 				phtrans[0] = 0;
 				sscanf(p,"%s %s %d",name,phtrans,&srate);
-				LoadMbrolaTable(name,phtrans,srate);
+				if(LoadMbrolaTable(name,phtrans,srate) != EE_OK)
+				{
+					fprintf(stderr,"mbrola voice not found\n");
+				}
+				voice->samplerate = srate;
 			}
 			break;
 
@@ -901,7 +937,7 @@ voice_t *LoadVoice(const char *vname, int control)
 
 		case V_FAST:
 			Read8Numbers(p,speed.fast_settings);
-			SetSpeed(2);
+			SetSpeed(3);
 			break;
 
 		default:
@@ -925,7 +961,7 @@ voice_t *LoadVoice(const char *vname, int control)
 		new_translator = SelectTranslator(translator_name);
 	}
 
-	SetSpeed(1);   // for speed_percent
+	SetSpeed(3);   // for speed_percent
 
 	for(ix=0; ix<N_PEAKS; ix++)
 	{
@@ -945,6 +981,7 @@ voice_t *LoadVoice(const char *vname, int control)
 			fprintf(stderr,"Unknown phoneme table: '%s'\n",phonemes_name);
 		}
 		voice->phoneme_tab_ix = ix;
+		new_translator->phoneme_tab_ix = ix;
 		error = LoadDictionary(new_translator, new_dictionary, control & 4);
 		if(dictionary_name[0]==0)
 			return(NULL);   // no dictionary loaded

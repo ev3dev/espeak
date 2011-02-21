@@ -169,6 +169,8 @@
         e (co_     E
         e (ctA_    E
         e (ctAm_   E
+        e (çA_     E
+        e (çAm_     E
 
         e (de_     E
         e (dem_    E
@@ -656,6 +658,8 @@
         qü         kw
         qu (Y      k
         qu (K      ku
+?2   _) que (_K    ke
+     _) que (_     ky
 ?1   _) qua        kwa       // quatro, etc.
 ?1   _) que        ke        // quente, etc.
 ?1   _) quei (C    k'eI      // queira, queima, etc
@@ -685,7 +689,7 @@
      A) r (_A      *
         rr         x
     XC) r (A       R
-     C) r (A       r
+     C) r (A       *
 //?1       C) r (A       r
      _) r          x
      l) r          x
@@ -746,9 +750,7 @@
      r) u (_A      u
         u (A_      'u
 
-        ui         'uI
-        ui (_      uI
-        ui (s      'uI
+        ui         uI
         u (iu      w
         u (iCK     u
         uy         uI

@@ -37,6 +37,7 @@
 //#define USE_PORTAUDIO
 //#define USE_NANOSLEEP
 #define INCLUDE_KLATT
+#define INCLUDE_MBROLA
 
 // will look for espeak_data directory here, and also in user's home directory
 #define PATH_ESPEAK_DATA  "/usr/share/espeak-data"
@@ -52,7 +53,7 @@ typedef struct {
    const char *mnem;
    int  value;
 } MNEM_TAB;
-int LookupMnem(MNEM_TAB *table, char *string);
+int LookupMnem(MNEM_TAB *table, const char *string);
 
 
 

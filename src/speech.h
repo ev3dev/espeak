@@ -22,6 +22,7 @@
 
 // conditional compilation options
 #define INCLUDE_KLATT
+#define INCLUDE_MBROLA
 
 #if defined(BYTE_ORDER) && BYTE_ORDER == BIG_ENDIAN
 #define ARCH_BIG
@@ -44,7 +45,6 @@
 
 #ifdef LIBRARY
 #define USE_ASYNC
-//#define USE_MBROLA_LIB
 #endif
 
 #ifdef _ESPEAKEDIT
@@ -69,7 +69,7 @@ typedef struct {
    const char *mnem;
    int  value;
 } MNEM_TAB;
-int LookupMnem(MNEM_TAB *table, char *string);
+int LookupMnem(MNEM_TAB *table, const char *string);
 
 
 #ifdef PLATFORM_WINDOWS

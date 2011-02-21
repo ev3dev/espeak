@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <stddef.h>
 
-#define ESPEAK_API_REVISION  5
+#define ESPEAK_API_REVISION  6
 /*
 Revision 2
    Added parameter "options" to eSpeakInitialize()
@@ -41,21 +41,30 @@ Revision 4
 
 Revision 5
    Added espeakCHARS_16BIT
+
+Revision 6
+  Added macros: espeakRATE_MINIMUM, espeakRATE_MAXIMUM, espeakRATE_NORMAL
 */
          /********************/
          /*  Initialization  */
          /********************/
 
+// values for 'value' in espeak_SetParameter(espeakRATE, value, 0), nominally in words-per-minute
+#define espeakRATE_MINIMUM  80
+#define espeakRATE_MAXIMUM  450
+#define espeakRATE_NORMAL   175
+
 
 typedef enum {
   espeakEVENT_LIST_TERMINATED = 0, // Retrieval mode: terminates the event list.
   espeakEVENT_WORD = 1,            // Start of word
-  espeakEVENT_SENTENCE,            // Start of sentence
-  espeakEVENT_MARK,                // Mark
-  espeakEVENT_PLAY,                // Audio element
-  espeakEVENT_END,                 // End of sentence or clause
-  espeakEVENT_MSG_TERMINATED,      // End of message
-  espeakEVENT_PHONEME              // Phoneme, if enabled in espeak_Initialize()
+  espeakEVENT_SENTENCE = 2,        // Start of sentence
+  espeakEVENT_MARK = 3,            // Mark
+  espeakEVENT_PLAY = 4,            // Audio element
+  espeakEVENT_END = 5,             // End of sentence or clause
+  espeakEVENT_MSG_TERMINATED = 6,  // End of message
+  espeakEVENT_PHONEME = 7,         // Phoneme, if enabled in espeak_Initialize()
+  espeakEVENT_SAMPLERATE = 8       // internal use, set sample rate
 } espeak_EVENT_TYPE;
 
 
@@ -385,9 +394,10 @@ espeak_ERROR espeak_SetParameter(espeak_PARAMETER parameter, int value, int rela
    relative=1   Sets a relative value of the parameter.
 
    parameter:
-      espeakRATE:    speaking speed in word per minute.
+      espeakRATE:    speaking speed in word per minute.  Values 80 to 450.
 
-      espeakVOLUME:  volume in range 0-100    0=silence
+      espeakVOLUME:  volume in range 0-200 or more.
+                     0=silence, 100=normal full volume, greater values may produce amplitude compression or distortion
 
       espeakPITCH:   base pitch, range 0-100.  50=normal
 
@@ -443,6 +453,7 @@ void espeak_SetPhonemeTrace(int value, FILE *stream);
    value=0  No phoneme output (default)
    value=1  Output the translated phoneme symbols for the text
    value=2  as (1), but also output a trace of how the translation was done (matching rules and list entries)
+   value=3  as (1), but produces IPA rather than ascii phoneme names
 
    stream   output stream for the phoneme symbols (and trace).  If stream=NULL then it uses stdout.
 */

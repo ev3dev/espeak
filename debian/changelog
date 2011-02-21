@@ -1,3 +1,80 @@
+espeak (1.44.05-1ubuntu1) UNRELEASED; urgency=low
+
+  * Merge from debian unstable, remaining changes:
+    - Add gbp.conf for use with git buildpackage
+    - Update the explanation of the -b command-line flag in the espeak manpage
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Mon, 21 Feb 2011 20:10:12 +1100
+
+espeak (1.44.05-1) unstable; urgency=low
+
+  [ Luke Yelavich ]
+  * debian/copyright: update
+  * Update manpage to add command-line flags and fix some errors
+
+  [ Mario Lang ]
+  * New upstream version (Closes: Bug#594872)
+
+  [ Nicolas Boulenguez ]
+  * Made the html docs a subdir.
+  * Referenced it in doc-base.
+  * Correct syntax in manpage.
+  * Separate common paragraph of each description, to ease translations.
+  * Remove empty postinst and postrm.
+  * Add ${misc:Depends} to espeak-data-udeb, update the description to mention
+    d-i.
+  * Use Package-Type instead of XC-Package-Type.
+
+  [ Samuel Thibault ]
+  * debian/copyright: Fix Jonathan's mail.
+  * debian/control: Add espeak-dbg package.
+  * debian/rules: Put debugging symbols into espeak-dbg (Closes: Bug#608984).
+
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 30 Jan 2011 20:41:59 +0100
+
+espeak (1.44.05~really-1.44.04-0ubuntu1) maverick; urgency=low
+
+  * Update the intonation data to correctly match the voice data from the
+    previous espeak release (LP: #644111)
+  * Rebuild orig tarball to include updated intonation data, as dpkg-source
+    being used by soyuz seems to error out when attempting to unpack a v3
+    quilt format package with a binary file included in the debian tarball
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Tue, 21 Sep 2010 16:34:29 +1000
+
+espeak (1.44.04-0ubuntu1) maverick; urgency=low
+
+  * New upstream bugfix release:
+    - Fix error in big-endian data conversion program, producing bad data.
+    - Make geminated voiced stops (eg. [bb] ) longer at fast speeds.
+    - Provide conditional compilation of the mbrola interface, define macro
+      INCLUDE_MBROLA in speech.h
+    - Mbrola: also look for mbrola voices in /usr/share/mbrola/voices
+    - Pad TUNES and frame_t structures to a multiple of 4 bytes.
+    - lang=da, Don't weaken unvoiced stops before pause.
+    - lang=el, Remove final unstressed [a] if the next word starts with [a].
+    - lang=pt, Change final [U] to [w] if next word starts with a vowel.
+  * debian/patches/big-endian-fix.patch: Dropped, applied upstream
+  * debian/rules: Refer to ChangeLog.txt
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu, 16 Sep 2010 08:57:00 +1000
+
+espeak (1.44.03-0ubuntu2) maverick; urgency=low
+
+  * debian/patches/big-endian-fix.patch: Patch to fix an issue with the
+    endian conversion utility used at package build time. This fixes reports of
+    garbled Hungarian speech output (LP: #623221)
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Tue, 14 Sep 2010 16:25:46 +1000
+
+espeak (1.44.03-0ubuntu1) maverick; urgency=low
+
+  * New upstream release (LP: #620179)
+  * debian/patches/big-endian.diff: Dropped, applied upstream
+  * Updated manpage
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu, 19 Aug 2010 10:22:22 +1000
+
 espeak (1.43.03-2ubuntu1) maverick; urgency=low
 
   * Merge from debian unstable, remaining changes:
