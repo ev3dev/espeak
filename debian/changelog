@@ -1,3 +1,9 @@
+espeak (1.44.05-2) unstable; urgency=low
+
+  * debian/control: Update language support comment.
+
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 27 Mar 2011 19:57:35 +0200
+
 espeak (1.44.05-1) unstable; urgency=low
 
   [ Luke Yelavich ]

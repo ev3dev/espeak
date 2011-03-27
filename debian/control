@@ -27,8 +27,7 @@ Description: A multi-lingual software speech synthesizer
    * Can produce speech output as a WAV file.
    * Can translate text to phoneme codes, so it could be adapted as a front end
      for another speech synthesis engine.
-   * Potential for other languages. Rudimentary (and probably humourous)
-     attempts at German and Esperanto are included.
+   * Potential for other languages. More than 40 languages are included.
    * Compact size. The program and its data total about 350 kbytes.
    * Written in C++.
 
