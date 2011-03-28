@@ -1,5 +1,6 @@
-espeak (1.44.05-2) UNRELEASED; urgency=low
+espeak (1.45.03-1) UNRELEASED; urgency=low
 
+  New upstream release (Closes: Bug#614386).
   * debian/control: Update language support comment.
 
  -- Samuel Thibault <sthibault@debian.org>  Sun, 27 Mar 2011 19:57:35 +0200
