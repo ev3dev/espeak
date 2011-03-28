@@ -1,12 +1,13 @@
 # remove -fno-exceptions  if it causes problems with stdio library on some platforms (ARM)
 
+DATADIR=/usr/share/espeak-data
+
 PREFIX=/usr
 BINDIR=$(PREFIX)/bin
 INCDIR=$(PREFIX)/include/espeak
 LIBDIR=$(PREFIX)/lib
-DATADIR=$(PREFIX)/share/espeak-data
 
-RELEASE = 1.44
+RELEASE = 1.45
 BIN_NAME = speak
 BIN2_NAME = espeak
 LIB_NAME = libespeak.so
@@ -50,13 +51,13 @@ endif
 speak_SOURCES = speak.cpp compiledict.cpp dictionary.cpp intonation.cpp \
 	readclause.cpp setlengths.cpp numbers.cpp synth_mbrola.cpp \
 	synthdata.cpp synthesize.cpp translate.cpp mbrowrap.cpp \
-	tr_languages.cpp voices.cpp wavegen.cpp phonemelist.cpp klatt.cpp
+	tr_languages.cpp voices.cpp wavegen.cpp phonemelist.cpp klatt.cpp sonic.cpp
 
 libespeak_SOURCES = speak_lib.cpp compiledict.cpp dictionary.cpp intonation.cpp \
 	readclause.cpp setlengths.cpp numbers.cpp synth_mbrola.cpp \
 	synthdata.cpp synthesize.cpp translate.cpp mbrowrap.cpp \
 	tr_languages.cpp voices.cpp wavegen.cpp phonemelist.cpp \
-	espeak_command.cpp event.cpp fifo.cpp $(WAVE) debug.cpp klatt.cpp
+	espeak_command.cpp event.cpp fifo.cpp $(WAVE) debug.cpp klatt.cpp sonic.cpp
 
 SRCS1=$(speak_SOURCES)
 OBJS1=$(patsubst %.cpp,%.o,$(SRCS1))
@@ -74,25 +75,28 @@ CXXFLAGS=-O2
 
 
 all: $(BIN_NAME) $(LIB_NAME) $(STATIC_LIB_NAME) $(BIN2_NAME)
-	mv $(LIB_NAME) $(LIB_NAME).$(LIBTAG)
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) $(USE_AUDIO) -D PATH_ESPEAK_DATA=\"$(DATADIR)\" -Wall -pedantic -I. -c -fno-exceptions  $<
 
 $(BIN_NAME): $(OBJS1)
-	$(CXX) -o $@ $(OBJS1) $(LIBS1)
+	$(CXX) $(LDFLAGS) -o $@ $(OBJS1) $(LIBS1)
 
 $(BIN2_NAME): $(OBJS3) $(LIB_NAME)
-	$(CXX) -o $@ $(OBJS3) $(LIBS3)
+	$(CXX) $(LDFLAGS) -o $@ $(OBJS3) $(LIBS3)
 
 
 
 x_%.o: %.cpp
-	$(CXX) $(CXXFLAGS) $(USE_AUDIO) -Wall -fpic -fvisibility=hidden -pedantic \
+	$(CXX) $(CXXFLAGS) $(USE_AUDIO) -D PATH_ESPEAK_DATA=\"$(DATADIR)\" -Wall -fpic -fvisibility=hidden -pedantic \
 	-I. -D LIBRARY -c -fno-exceptions  $<  -o x_$*.o
 
 $(LIB_NAME): $(OBJS2)
-	$(CXX) -shared $(SONAME_OPT)$(LIB_NAME).$(LIB_VERSION) -o $@ $(OBJS2) $(LIBS2)
+	$(CXX) $(LDFLAGS) -shared $(SONAME_OPT)$(LIB_NAME).$(LIB_VERSION) -o $@ \
+	$(OBJS2) $(LIBS2)
+	mv $(LIB_NAME) $(LIB_NAME).$(LIBTAG)
+	$(LN_SF) $(LIB_NAME).$(LIBTAG) $(LIB_NAME).$(LIB_VERSION)
+	$(LN_SF) $(LIB_NAME).$(LIB_VERSION) $(LIB_NAME)
 
 $(STATIC_LIB_NAME): $(OBJS2)
 	$(AR) cqs $(STATIC_LIB_NAME) $(OBJS2)
