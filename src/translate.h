@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2010 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2011 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -60,7 +60,7 @@
 
 #define FLAG_ALLOW_DOT  0x01000000  // ignore '.' after word (abbreviation)
 #define FLAG_NEEDS_DOT  0x02000000  // only if the word is followed by a dot
-
+#define FLAG_WAS_UNPRONOUNCABLE  0x04000000  // the unpronounceable routine was used
 #define FLAG_MAX3       0x08000000  // limit to 3 repeats
 #define FLAG_PAUSE1     0x10000000  // shorter prepause
 #define FLAG_TEXTMODE   0x20000000  // word translates to replacement text, not phonemes
@@ -145,10 +145,11 @@
 #define RULE_CONDITION	5	// followed by condition number (byte)
 #define RULE_GROUP_START 6
 #define RULE_GROUP_END	7
-#define RULE_LINENUM		8  // next 2 bytes give a line number, for debugging purposes
+#define RULE_PRE_ATSTART 8   // as RULE_PRE but also match with 'start of word'
+#define RULE_LINENUM		9  // next 2 bytes give a line number, for debugging purposes
 
 #define RULE_SPACE		32   // ascii space
-#define RULE_SYLLABLE	9    // @
+#define RULE_SYLLABLE	21    // @
 #define RULE_STRESSED	10   // &
 #define RULE_DOUBLE		11   // %
 #define RULE_INC_SCORE	12   // +
@@ -342,6 +343,7 @@ typedef struct {
 #define S_FINAL_NO_2        0x10
 #define S_NO_AUTO_2         0x20
 #define S_2_TO_HEAVY        0x40
+#define S_FIRST_PRIMARY     0x80
 #define S_2_SYL_2           0x1000
 #define S_INITIAL_2         0x2000
 #define S_NO_AUTO_DIM       0x10000
@@ -353,6 +355,7 @@ typedef struct {
 // bit4=don't allow secondary stress on last syllable
 // bit5-don't use automatic secondary stress
 // bit6=light syllable followed by heavy, move secondary stress to the heavy syllable. LANG=Finnish
+// bit7=if more than one primary stress, make the subsequent primaries to secondary stress
 // bit8=stress last syllable if it doesn't end in a vowel
 // bit9=stress last syllable if it doesn't end in vowel or "s" or "n"  LANG=Spanish
 // bit12= In a 2-syllable word, if one has primary stress then give the other secondary stress
@@ -392,13 +395,14 @@ typedef struct {
 #define NUM_NOPAUSE       0x20000
 #define NUM_AND_HUNDRED   0x40000
 #define NUM_THOUSAND_AND  0x80000
-#define NUM_VIGESIMAL     0x100000
+#define NUM_VIGESIMAL       0x100000
 #define NUM_OMIT_1_THOUSAND 0x200000
-
-#define NUM_ROMAN         0x1000000
+#define NUM_ZERO_HUNDRED    0x400000
+#define NUM_HUNDRED_AND_DIGIT   0x800000
+#define NUM_ROMAN          0x1000000
 #define NUM_ROMAN_CAPITALS 0x2000000
-#define NUM_ROMAN_AFTER   0x4000000
-#define NUM_ROMAN_ORDINAL 0x8000000
+#define NUM_ROMAN_AFTER    0x4000000
+#define NUM_ROMAN_ORDINAL  0x8000000
 
 	// bits0-1=which numbers routine to use.
 	// bit2=  thousands separator must be space
@@ -420,6 +424,8 @@ typedef struct {
 	// bit19= 'and' after thousands if there are no hundreds
 	// bit20= vigesimal number, if tens are not found
 	// bit21= omit "one" before "thousand"
+	// bit22= say "zero" before hundred
+	// bit23= add "and" after hundreds and thousands, only if there are digits and no tens
 
 	// bit24= recognize roman numbers
 	// bit25= Roman numbers only if upper case
@@ -427,11 +433,13 @@ typedef struct {
 	// bit27= Roman numbers are ordinal numbers
 	int numbers;
 
+#define NUM2_MULTIPLE_ORDINAL   0x1000
 	// bits 1-4  use variant form of numbers before thousands,millions,etc.
 	// bit6=(LANG=pl) two forms of plural, M or MA
 	// bit7=(LANG-ru) use MB for 1 thousand, million, etc
 	// bit8=(LANG=cs,sk) two forms of plural, M or MA
 	// bit9=(LANG=rw) say "thousand" and "million" before its number, not after
+	// bit12=(LANG=el,es) use ordinal form of hundreds and tens as well as units
 	int numbers2;
 
 #define BREAK_THOUSANDS   0x49249248
@@ -476,10 +484,6 @@ typedef struct {
 } CHANGEPH;
 
 
-
-#define NUM_SEP_DOT    0x0008    // . , for thousands and decimal separator
-#define NUM_SEP_SPACE  0x1000    // allow space as thousands separator (in addition to langopts.thousands_sep)
-#define NUM_DEC_IT     0x2000    // (LANG=it) speak post-decimal-point digits as a combined number not as single digits
 
 typedef struct
 {//===========
@@ -654,7 +658,7 @@ void CalcLengths(Translator *tr);
 void CalcPitches(Translator *tr, int clause_tone);
 
 int RemoveEnding(Translator *tr, char *word, int end_type, char *word_copy);
-int Unpronouncable(Translator *tr, char *word);
+int Unpronouncable(Translator *tr, char *word, int posn);
 void SetWordStress(Translator *tr, char *output, unsigned int *dictionary_flags, int tonic, int prev_stress);
 int TranslateRules(Translator *tr, char *p, char *phonemes, int size, char *end_phonemes, int end_flags, unsigned int *dict_flags);
 int TranslateWord(Translator *tr, char *word1, int next_pause, WORD_TAB *wtab);

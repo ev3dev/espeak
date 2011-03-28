@@ -27,6 +27,8 @@
 
 #ifndef PLATFORM_DOS
 #ifdef PLATFORM_WINDOWS
+#include <fcntl.h>
+#include <io.h>
 #include <windows.h>
 #include <winreg.h>
 #else
@@ -234,7 +236,13 @@ static int OpenWaveFile(const char *path, int rate)
 		return(2);
 
 	if(strcmp(path,"stdout")==0)
+	{
+#ifdef PLATFORM_WINDOWS
+// prevent Windows adding 0x0d before 0x0a bytes
+		_setmode(_fileno(stdout), _O_BINARY);
+#endif
 		f_wave = stdout;
+	}
 	else
 		f_wave = fopen(path,"wb");
 
@@ -289,7 +297,7 @@ void MarkerEvent(int type, unsigned int char_position, int value, unsigned char 
 static int WavegenFile(void)
 {//=========================
 	int finished;
-	unsigned char wav_outbuf[512];
+	unsigned char wav_outbuf[1024];
 	char fname[210];
 
 	out_ptr = out_start = wav_outbuf;
@@ -542,6 +550,9 @@ int main (int argc, char **argv)
 
 		if(c == '-')
 		{
+			if(p[0] == 0)
+				break;   // -- means don't interpret further - as commands
+
 			opt_string="";
 			for(ix=0; ;ix++)
 			{
@@ -593,7 +604,8 @@ int main (int argc, char **argv)
 			break;
 
 		case 'h':
-			printf("\nspeak text-to-speech: %s\n%s",version_string,help_text);
+			init_path(argv[0],data_path);
+			printf("\nspeak text-to-speech: %s   Data at: %s\n%s",version_string,path_home,help_text);
 			exit(0);
 			break;
 

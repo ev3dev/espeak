@@ -109,7 +109,7 @@ void unload_MBR()
 
 static MBROLA_TAB *mbrola_tab = NULL;
 static int mbrola_control = 0;
-
+static int mbr_name_prefix = 0;
 
 espeak_ERROR LoadMbrolaTable(const char *mbrola_voice, const char *phtrans, int srate)
 {//===================================================================================
@@ -123,6 +123,7 @@ espeak_ERROR LoadMbrolaTable(const char *mbrola_voice, const char *phtrans, int 
 
 	mbrola_name[0] = 0;
 	mbrola_delay = 0;
+	mbr_name_prefix = 0;
 
 	if(mbrola_voice == NULL)
 	{
@@ -133,14 +134,18 @@ espeak_ERROR LoadMbrolaTable(const char *mbrola_voice, const char *phtrans, int 
 
 	sprintf(path,"%s/mbrola/%s",path_home,mbrola_voice);
 #ifdef PLATFORM_POSIX
+	// if not found, then also look in
+	//   usr/share/mbrola/xx, /usr/share/mbrola/xx/xx, /usr/share/mbrola/voices/xx
 	if(GetFileLength(path) <= 0)
 	{
-		// mbrola voice file not found, look in /usr/share
      sprintf(path,"/usr/share/mbrola/%s",mbrola_voice);
 	}
 	if(GetFileLength(path) <= 0)
 	{
-		// mbrola voice file not found, look in /usr/share
+     sprintf(path,"/usr/share/mbrola/%s/%s",mbrola_voice,mbrola_voice);
+	}
+	if(GetFileLength(path) <= 0)
+	{
      sprintf(path,"/usr/share/mbrola/voices/%s",mbrola_voice);
 	}
 #endif
@@ -196,16 +201,22 @@ static int GetMbrName(PHONEME_LIST *plist, PHONEME_TAB *ph, PHONEME_TAB *ph_prev
 {//==========================================================================================================================================
 // Look up a phoneme in the mbrola phoneme name translation table
 // It may give none, 1, or 2 mbrola phonemes
-	int mnem = ph->mnemonic;
 	MBROLA_TAB *pr;
 	PHONEME_TAB *other_ph;
 	int found = 0;
+	static int mnem;
 
 	// control
 	// bit 0  skip the next phoneme
 	// bit 1  match this and Previous phoneme
 	// bit 2  only at the start of a word
 	// bit 3  don't match two phonemes across a word boundary
+	// bit 4  add this phoneme name as a prefix to the next phoneme name (used for de4 phoneme prefix '?')
+
+	*name2=0;
+	*split=0;
+	*control=0;
+	mnem = ph->mnemonic;
 
 	pr = mbrola_tab;
 	while(pr->name != 0)
@@ -245,15 +256,25 @@ static int GetMbrName(PHONEME_LIST *plist, PHONEME_TAB *ph, PHONEME_TAB *ph_prev
 				*name2 = pr->mbr_name2;
 				*split = pr->percent;
 				*control = pr->control;
-				return(pr->mbr_name);
+
+				if(pr->control & 0x10)
+				{
+					mbr_name_prefix = pr->mbr_name;
+					return(0);
+				}
+				mnem = pr->mbr_name;
+				break;
 			}
 		}
 
 		pr++;
 	}
-	*name2=0;
-	*split=0;
-	*control=0;
+
+	if(mbr_name_prefix != 0)
+	{
+		mnem = (mnem << 8) | (mbr_name_prefix & 0xff);
+	}
+	mbr_name_prefix = 0;
 	return(mnem);
 }
 
