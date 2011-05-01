@@ -259,7 +259,7 @@ geweest	$u
 hebben  $u          // to have
 heb	$u
 hebt	$u
-heeft	$u
+heeft   $u
 hadden	$u
 gehad	$u
 
@@ -341,6 +341,23 @@ up	_^_EN
 website _^_EN
 websites _^_EN
 weekend _^_EN
+
+
+// verbs where -ent is not a stressed ending
+bakent		$alt
+effent		$alt
+jegent		$alt
+kerstent	$alt
+ketent		$alt
+loochent	$alt
+oefent		$alt
+opent		$alt
+regent		$alt
+rekent		$alt
+stevent		$alt
+tekent		$alt
+wapent		$alt
+zegent		$alt
 
 
 // words where -er is not a stressed verb ending

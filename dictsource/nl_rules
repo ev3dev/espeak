@@ -13,8 +13,8 @@
 
         @@C) a (_         =a:
           _) aan (@P3     'a:n
-          @) aar (_@S3    a:r
-          @) aard (_@S4   a:rt
+          @) aar (_S3    a:r
+          @) aard (_S4   a:rt
              aa (rd_      'a:
              aa (C_       'a:
           z) aa (m_       a:
@@ -130,7 +130,7 @@
 
 
 .group e
-             e            e:
+             e            e#  // [e:] but change to [@] in unstressed syllables
          &C) e (_S1qd     @
              e (_         @
              e (CK        E
@@ -185,16 +185,21 @@
           &) elijks       @l@ks
           &) em (_        @m
           &) e (ment      @
+          &) e (nissen_   @
           &) en (_S2qd    @n
           &) ens (_S3q    @ns
           &) end (_       @nd
           &) ende (_      @nd@
           &) enden (_     @nd@n
              eden         e:d@n
+          &) ent (_$w_alt =@nt
           @) ent (_       'Ent
           @) ent (e_      'Ent
           @) ent (en_     'Ent
           @) ent (er_     'Ent
+          @) ent (ere_    'Ent
+          @) ent (st_     'Ent
+          @) ent (ste_    'Ent
          ag) ent          'Ent
           &) er (_        @r
           &) ere (_       @r@
@@ -204,7 +209,7 @@
           @) es (_S2qd   'Es
           @) essen (_S5qd'Es@n
           @) eres (_S4qd  @r'Es
-        @) eressen (_S7sq @r'Es@n
+          @) eressen (_S7sq @r'Es@n
           @) etten (_S3   @n 
           @) es    (_$p_alt @s  // for wors which end on [@] with multiple on 's'.
              euille       @'y
@@ -215,7 +220,7 @@
           &) e (nB@       E2
          id) e (nt        E
           _) er (@P2      Er
-          _) erger        %ErgEr  // ergeren
+          _) erger        ErQ@r  // ergeren
           &) era (_       @ra:
           @) e (raar_     @
           &) e (rC@       E2
@@ -374,8 +379,8 @@
           _) natuur       na:t'yr
           _) noord (@P5   no:rd
           _) nieuws (@P6  n'iws
-         @@) nis (_@S3    nIs
-         @@) nisen (_@S5  nIs@n
+         @@) nis (_S3    nIs
+         @@) nisen (_S5  nIs@n
 
 
 .group o
@@ -494,7 +499,7 @@
           @) ssi (o       S
 
           _) standaard (@P9 st'Anda:rt
-          @) straat (_@S6 stra:t
+          @) straat (_S6 stra:t
        _vre) s (e         s
 
 
@@ -607,7 +612,7 @@
 
 .group z
              z            z
-             zele (_@S4   ze:l@ // common suffix for cities.
+             zele (_S4   ze:l@ // common suffix for cities.
          _)  zuid (@P4    zWyt
 
 
@@ -618,5 +623,6 @@
             $             d'OlAr
             , (D          k'Oma:
         __) - (_D         m'In
+         @) 's (_S2       s
 
 
