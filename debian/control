@@ -12,7 +12,7 @@ Standards-Version: 3.9.2
 Package: espeak
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: A multi-lingual software speech synthesizer
+Description: Multi-lingual software speech synthesizer
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
@@ -35,7 +35,7 @@ Package: espeak-data
 Architecture: any
 Depends: ${misc:Depends}
 Recommends: espeak (= ${binary:Version})
-Description: A multi-lingual software speech synthesizer: speech data files
+Description: Multi-lingual software speech synthesizer: speech data files
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
@@ -47,7 +47,7 @@ Section: debian-installer
 Architecture: any
 Depends: ${misc:Depends}
 Package-Type: udeb
-Description: A multi-lingual software speech synthesizer: data for d-i
+Description: Multi-lingual software speech synthesizer: data for d-i
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
@@ -59,7 +59,7 @@ Package: libespeak1
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}, espeak-data (= ${binary:Version})
-Description: A multi-lingual software speech synthesizer: shared library
+Description: Multi-lingual software speech synthesizer: shared library
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
@@ -69,7 +69,7 @@ Package: libespeak-dev
 Architecture: any
 Section: libdevel
 Depends: ${misc:Depends}, libespeak1 (= ${binary:Version})
-Description: A multi-lingual software speech synthesizer: development files
+Description: Multi-lingual software speech synthesizer: development files
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
@@ -81,7 +81,7 @@ Architecture: any
 Section: debug
 Priority: extra
 Depends: ${shlibs:Depends}, ${misc:Depends}, espeak (= ${binary:Version}), libespeak1 (= ${binary:Version})
-Description: A multi-lingual software speech synthesizer: shared library
+Description: Multi-lingual software speech synthesizer: shared library
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
