@@ -1,3 +1,20 @@
+espeak 1.45.04  25.Apr.2011
+
+Added language Malayalam (ml).
+
+lang=de, Fixed important pronunciation error "sage" etc.
+
+Don't speak punctuation names faster at high speeds.
+
+lang=ml, recognise "virama + U+200d" (zero-width joiner) to indicte 'chillu' characters.
+
+Fix problem of punctuation character announcement repeated at the start of the next sentence after speaking is stopped.
+
+Fixed crash due to large numbers of box-drawing characters in text input.
+
+Fixed phoneme translation of 't' sounds for US-English voices.
+
+
 espeak 1.45.03  22.Mar.2011
 
 lang=Turkish, fix pronunciation of suffixes, fix suffixes after names.

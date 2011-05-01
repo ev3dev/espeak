@@ -352,7 +352,7 @@ char *EncodePhonemes(char *p, char *outptr, unsigned char *bad_phoneme)
 /* Translate a phoneme string from ascii mnemonics to internal phoneme numbers,
    from 'p' up to next blank .
    Returns advanced 'p'
-   outptr contains encoded phonemes, unrecognised phonemes are encoded as 255
+   outptr contains encoded phonemes, unrecognized phoneme stops the encoding
    bad_phoneme must point to char array of length 2 of more
 */
 {
@@ -423,9 +423,11 @@ char *EncodePhonemes(char *p, char *outptr, unsigned char *bad_phoneme)
 
 			if(max_ph == 0)
 			{
-				max_ph = 255;   /* not recognised */
+				// not recognised, report and ignore
 				bad_phoneme[0] = *p;
 				bad_phoneme[1] = 0;
+				*outptr++ = 0;
+				return(p+1);
 			}
 
 			if(max <= 0)
@@ -1183,8 +1185,8 @@ void SetWordStress(Translator *tr, char *output, unsigned int *dictionary_flags,
 	switch(tr->langopts.stress_rule)
 	{
 	case 8:
-		// stress on first syllable, unless it is a light syllable
-		if(syllable_weight[1] > 0)
+		// stress on first syllable, unless it is a light syllable followed by a heavy syllable
+		if((syllable_weight[1] > 0) || (syllable_weight[2] == 0))
 			break;
 		// else drop through to case 1
 	case 1:
@@ -3248,7 +3250,7 @@ int LookupDictList(Translator *tr, char **wordptr, char *ph_out, unsigned int *f
 		}
 	}
 
-	for(length=0; length<N_WORD_BYTES; length++)
+	for(length=0; length<(N_WORD_BYTES-1); length++)
 	{
 		if(((c = *word1++)==0) || (c == ' '))
 			break;
