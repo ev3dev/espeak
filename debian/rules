@@ -6,7 +6,7 @@
 
 soname=libespeak.so.1
 #version=$(shell dpkg-parsechangelog|sed -n -e 's/^Version: //p'|cut -d- -f1)
-version=1.44
+version=1.45
 
 CFLAGS = -Wall -g
 
@@ -73,7 +73,7 @@ binary-indep: build install
 binary-arch: build install
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs ChangeLog
+	dh_installchangelogs ChangeLog.txt
 	dh_installdocs
 	dh_installman debian/espeak.1
 	dh_link

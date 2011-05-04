@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2010 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2011 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,8 +35,8 @@
 #include "translate.h"
 #include "wave.h"
 
-const char *version_string = "1.44.04  14.Sep.10";
-const int version_phdata  = 0x014404;
+const char *version_string = "1.45.04  25.Apr.11";
+const int version_phdata  = 0x014500;
 
 int option_device_number = -1;
 FILE *f_logespeak = NULL;
@@ -496,7 +496,7 @@ void LoadConfig(void)
 		else
 		if(memcmp(buf,"pa_device",9)==0)
 		{
-			sscanf(&buf[7],"%d",&option_device_number);
+			sscanf(&buf[10],"%d",&option_device_number);
 		}
 		else
 		if(memcmp(buf,"soundicon",9)==0)
@@ -593,6 +593,7 @@ static bool InterpretCondition(Translator *tr, int control, PHONEME_LIST *plist,
 	int which;
 	unsigned int data;
 	int instn2;
+	int count;
 	PHONEME_TAB *ph;
 	PHONEME_LIST *plist_this;
 	static int ph_position[8] = {0, 1, 2, 3, 2, 0, 1, 3};  // prevPh, thisPh, nextPh, next2Ph, nextPhW, prevPhW, nextVowel, next2PhW
@@ -616,6 +617,13 @@ static bool InterpretCondition(Translator *tr, int control, PHONEME_LIST *plist,
 			if(plist[0].sourceix)
 				return(false);
 		}
+		if(which==7)
+		{
+			// nextPh2 not word boundary
+			if((plist[1].sourceix) || (plist[2].sourceix))
+				return(false);
+		}
+
 		if(which==6)
 		{
 			// nextVowel, not word boundary
@@ -627,16 +635,11 @@ static bool InterpretCondition(Translator *tr, int control, PHONEME_LIST *plist,
 					break;
 			}
 		}
-		if(which==7)
-		{
-			// nextPh2 not word boundary
-			if((plist[1].sourceix) || (plist[2].sourceix))
-				return(false);
-		}
 		else
 		{
 			which = ph_position[which];
 		}
+
 		plist_this = plist;
 		plist = &plist[which-1];
 
@@ -737,6 +740,18 @@ static bool InterpretCondition(Translator *tr, int control, PHONEME_LIST *plist,
 			case 12:  // isVoiced
 				return((ph->type == phVOWEL) || (ph->type == phLIQUID) || (ph->phflags & phVOICED));
 			}
+
+			case 13:  // isFirstVowel
+				count = 0;
+				for(;;)
+				{
+					if(plist->ph->type == phVOWEL)
+						count++;
+					if(plist->sourceix != 0)
+						break;
+					plist--;
+				}
+				return(count==1);
 			break;
 
 		}

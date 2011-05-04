@@ -1,3 +1,28 @@
+espeak (1.45.04-1ubuntu1) UNRELEASED; urgency=low
+
+  * Merge from debian unstable, remaining changes:
+    - Add gbp.conf for use with git buildpackage
+    - Update the explanation of the -b command-line flag in the espeak manpage
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Wed, 04 May 2011 11:09:07 +1000
+
+espeak (1.45.04-1) unstable; urgency=low
+
+  [ Samuel Thibault ]
+  * New upstream release (Closes: #622747).
+  * Bump Standards-Version to 3.9.2 (no change needed)
+  * Remove "A" from package descriptions, see lintian's
+    description-synopsis-starts-with-article.
+
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 01 May 2011 17:16:59 +0200
+
+espeak (1.45.03-1) unstable; urgency=low
+
+  New upstream release (Closes: Bug#614386).
+  * debian/control: Update language support comment.
+
+ -- Samuel Thibault <sthibault@debian.org>  Mon, 28 Mar 2011 20:54:50 +0200
+
 espeak (1.44.05-1ubuntu1) natty; urgency=low
 
   * Merge from debian unstable, remaining changes:

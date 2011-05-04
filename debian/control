@@ -8,12 +8,12 @@ Vcs-Browser: http://git.debian.org/?p=pkg-a11y/espeak.git;a=summary
 Vcs-Git: git://git.debian.org/git/pkg-a11y/espeak.git
 Homepage: http://espeak.sourceforge.net/
 Build-Depends: debhelper (>= 5.0.0), portaudio19-dev
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 
 Package: espeak
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: A multi-lingual software speech synthesizer
+Description: Multi-lingual software speech synthesizer
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
@@ -28,8 +28,7 @@ Description: A multi-lingual software speech synthesizer
    * Can produce speech output as a WAV file.
    * Can translate text to phoneme codes, so it could be adapted as a front end
      for another speech synthesis engine.
-   * Potential for other languages. Rudimentary (and probably humourous)
-     attempts at German and Esperanto are included.
+   * Potential for other languages. More than 40 languages are included.
    * Compact size. The program and its data total about 350 kbytes.
    * Written in C++.
 
@@ -37,7 +36,7 @@ Package: espeak-data
 Architecture: any
 Depends: ${misc:Depends}
 Recommends: espeak (= ${binary:Version})
-Description: A multi-lingual software speech synthesizer: speech data files
+Description: Multi-lingual software speech synthesizer: speech data files
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
@@ -49,7 +48,7 @@ Section: debian-installer
 Architecture: any
 Depends: ${misc:Depends}
 Package-Type: udeb
-Description: A multi-lingual software speech synthesizer: data for d-i
+Description: Multi-lingual software speech synthesizer: data for d-i
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
@@ -61,7 +60,7 @@ Package: libespeak1
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}, espeak-data (= ${binary:Version})
-Description: A multi-lingual software speech synthesizer: shared library
+Description: Multi-lingual software speech synthesizer: shared library
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
@@ -71,7 +70,7 @@ Package: libespeak-dev
 Architecture: any
 Section: libdevel
 Depends: ${misc:Depends}, libespeak1 (= ${binary:Version})
-Description: A multi-lingual software speech synthesizer: development files
+Description: Multi-lingual software speech synthesizer: development files
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
@@ -83,7 +82,7 @@ Architecture: any
 Section: debug
 Priority: extra
 Depends: ${shlibs:Depends}, ${misc:Depends}, espeak (= ${binary:Version}), libespeak1 (= ${binary:Version})
-Description: A multi-lingual software speech synthesizer: shared library
+Description: Multi-lingual software speech synthesizer: shared library
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .

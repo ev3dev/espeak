@@ -352,7 +352,7 @@ char *EncodePhonemes(char *p, char *outptr, unsigned char *bad_phoneme)
 /* Translate a phoneme string from ascii mnemonics to internal phoneme numbers,
    from 'p' up to next blank .
    Returns advanced 'p'
-   outptr contains encoded phonemes, unrecognised phonemes are encoded as 255
+   outptr contains encoded phonemes, unrecognized phoneme stops the encoding
    bad_phoneme must point to char array of length 2 of more
 */
 {
@@ -423,9 +423,11 @@ char *EncodePhonemes(char *p, char *outptr, unsigned char *bad_phoneme)
 
 			if(max_ph == 0)
 			{
-				max_ph = 255;   /* not recognised */
+				// not recognised, report and ignore
 				bad_phoneme[0] = *p;
 				bad_phoneme[1] = 0;
+				*outptr++ = 0;
+				return(p+1);
 			}
 
 			if(max <= 0)
@@ -781,8 +783,8 @@ static int Unpronouncable2(Translator *tr, char *word)
 }
 
 
-int Unpronouncable(Translator *tr, char *word)
-{//===========================================
+int Unpronouncable(Translator *tr, char *word, int posn)
+{//=====================================================
 /* Determines whether a word in 'unpronouncable', i.e. whether it should
 	be spoken as individual letters.
 
@@ -817,7 +819,7 @@ int Unpronouncable(Translator *tr, char *word)
 		if((c==0) || (c==' '))
 			break;
 
-		if((c=='\'') && (count > 1))
+		if((c=='\'') && ((count > 1) || (posn > 0)))
 			break;   // "tv'" but not "l'"
 
 		if(count==0)
@@ -1090,6 +1092,7 @@ void SetWordStress(Translator *tr, char *output, unsigned int *dictionary_flags,
 	int done;
 	int stressflags;
 	int dflags = 0;
+	int first_primary;
 
 	signed char vowel_stress[N_WORD_PHONEMES/2];
 	char syllable_weight[N_WORD_PHONEMES/2];
@@ -1182,8 +1185,8 @@ void SetWordStress(Translator *tr, char *output, unsigned int *dictionary_flags,
 	switch(tr->langopts.stress_rule)
 	{
 	case 8:
-		// stress on first syllable, unless it is a light syllable
-		if(syllable_weight[1] > 0)
+		// stress on first syllable, unless it is a light syllable followed by a heavy syllable
+		if((syllable_weight[1] > 0) || (syllable_weight[2] == 0))
 			break;
 		// else drop through to case 1
 	case 1:
@@ -1433,6 +1436,7 @@ void SetWordStress(Translator *tr, char *output, unsigned int *dictionary_flags,
 	}
 
 	done = 0;
+	first_primary = 0;
 	for(v=1; v<vowel_count; v++)
 	{
 		if(vowel_stress[v] < 0)
@@ -1467,6 +1471,18 @@ void SetWordStress(Translator *tr, char *output, unsigned int *dictionary_flags,
 				vowel_stress[v] = (char)stress;
 				done =1;
 				stress = 3;  /* use secondary stress for remaining syllables */
+			}
+		}
+
+		if(vowel_stress[v] >= 4)
+		{
+			if(first_primary == 0)
+				first_primary = v;
+			else
+			if(stressflags & S_FIRST_PRIMARY)
+			{
+				// reduce primary stresses after the first to secondary
+				vowel_stress[v] = 3;
 			}
 		}
 	}
@@ -1737,7 +1753,6 @@ static void MatchRule(Translator *tr, char *word[], char *word_start, int group_
 	int  failed;
 	int  unpron_ignore;
 	int  consumed;        /* number of letters consumed from input */
-	int  count;           /* count through rules in the group */
 	int  syllable_count;
 	int  vowel;
 	int  letter_group;
@@ -1747,6 +1762,7 @@ static void MatchRule(Translator *tr, char *word[], char *word_start, int group_
 	int  n_bytes;
 	int add_points;
 	int command;
+	int check_atstart;
 
 	MatchRecord match;
 	static MatchRecord best;
@@ -1769,7 +1785,6 @@ static void MatchRule(Translator *tr, char *word[], char *word_start, int group_
 
 
 	total_consumed = 0;
-	count = 0;
 	common_phonemes = NULL;
 	match_type = 0;
 
@@ -1787,7 +1802,7 @@ static void MatchRule(Translator *tr, char *word[], char *word_start, int group_
 		letter = 0;
 		distance_right= -6;   /* used to reduce points for matches further away the current letter */
 		distance_left= -2;
-		count++;
+		check_atstart = 0;
 
 		match.points = 1;
 		match.end_type = 0;
@@ -1827,17 +1842,24 @@ static void MatchRule(Translator *tr, char *word[], char *word_start, int group_
 					rule--;      // so we are still pointing at the 0
 					failed=2;    // matched OK
 					break;
+
+				case RULE_PRE_ATSTART:   // pre rule with implied 'start of word'
+					check_atstart = 1;
+					unpron_ignore = 0;
+					match_type = RULE_PRE;
+					break;
+
 				case RULE_PRE:
 					match_type = RULE_PRE;
 					if(word_flags & FLAG_UNPRON_TEST)
 					{
 						// checking the start of the word for unpronouncable character sequences, only
 						// consider rules which explicitly match the start of a word
-						if(rule[0] != ' ')
-							failed = 1;
-						unpron_ignore = 0;
+						// Note: Those rules now use RULE_PRE_ATSTART
+						failed = 1;
 					}
 					break;
+
 				case RULE_POST:
 					match_type = RULE_POST;
 					break;
@@ -2306,31 +2328,34 @@ static void MatchRule(Translator *tr, char *word[], char *word_start, int group_
 				match.points += add_points;
 		}
 
-
 		if((failed == 2) && (unpron_ignore == 0))
 		{
-			/* matched OK, is this better than the last best match ? */
-
-			if(match.points >= best.points)
+			// do we also need to check for 'start of word' ?
+			if((check_atstart==0) || (pre_ptr[-1] == ' '))
 			{
-				memcpy(&best,&match,sizeof(match));
-				total_consumed = consumed;
+				if(check_atstart)
+					match.points += 4;
+
+				/* matched OK, is this better than the last best match ? */
+				if(match.points >= best.points)
+				{
+					memcpy(&best,&match,sizeof(match));
+					total_consumed = consumed;
+				}
+	
+				if((option_phonemes == 2) && (match.points > 0) && ((word_flags & FLAG_NO_TRACE) == 0))
+				{
+					// show each rule that matches, and it's points score
+					int pts;
+					char decoded_phonemes[80];
+	
+					pts = match.points;
+					if(group_length > 1)
+						pts += 35;    // to account for an extra letter matching
+					DecodePhonemes(match.phonemes,decoded_phonemes);
+					fprintf(f_trans,"%3d\t%s [%s]\n",pts,DecodeRule(group_chars, group_length, rule_start, word_flags), decoded_phonemes);
+				}
 			}
-
-			if((option_phonemes == 2) && (match.points > 0) && ((word_flags & FLAG_NO_TRACE) == 0))
-			{
-				// show each rule that matches, and it's points score
-				int pts;
-				char decoded_phonemes[80];
-
-				// note: 'count' contains the rule number, if we want to include it
-				pts = match.points;
-				if(group_length > 1)
-					pts += 35;    // to account for an extra letter matching
-				DecodePhonemes(match.phonemes,decoded_phonemes);
-				fprintf(f_trans,"%3d\t%s [%s]\n",pts,DecodeRule(group_chars, group_length, rule_start, word_flags), decoded_phonemes);
-			}
-
 		}
 
 		/* skip phoneme string to reach start of next template */
@@ -2717,6 +2742,8 @@ void ApplySpecialAttribute(Translator *tr, char *phonemes, int dict_flags)
 
 	switch(tr->translator_name)
 	{
+#ifdef deleted
+// this is now done in de_rules
 	case L('d','e'):
 		if(p_end[0] == PhonemeCode2('i',':'))
 		{
@@ -2727,6 +2754,7 @@ void ApplySpecialAttribute(Translator *tr, char *phonemes, int dict_flags)
 			p_end[2] = 0;
 		}
 		break;
+#endif
 
 	case L('r','o'):
 		if(p_end[0] == PhonemeCode('j'))
@@ -3222,10 +3250,14 @@ int LookupDictList(Translator *tr, char **wordptr, char *ph_out, unsigned int *f
 		}
 	}
 
-	for(length=0; length<N_WORD_BYTES; length++)
+	for(length=0; length<(N_WORD_BYTES-1); length++)
 	{
 		if(((c = *word1++)==0) || (c == ' '))
 			break;
+
+		if((c=='.') && (length > 0) && (isdigit(word[length-1])))
+			break;  // needed for lang=hu, eg. "december 2.-ig"
+
 		word[length] = c;
 	}
 	word[length] = 0;
@@ -3312,6 +3344,10 @@ int LookupDictList(Translator *tr, char **wordptr, char *ph_out, unsigned int *f
 					word[len] = 0;
 					fprintf(f_trans,"Replace: %s  %s\n",word,*wordptr);
 				}
+			}
+			else
+			{
+//				flags[0] &= ~FLAG_SKIPWORDS;  // check lang=hu  január 21.-ig  (error: suffix repeated ??)
 			}
 
 			ph_out[0] = 0;
