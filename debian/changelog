@@ -1,10 +1,10 @@
-espeak (1.45.04-1ubuntu1) UNRELEASED; urgency=low
+espeak (1.45.04-1ubuntu1) oneiric; urgency=low
 
   * Merge from debian unstable, remaining changes:
     - Add gbp.conf for use with git buildpackage
     - Update the explanation of the -b command-line flag in the espeak manpage
 
- -- Luke Yelavich <themuso@ubuntu.com>  Wed, 04 May 2011 11:09:07 +1000
+ -- Luke Yelavich <themuso@ubuntu.com>  Wed, 04 May 2011 11:25:46 +1000
 
 espeak (1.45.04-1) unstable; urgency=low
 
