@@ -7,6 +7,9 @@ espeak (1.45.04-1ubuntu2) UNRELEASED; urgency=low
   [ Samuel Thibault ]
   * debian/patches/leak: Fix fd leak (Closes: Bug#638745).
 
+  [ Boris Dušek ]
+  * espeak-dbg: Fix package description
+
  -- Mackenzie Morgan <maco.m@ubuntu.com>  Mon, 26 Sep 2011 18:21:16 -0400
 
 espeak (1.45.04-1ubuntu1) oneiric; urgency=low

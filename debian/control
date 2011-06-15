@@ -82,7 +82,7 @@ Architecture: any
 Section: debug
 Priority: extra
 Depends: ${shlibs:Depends}, ${misc:Depends}, espeak (= ${binary:Version}), libespeak1 (= ${binary:Version})
-Description: Multi-lingual software speech synthesizer: shared library
+Description: Multi-lingual software speech synthesizer: debugging symbols
  eSpeak is a software speech synthesizer for English, and some other
  languages.
  .
