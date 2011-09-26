@@ -1,0 +1,12 @@
+diff --git a/src/synthdata.cpp b/src/synthdata.cpp
+index 4ad64b3..49e7f95 100644
+--- a/src/synthdata.cpp
++++ b/src/synthdata.cpp
+@@ -512,6 +512,7 @@ void LoadConfig(void)
+ 			}
+ 		}
+ 	}
++	fclose(f);
+ }  //  end of LoadConfig
+ 
+ 
