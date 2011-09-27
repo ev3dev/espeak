@@ -10,7 +10,11 @@ espeak (1.45.04-1ubuntu2) UNRELEASED; urgency=low
   [ Boris Dušek ]
   * espeak-dbg: Fix package description
 
- -- Mackenzie Morgan <maco.m@ubuntu.com>  Mon, 26 Sep 2011 18:21:16 -0400
+  [ Luke Yelavich ]
+  * debian/rules: Rebuild the voice metadata for English, to include the
+    above pronunciation changes
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Tue, 27 Sep 2011 14:19:14 +1000
 
 espeak (1.45.04-1ubuntu1) oneiric; urgency=low
 

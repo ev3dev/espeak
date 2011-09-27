@@ -23,12 +23,15 @@ build-stamp:
 	dh_testdir
 
 	cp src/portaudio19.h src/portaudio.h
-	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE)
+	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) speak DATADIR=$(CURDIR)/espeak-data-local
+	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) libespeak.a
+	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) espeak
 
 	# Build static speak binary
 	cd platforms/big_endian && CFLAGS="$(CFLAGS)" $(MAKE)
 	# Build voice metadata.
 	cp -a $(CURDIR)/espeak-data $(CURDIR)/espeak-data-local
+	cd dictsource && $(CURDIR)/src/speak --compile=en
 	$(CURDIR)/platforms/big_endian/espeak-phoneme-data $(CURDIR)/espeak-data-local $(CURDIR)/espeak-data-local $(CURDIR)/platforms/big_endian/phondata-manifest
 
 	touch build-stamp
