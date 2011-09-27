@@ -1,4 +1,4 @@
-espeak (1.45.04-1ubuntu2) UNRELEASED; urgency=low
+espeak (1.45.04-1ubuntu2) oneiric; urgency=low
 
   [ Mackenzie Morgan ]
   * Add "oneiric" and "ocelot" to en_extra and update
@@ -14,7 +14,7 @@ espeak (1.45.04-1ubuntu2) UNRELEASED; urgency=low
   * debian/rules: Rebuild the voice metadata for English, to include the
     above pronunciation changes
 
- -- Luke Yelavich <themuso@ubuntu.com>  Tue, 27 Sep 2011 14:19:14 +1000
+ -- Luke Yelavich <themuso@ubuntu.com>  Tue, 27 Sep 2011 14:30:54 +1000
 
 espeak (1.45.04-1ubuntu1) oneiric; urgency=low
 
