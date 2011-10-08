@@ -1,4 +1,4 @@
-espeak (1.45.04-2) UNRELEASED; urgency=low
+espeak (1.45.04-2) unstable; urgency=low
 
   [ Samuel Thibault ]
   * debian/control: Build-depend on libsonic-dev.
