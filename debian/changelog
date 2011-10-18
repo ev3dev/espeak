@@ -1,3 +1,26 @@
+espeak (1.45.04-2ubuntu1) UNRELEASED; urgency=low
+
+  * Merge from debian unstable, remaining changes:
+    - Add gbp.conf for use with git buildpackage
+    - Update the explanation of the -b command-line flag in the espeak manpage
+    - Add "oneiric" and "ocelot" to en_extra and update
+      en_dict accordingly
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Wed, 19 Oct 2011 10:35:13 +1100
+
+espeak (1.45.04-2) unstable; urgency=low
+
+  [ Samuel Thibault ]
+  * debian/control: Build-depend on libsonic-dev.
+  * debian/patches/sonic: New patch to make espeak use the system libsonic
+    instead of its copy.
+  * debian/patches/leak: Fix fd leak (Closes: Bug#638745).
+
+  [ Boris Dušek ]
+  * espeak-dbg: Fix package description
+
+ -- Boris Dušek <dusek@brailcom.org>  Wed, 15 Jun 2011 13:24:20 +0200
+
 espeak (1.45.04-1ubuntu2) oneiric; urgency=low
 
   [ Mackenzie Morgan ]

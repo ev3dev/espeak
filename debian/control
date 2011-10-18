@@ -7,7 +7,7 @@ Uploaders: Mario Lang <mlang@debian.org>, Samuel Thibault <sthibault@debian.org>
 Vcs-Browser: http://git.debian.org/?p=pkg-a11y/espeak.git;a=summary
 Vcs-Git: git://git.debian.org/git/pkg-a11y/espeak.git
 Homepage: http://espeak.sourceforge.net/
-Build-Depends: debhelper (>= 5.0.0), portaudio19-dev
+Build-Depends: debhelper (>= 5.0.0), portaudio19-dev, libsonic-dev
 Standards-Version: 3.9.2
 
 Package: espeak
