@@ -1,3 +1,9 @@
+espeak (1.45.04-3) UNRELEASED; urgency=low
+
+  * Update the explanation of the -b command-line flag in the espeak manpage
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Wed, 19 Oct 2011 10:40:51 +1100
+
 espeak (1.45.04-2) unstable; urgency=low
 
   [ Samuel Thibault ]
