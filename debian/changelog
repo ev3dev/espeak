@@ -1,4 +1,4 @@
-espeak (1.45.04-2ubuntu1) UNRELEASED; urgency=low
+espeak (1.45.04-2ubuntu1) precise; urgency=low
 
   * Merge from debian unstable, remaining changes:
     - Add gbp.conf for use with git buildpackage
@@ -6,7 +6,7 @@ espeak (1.45.04-2ubuntu1) UNRELEASED; urgency=low
     - Add "oneiric" and "ocelot" to en_extra and update
       en_dict accordingly
 
- -- Luke Yelavich <themuso@ubuntu.com>  Wed, 19 Oct 2011 10:35:13 +1100
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu, 20 Oct 2011 16:09:18 +1100
 
 espeak (1.45.04-2) unstable; urgency=low
 
