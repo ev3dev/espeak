@@ -1,5 +1,9 @@
 espeak (1.45.04-3) UNRELEASED; urgency=low
 
+  [ Luke Yelavich ]
+  * Update the explanation of the -b command-line flag in the espeak manpage
+
+  [ Samuel Thibault ]
   * control: Depend on hardening-check.
   * rules: Set DEB_BUILD_HARDENING=1 to enable hardening.
 
