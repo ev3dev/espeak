@@ -10,6 +10,8 @@ version=1.45
 
 CFLAGS = -Wall -g
 
+export DEB_BUILD_HARDENING=1
+
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -O0
 else
