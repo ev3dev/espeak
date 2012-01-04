@@ -2,8 +2,9 @@ espeak (1.46.01-0ubuntu1) UNRELEASED; urgency=low
 
   * New upstream release
   * debian/control: Add libpulse-dev as a build dependency
+  * debian/rules: Build espeak with AUDIO=runtime
 
- -- Luke Yelavich <themuso@ubuntu.com>  Wed, 04 Jan 2012 16:56:40 +1100
+ -- Luke Yelavich <themuso@ubuntu.com>  Wed, 04 Jan 2012 16:59:12 +1100
 
 espeak (1.45.04-2ubuntu1) precise; urgency=low
 
