@@ -2,10 +2,13 @@ espeak (1.46.01-0ubuntu1) UNRELEASED; urgency=low
 
   * New upstream release
   * debian/control: Add libpulse-dev as a build dependency
-  * debian/rules: Build espeak with AUDIO=runtime
+  * debian/rules:
+    - Build espeak with AUDIO=runtime
+    - Reinstate parsing the changelog for the soname version, and extend the
+      command to only extract the major version of the soname
   * debian/patches/leak: Dropped, applied upstream
 
- -- Luke Yelavich <themuso@ubuntu.com>  Wed, 04 Jan 2012 17:04:40 +1100
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu, 05 Jan 2012 09:11:29 +1100
 
 espeak (1.45.04-2ubuntu1) precise; urgency=low
 

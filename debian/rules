@@ -5,8 +5,7 @@
 #export DH_VERBOSE=1
 
 soname=libespeak.so.1
-#version=$(shell dpkg-parsechangelog|sed -n -e 's/^Version: //p'|cut -d- -f1)
-version=1.45
+version=$(shell dpkg-parsechangelog|sed -n -e 's/^Version: //p'|cut -d- -f1|cut -d. -f1-2)
 
 CFLAGS = -Wall -g
 
