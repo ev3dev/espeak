@@ -762,7 +762,7 @@ if(voice->klattv[0])
 	}
 
 	if(flags & 0x40)
-		DoPause(12,0);  // add a short pause after the consonant
+		DoPause(20,0);  // add a short pause after the consonant
 
 	if(flags & 16)
 		return(len);
@@ -1209,12 +1209,14 @@ void DoMarker(int type, int char_posn, int length, int value)
 {//==========================================================
 // This could be used to return an index to the word currently being spoken
 // Type 1=word, 2=sentence, 3=named marker, 4=play audio, 5=end
-	wcmdq[wcmdq_tail][0] = WCMD_MARKER;
-	wcmdq[wcmdq_tail][1] = type;
-	wcmdq[wcmdq_tail][2] = (char_posn & 0xffffff) | (length << 24);
-	wcmdq[wcmdq_tail][3] = value;
-	WcmdqInc();
-
+	if(WcmdqFree() > 5)
+	{
+		wcmdq[wcmdq_tail][0] = WCMD_MARKER;
+		wcmdq[wcmdq_tail][1] = type;
+		wcmdq[wcmdq_tail][2] = (char_posn & 0xffffff) | (length << 24);
+		wcmdq[wcmdq_tail][3] = value;
+		WcmdqInc();
+	}
 }  // end of DoMarker
 
 
@@ -1317,7 +1319,6 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, int resume)
 	unsigned char *pitch_env=NULL;
 	unsigned char *amp_env;
 	PHONEME_TAB *ph;
-	PHONEME_TAB *prev_ph;
 	static int sourceix=0;
 
 	PHONEME_DATA phdata;
@@ -1354,12 +1355,12 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, int resume)
 		p = &phoneme_list[ix];
 
 		if(p->type == phPAUSE)
-			free_min = 5;
+			free_min = 10;
 		else
 		if(p->type != phVOWEL)
-			free_min = 10;     // we need less Q space for non-vowels, and we need to generate phonemes after a vowel so that the pitch_length is filled in
+			free_min = 15;     // we need less Q space for non-vowels, and we need to generate phonemes after a vowel so that the pitch_length is filled in
 		else
-			free_min = MIN_WCMDQ;  // 22
+			free_min = MIN_WCMDQ;  // 25
 
 		if(WcmdqFree() <= free_min)
 			return(1);  // wait
@@ -1393,7 +1394,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, int resume)
 //				DoMarker(espeakEVENT_END, count_characters, 0, count_sentences);  // end of clause
 
 			if(p->newword & 1)
-				DoMarker(espeakEVENT_WORD, sourceix, p->sourceix >> 11, clause_start_word + word_count++);
+				DoMarker(espeakEVENT_WORD, sourceix, p->sourceix >> 11, clause_start_word + word_count++);  // NOTE, this count doesn't include multiple-word pronunciations in *_list. eg (of a)
 		}
 
 		EndAmplitude();
@@ -1401,7 +1402,7 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, int resume)
 		if(p->prepause > 0)
 			DoPause(p->prepause,1);
 
-		if(option_phoneme_events && (p->type != phVOWEL))
+		if(option_phoneme_events && (p->type != phVOWEL) && (p->ph->code != phonEND_WORD))
 		{
 			// Note, for vowels, do the phoneme event after the vowel-start
 			DoMarker(espeakEVENT_PHONEME, sourceix, 0, p->ph->mnemonic);
@@ -1602,10 +1603,6 @@ int Generate(PHONEME_LIST *phoneme_list, int *n_ph, int resume)
 			modulation = 0;
 			if(p->ph->phflags & phTRILL)
 				modulation = 5;
-
-			prev_ph = prev->ph;
-//			if(p->newword)
-//				prev_ph = phoneme_tab[phonPAUSE];    // pronounce fully at the start of a word
 
 			if(!(p->synthflags & SFLAG_SEQCONTINUE))
 			{

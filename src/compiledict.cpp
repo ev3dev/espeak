@@ -31,9 +31,6 @@
 #include "synthesize.h"
 #include "translate.h"
 
-//#define OPT_FORMAT         // format the text and write formatted copy to Log file 
-//#define OUTPUT_FORMAT
-
 extern void Write4Bytes(FILE *f, int value);
 int HashDictionary(const char *string);
 
@@ -376,6 +373,7 @@ static int compile_line(char *linebuf, char *dict_line, int *hash)
 	unsigned int  ix;
 	int  step;
 	unsigned int  n_flag_codes = 0;
+	int flagnum;
 	int  flag_offset;
 	int  length;
 	int  multiple_words = 0;
@@ -390,20 +388,14 @@ static int compile_line(char *linebuf, char *dict_line, int *hash)
 	int all_upper_case;
 	
 	char *mnemptr;
-	char *comment;
 	unsigned char flag_codes[100];
 	char encoded_ph[200];
 	unsigned char bad_phoneme[4];
 static char nullstring[] = {0};
 
-	comment = NULL;
 	text_not_phonemes = 0;
 	phonetic = word = nullstring;
 
-if(memcmp(linebuf,"_-",2)==0)
-{
-step=1;  // TEST
-}
 	p = linebuf;
 //	while(isspace2(*p)) p++;
 
@@ -465,26 +457,26 @@ step=1;  // TEST
 			while(!isspace2(c = *p)) p++;
 			*p = 0;
 	
-			ix = LookupMnem(mnem_flags,mnemptr);
-			if(ix > 0)
+			flagnum = LookupMnem(mnem_flags,mnemptr);
+			if(flagnum > 0)
 			{
-				if(ix == 200)
+				if(flagnum == 200)
 				{
 					text_mode = 1;
 				}
 				else
-				if(ix == 201)
+				if(flagnum == 201)
 				{
 					text_mode = 0;
 				}
 				else
-				if(ix == BITNUM_FLAG_TEXTMODE)
+				if(flagnum == BITNUM_FLAG_TEXTMODE)
 				{
 					text_not_phonemes = 1;
 				}
 				else
 				{
-					flag_codes[n_flag_codes++] = ix;
+					flag_codes[n_flag_codes++] = flagnum;
 				}
 			}
 			else
@@ -497,7 +489,6 @@ step=1;  // TEST
 		if((c == '/') && (p[1] == '/') && (multiple_words==0))
 		{
 			c = '\n';   /* "//" treat comment as end of line */
-			comment = p;
 		}
 	
 		switch(step)
@@ -545,11 +536,21 @@ step=1;  // TEST
 				}
 			}
 			else
-			if((c == ')') && multiple_words)
+			if(c == ')')
 			{
-				p[0] = 0;
-				step = 3;
-				multiple_words = 0;
+				if(multiple_words)
+				{
+					p[0] = 0;
+					multiple_words = 0;
+					step = 3;
+				}
+				else
+				if(word[0] != '_')
+				{
+					fprintf(f_log, "%5d: Missing '('\n", linenum);
+					error_count++;
+					step = 3;
+				}
 			}
 			break;
 
@@ -591,12 +592,6 @@ step=1;  // TEST
 	
 	if(word[0] == 0)
 	{
-#ifdef OPT_FORMAT
-		if(comment != NULL)
-			fprintf(f_log,"%s",comment);
-		else
-			fputc('\n',f_log);
-#endif
 		return(0);   /* blank line */
 	}
 
@@ -732,6 +727,7 @@ step=1;  // TEST
 		if(multiple_words > 10)
 		{
 			fprintf(f_log,"%5d: Two many parts in a multi-word entry: %d\n",linenum,multiple_words);
+			error_count++;
 		}
 		else
 		{
@@ -747,35 +743,6 @@ step=1;  // TEST
 	}
 	dict_line[0] = length;
 
-#ifdef OPT_FORMAT
-	spaces = 16;
-	for(ix=0; ix<n_flag_codes; ix++)
-	{
-		if(flag_codes[ix] >= 100)
-		{
-			fprintf(f_log,"?%d ",flag_codes[ix]-100);
-			spaces -= 3;
-		}
-	}
-
-	fprintf(f_log,"%s",word);
-	spaces -= strlen(word);
-	DecodePhonemes(encoded_ph,decoded_ph);
-	while(spaces-- > 0) fputc(' ',f_log);
-	spaces += (14 - strlen(decoded_ph));
-	
-	fprintf(f_log," %s",decoded_ph);
-	while(spaces-- > 0) fputc(' ',f_log);
-	for(ix=0; ix<n_flag_codes; ix++)
-	{
-		if(flag_codes[ix] < 100)
-			fprintf(f_log," %s",lookup_mnem(mnem_flags,flag_codes[ix]));
-	}
-	if(comment != NULL)
-		fprintf(f_log," %s",comment);
-	else
-		fputc('\n',f_log);
-#endif
 
 	return(length);
 }  /* end of compile_line */
@@ -1160,7 +1127,6 @@ static char *compile_rule(char *input)
 	int start;
 	int state=2;
 	int finish=0;
-	int pre_bracket=0;
 	char buf[80];
 	char output[150];
 	unsigned char bad_phoneme[4];
@@ -1183,7 +1149,6 @@ static char *compile_rule(char *input)
 		case ')':		// end of prefix section
 			*p = 0;
 			state = 1;
-			pre_bracket = 1;
 			copy_rule_string(buf,state);
 			p = buf;
 			break;

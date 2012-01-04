@@ -109,6 +109,7 @@
 #define FLAG_COMMA_AFTER   0x20000  // comma after this word
 #define FLAG_MULTIPLE_SPACES 0x40000  // word is preceded by multiple spaces, newline, or tab
 #define FLAG_INDIVIDUAL_DIGITS 0x80000  // speak number as individual digits
+#define FLAG_DELETE_WORD     0x100000   // don't speak this word, it has been spoken as part of the previous word
 
 #define FLAG_SUFFIX_VOWEL  0x08000000   // remember an initial vowel from the suffix
 #define FLAG_NO_TRACE      0x10000000   // passed to TranslateRules() to suppress dictionary lookup printout
@@ -121,7 +122,7 @@
 #define SUFX_I        0x0200   // y may have been changed to i
 #define SUFX_P        0x0400   // prefix
 #define SUFX_V        0x0800   // suffix means use the verb form pronunciation
-#define SUFX_D        0x1000   // previous letter may have been doubles
+#define SUFX_D        0x1000   // previous letter may have been doubled
 #define SUFX_F        0x2000   // verb follows
 #define SUFX_Q        0x4000   // don't retranslate
 #define SUFX_T        0x10000   // don't affect the stress position in the stem
@@ -182,6 +183,7 @@
 
 // Punctuation types  returned by ReadClause()
 // bits 0-7 pause x 10mS, bits 12-14 intonation type,
+// bits12-14 intonation type
 // bit 15- don't need space after the punctuation
 // bit 19=sentence, bit 18=clause,  bits 17=voice change
 // bit 16 used to distinguish otherwise identical types
@@ -255,7 +257,7 @@ extern const int param_defaults[N_SPEECH_PARAM];
 
 
 
-#define N_LOPTS      19
+#define N_LOPTS      20
 #define LOPT_DIERESES        1
  // 1=remove [:] from unstressed syllables, 2= remove from unstressed or non-penultimate syllables
  // bit 4=0, if stress < 4,  bit 4=1, if not the highest stress in the word
@@ -265,10 +267,12 @@ extern const int param_defaults[N_SPEECH_PARAM];
 #define LOPT_PREFIXES        3
 
  // non-zero, change voiced/unoiced to match last consonant in a cluster
- // bit 1=LANG=ru,  don't propagate over [v]
+ // bit 0=use regressive voicing
+ // bit 1=LANG=cz,bg  don't propagate over [v]
  // bit 2=don't propagate acress word boundaries
  // bit 3=LANG=pl,  propagate over liquids and nasals
- // bit 4=devoice word-final consonants
+ // bit 4=LANG=cz,sk  don't progagate to [v]
+ // bit 8=devoice word-final consonants
 #define LOPT_REGRESSIVE_VOICING  4
 
  // 0=default, 1=no check, other allow this character as an extra initial letter (default is 's')
@@ -319,6 +323,9 @@ extern const int param_defaults[N_SPEECH_PARAM];
 
 	// recognize long vowels (0 = don't recognize)
 #define LOPT_LONG_VOWEL_THRESHOLD 18
+
+	// bit 0:  Don't allow suffices if there is no previous syllable
+#define LOPT_SUFFIX  19
 
 
 // stress_rule
@@ -494,7 +501,7 @@ typedef struct
 	int transpose_min;
 	char dictionary_name[40];
 
-	char phon_out[300];
+	char phon_out[400];
 	char phonemes_repeat[20];
 	int  phonemes_repeat_count;
 	int  phoneme_tab_ix;
@@ -665,7 +672,7 @@ int TranslateWord(Translator *tr, char *word1, int next_pause, WORD_TAB *wtab);
 void *TranslateClause(Translator *tr, FILE *f_text, const void *vp_input, int *tone, char **voice_change);
 int ReadClause(Translator *tr, FILE *f_in, char *buf, short *charix, int *charix_top, int n_buf, int *tone_type, char *voice_change);
 
-void SetVoiceStack(espeak_VOICE *v);
+void SetVoiceStack(espeak_VOICE *v, const char *variant_name);
 void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_DATA *phdata);
 void InterpretPhoneme2(int phcode, PHONEME_DATA *phdata);
 

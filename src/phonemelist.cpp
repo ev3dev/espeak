@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2007 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2011 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -114,7 +114,7 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 	int  insert_ph = 0;
 	PHONEME_LIST *phlist;
 	PHONEME_TAB *ph;
-	PHONEME_TAB *prev, *next, *next2;
+	PHONEME_TAB *next, *next2;
 	int unstress_count = 0;
 	int word_stress = 0;
 	int switched_language = 0;
@@ -123,7 +123,6 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 	int regression;
 	int end_sourceix;
 	int alternative;
-	int first_vowel=0;   // first vowel in a word
 	PHONEME_DATA phdata;
 
 	int n_ph_list3;
@@ -131,8 +130,7 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 	PHONEME_LIST *plist3_inserted = NULL;
 	PHONEME_LIST ph_list3[N_PHONEME_LIST];
 
-	static PHONEME_LIST2 ph_list2_null = {0,0,0,0,0,0};
-	PHONEME_LIST2 *plist2 = &ph_list2_null;
+	PHONEME_LIST2 *plist2;
 
 	plist2 = ph_list2;
 	phlist = phoneme_list;
@@ -171,7 +169,7 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 		// set consonant clusters to all voiced or all unvoiced
 		// Regressive
 		int type;
-		int word_end_devoice = 0;
+		int stop_propagation = 0;
 		voicing = 0;
 
 		for(j=n_ph_list2-1; j>=0; j--)
@@ -189,13 +187,12 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 
 			if(regression & 0x2)
 			{
-				// LANG=Russian, [v] amd [v;] don't cause regression, or [R^]
-				if((ph->mnemonic == 'v') || (ph->mnemonic == ((';'<<8)+'v')) || ((ph->mnemonic & 0xff)== 'R'))
+				// [v] amd [v;] don't cause regression, or [R^]
+				if(((ph->mnemonic & 0xff) == 'v') || ((ph->mnemonic & 0xff)== 'R'))
 				{
-					if(word_end_devoice == 1)
+					stop_propagation = 1;
+					if(regression & 0x10)
 						voicing = 0;
-					else
-						type = phLIQUID;
 				}
 			}
 
@@ -237,8 +234,12 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 					voicing = 0;
 				}
 			}
+			if(stop_propagation)
+			{
+				voicing = 0;
+				stop_propagation = 0;
+			}
 
-			word_end_devoice = 0;
 			if(plist2[j].sourceix)
 			{
 				if(regression & 0x04)
@@ -246,13 +247,12 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 					// stop propagation at a word boundary
 					voicing = 0;
 				}
-				if(regression & 0x10)
+				if(regression & 0x100)
 				{
 					// devoice word-final consonants, unless propagating voiced
 					if(voicing == 0)
 					{
 						voicing = 1;
-						word_end_devoice = 1;
 					}
 				}
 			}
@@ -300,8 +300,6 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 
 	for(j=0; insert_ph || ((j < n_ph_list3) && (ix < N_PHONEME_LIST-3)); j++)
 	{
-		prev = ph;
-
 		plist3 = &ph_list3[j];
 
 		if(insert_ph != 0)
@@ -445,53 +443,6 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 				unstress_count = 0;
 			}
 		}
-
-#ifdef deleted
-		while((ph->reduce_to != 0) && (!(plist3->synthflags & SFLAG_DICTIONARY)  || (tr->langopts.param[LOPT_REDUCE] & 1)))
-		{
-			int reduce_level;
-			int stress_level;
-			int reduce = 0;
-
-			reduce_level = (ph->phflags >> 28) & 7;
-
-			if(ph->type == phVOWEL)
-			{
-				stress_level = plist3->stress;
-			}
-			else
-			{
-				// consonant, get stress from the following vowel
-				if(next->type == phVOWEL)
-					stress_level = (plist3+1)->stress;
-				else
-					break;
-			}
-
-			if((stress_level == 1) && (first_vowel))
-				stress_level = 0;   // ignore 'dimished' stress on first syllable
-
-			if(stress_level == 1)
-				reduce = 1;    // stress = 'reduced'
-
-			if(stress_level < reduce_level)
-				reduce =1;
-
-			if((word_stress < 4) && (tr->langopts.param[LOPT_REDUCE] & 0x2) && (stress_level >= word_stress))
-			{
-				// don't reduce the most stressed syllable in an unstressed word
-				reduce = 0;
-			}
-
-			if(reduce)
-				ph = phoneme_tab[ph->reduce_to];
-			else
-				break;
-		}
-#endif
-
-		if(ph->type == phVOWEL)
-			first_vowel = 0;
 
 		if((plist3+1)->synthflags & SFLAG_LENGTHEN)
 		{

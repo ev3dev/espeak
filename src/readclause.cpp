@@ -94,6 +94,9 @@ static const unsigned short punct_chars[] = {',','.','?','!',':',';',
   0x0b1b,  // Arabic ;
   0x061f,  // Arabic ?
 
+  0x0f0d,  // Tibet Shad
+  0x0f0e,
+
   0x1362,  // Ethiopic period
   0x1363,
   0x1364,
@@ -137,6 +140,9 @@ static const unsigned int punct_attributes [] = { 0,
   CLAUSE_SEMICOLON,  // Arabic ;
   CLAUSE_QUESTION,   // Arabic question mark
 
+  CLAUSE_PERIOD+0x8000,     // Tibet period
+  CLAUSE_PARAGRAPH,
+
   CLAUSE_PERIOD,     // Ethiopic period
   CLAUSE_COMMA,      // Ethiopic comma
   CLAUSE_SEMICOLON,  // Ethiopic semicolon
@@ -164,7 +170,7 @@ static const unsigned int punct_attributes [] = { 0,
 // frame 0 is for the defaults, before any ssml tags.
 typedef struct {
 	int tag_type;
-	int voice_variant;
+	int voice_variant_number;
 	int voice_gender;
 	int voice_age;
 	char voice_name[40];
@@ -175,6 +181,8 @@ typedef struct {
 static int n_ssml_stack;
 static SSML_STACK ssml_stack[N_SSML_STACK];
 
+static espeak_VOICE base_voice;
+static char base_voice_variant_name[40] = {0};
 static char current_voice_id[40] = {0};
 
 
@@ -470,10 +478,8 @@ static int GetC(void)
 	int cbuf[4];
 	int ix;
 	int n_bytes;
-	unsigned char m;
 	static int ungot2 = 0;
 	static const unsigned char mask[4] = {0xff,0x1f,0x0f,0x07};
-	static const unsigned char mask2[4] = {0,0x80,0x20,0x30};
 
 	if((c1 = ungot_char) != 0)
 	{
@@ -514,7 +520,6 @@ static int GetC(void)
 		if((ix = n_bytes) > 0)
 		{
 			c = c1 & mask[ix];
-			m = mask2[ix];
 			while(ix > 0)
 			{
 				if((c2 = cbuf[ix] = GetC_get()) == 0)
@@ -533,7 +538,6 @@ static int GetC(void)
 					GetC_unget(c2);
 					break;
 				}
-				m = 0x80;
 				c = (c << 6) + (c2 & 0x3f);
 				ix--;
 			}
@@ -1037,19 +1041,21 @@ static const char *VoiceFromStack()
 // Use the voice properties from the SSML stack to choose a voice, and switch
 // to that voice if it's not the current voice
 	int ix;
+	const char *p;
 	SSML_STACK *sp;
 	const char *v_id;
 	int voice_name_specified;
 	int voice_found;
 	espeak_VOICE voice_select;
-	char voice_name[40];
+	static char voice_name[40];
 	char language[40];
+	char buf[80];
 
 	strcpy(voice_name,ssml_stack[0].voice_name);
 	strcpy(language,ssml_stack[0].language);
 	voice_select.age = ssml_stack[0].voice_age;
 	voice_select.gender = ssml_stack[0].voice_gender;
-	voice_select.variant = ssml_stack[0].voice_variant;
+	voice_select.variant = ssml_stack[0].voice_variant_number;
 	voice_select.identifier = NULL;
 
 	for(ix=0; ix<n_ssml_stack; ix++)
@@ -1069,15 +1075,32 @@ static const char *VoiceFromStack()
 		if(sp->language[0] != 0)
 		{
 			strcpy(language, sp->language);
+
+			// is this language provided by the base voice?
+			p = base_voice.languages;
+			while(*p++ != 0)
+			{
+				if(strcmp(p, language) == 0)
+				{
+					// yes, change the language to the main language of the base voice
+					strcpy(language, &base_voice.languages[1]);
+					break;
+				}
+				p += (strlen(p) + 1);
+			}
+			
 			if(voice_name_specified == 0)
 				voice_name[0] = 0;  // forget a previous voice name if a language is specified
 		}
 		if(sp->voice_gender != 0)
+		{
 			voice_select.gender = sp->voice_gender;
+		}
+
 		if(sp->voice_age != 0)
 			voice_select.age = sp->voice_age;
-		if(sp->voice_variant != 0)
-			voice_select.variant = sp->voice_variant;
+		if(sp->voice_variant_number != 0)
+			voice_select.variant = sp->voice_variant_number;
 	}
 
 	voice_select.name = voice_name;
@@ -1085,6 +1108,14 @@ static const char *VoiceFromStack()
 	v_id = SelectVoice(&voice_select, &voice_found);
 	if(v_id == NULL)
 		return("default");
+
+	if((strchr(v_id, '+') == NULL) && ((voice_select.gender == 0) || (voice_select.gender == base_voice.gender)) && (base_voice_variant_name[0] != 0))
+	{
+		// a voice variant has not been selected, use the original voice variant
+		sprintf(buf, "%s+%s", v_id, base_voice_variant_name);
+		strncpy0(voice_name, buf, sizeof(voice_name));
+		return(voice_name);
+	}
 	return(v_id);
 }  // end of VoiceFromStack
 
@@ -1376,11 +1407,12 @@ int AddNameData(const char *name, int wide)
 	if(namedata_ix+len >= n_namedata)
 	{
 		// allocate more space for marker names
-		if((vp = realloc(namedata, namedata_ix+len + 300)) == NULL)
+		if((vp = realloc(namedata, namedata_ix+len + 1000)) == NULL)
 			return(-1);  // failed to allocate, original data is unchanged but ignore this new name
+// !!! Bug?? If the allocated data shifts position, then pointers given to user application will be invalid
 
 		namedata = (char *)vp;
-		n_namedata = namedata_ix+len + 300;
+		n_namedata = namedata_ix+len + 1000;
 	}
 	memcpy(&namedata[ix = namedata_ix],name,len);
 	namedata_ix += len;
@@ -1388,8 +1420,8 @@ int AddNameData(const char *name, int wide)
 }  //  end of AddNameData
 
 
-void SetVoiceStack(espeak_VOICE *v)
-{//================================
+void SetVoiceStack(espeak_VOICE *v, const char *variant_name)
+{//==========================================================
 	SSML_STACK *sp;
 	sp = &ssml_stack[0];
 
@@ -1401,10 +1433,15 @@ void SetVoiceStack(espeak_VOICE *v)
 	if(v->languages != NULL)
 		strcpy(sp->language,v->languages);
 	if(v->name != NULL)
-		strcpy(sp->voice_name,v->name);
-	sp->voice_variant = v->variant;
+		strncpy0(sp->voice_name, v->name, sizeof(sp->voice_name));
+	sp->voice_variant_number = v->variant;
 	sp->voice_age = v->age;
 	sp->voice_gender = v->gender;
+
+	if(memcmp(variant_name, "!v", 2) == 0)
+		variant_name += 3;// strip variant directory name, !v plus PATHSEP
+	strncpy0(base_voice_variant_name, variant_name, sizeof(base_voice_variant_name));
+	memcpy(&base_voice, &current_voice_selected, sizeof(base_voice));
 }
 
 
@@ -1466,7 +1503,7 @@ static int GetVoiceAttributes(wchar_t *pw, int tag_type)
 
 		attrcopy_utf8(ssml_sp->language,lang,sizeof(ssml_sp->language));
 		attrcopy_utf8(ssml_sp->voice_name,name,sizeof(ssml_sp->voice_name));
-		ssml_sp->voice_variant = attrnumber(variant,1,0)-1;
+		ssml_sp->voice_variant_number = attrnumber(variant,1,0)-1;
 		ssml_sp->voice_age = attrnumber(age,0,0);
 		ssml_sp->voice_gender = attrlookup(gender,mnem_gender);
 		ssml_sp->tag_type = tag_type;
@@ -1646,6 +1683,7 @@ static int ProcessSsmlTag(wchar_t *xml_buf, char *outbuf, int &outix, int n_outb
 		{"reduced",2},
 		{"moderate",3},
 		{"strong",4},
+		{"x-strong",5},
 		{NULL,-1}};
 
 	static const char *prosody_attr[5] = {
@@ -1734,14 +1772,16 @@ static int ProcessSsmlTag(wchar_t *xml_buf, char *outbuf, int &outix, int n_outb
 
 		if(translator->langopts.tone_language == 1)
 		{
-			static unsigned char emphasis_to_pitch_range[] = {50,50,40,70,90,90};
-			static unsigned char emphasis_to_volume[] = {100,100,70,110,140,140};
+			static unsigned char emphasis_to_pitch_range[] = {50,50,40,70,90,100};
+			static unsigned char emphasis_to_volume[] = {100,100,70,110,135,150};
 			// tone language (eg.Chinese) do emphasis by increasing the pitch range.
 			sp->parameter[espeakRANGE] = emphasis_to_pitch_range[value];
 			sp->parameter[espeakVOLUME] = emphasis_to_volume[value];
 		}
 		else
 		{
+			static unsigned char emphasis_to_volume2[] = {100,100,75,100,120,150};
+			sp->parameter[espeakVOLUME] = emphasis_to_volume2[value];
 			sp->parameter[espeakEMPHASIS] = value;
 		}
 		ProcessParamStack(outbuf, outix);
@@ -2059,7 +2099,6 @@ int ReadClause(Translator *tr, FILE *f_in, char *buf, short *charix, int *charix
 	int punct_data = 0;
 	int is_end_clause;
 	int announced_punctuation = 0;
-	int prev_announced_punctuation;
 	int stressed_word = 0;
 	int end_clause_after_tag = 0;
 	int end_clause_index = 0;
@@ -2218,6 +2257,17 @@ f_input = f_in;  // for GetC etc
 				else
 				if((c2 == '/') || iswalpha(c2))
 				{
+					// check for space in the output buffer for embedded commands produced by the SSML tag
+					if(ix > (n_buf - 20))
+					{
+						// Perhaps not enough room, end the clause before the SSML tag
+						UngetC(c2);
+						ungot_char2 = c1;
+						buf[ix] = ' ';
+						buf[ix+1] = 0;
+						return(CLAUSE_NONE);
+					}
+
 					// SSML Tag
 					n_xml_buf = 0;
 					c1 = c2;
@@ -2347,6 +2397,9 @@ f_input = f_in;  // for GetC etc
 				continue;
 			}
 
+			if(c1 == 0xf0b)
+				c1 = ' ';    // Tibet inter-syllabic mark, ?? replace by space ??
+
 			if(iswspace(c1))
 			{
 				char *p_word;
@@ -2456,7 +2509,6 @@ if(option_ssml) parag=1;
 			linelength = 0;
 		}
 
-		prev_announced_punctuation = announced_punctuation;
 		announced_punctuation = 0;
 
 		if((phoneme_mode==0) && (sayas_mode==0))
@@ -2691,10 +2743,11 @@ if(option_ssml) parag=1;
 		}
 		*charix_top = ix;
 
-		if(((ix > (n_buf-20)) && !IsAlpha(c1) && !iswdigit(c1))  ||  (ix >= (n_buf-2)))
+		if(((ix > (n_buf-75)) && !IsAlpha(c1) && !iswdigit(c1))  ||  (ix >= (n_buf-4)))
 		{
 			// clause too long, getting near end of buffer, so break here
 			// try to break at a word boundary (unless we actually reach the end of buffer).
+			// (n_buf-4) is to allow for 3 bytes of multibyte character plus terminator.
 			buf[ix] = ' ';
 			buf[ix+1] = 0;
 			UngetC(c2);
