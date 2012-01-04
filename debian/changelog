@@ -1,4 +1,4 @@
-espeak (1.46.01-0ubuntu1) UNRELEASED; urgency=low
+espeak (1.46.01-0ubuntu1) precise; urgency=low
 
   * New upstream release
   * debian/control: Add libpulse-dev as a build dependency
@@ -12,7 +12,7 @@ espeak (1.46.01-0ubuntu1) UNRELEASED; urgency=low
   * Build for multi-arch
   * Fix some lintian warnings
 
- -- Luke Yelavich <themuso@ubuntu.com>  Thu, 05 Jan 2012 09:48:04 +1100
+ -- Luke Yelavich <themuso@ubuntu.com>  Thu, 05 Jan 2012 09:52:27 +1100
 
 espeak (1.45.04-2ubuntu1) precise; urgency=low
 
