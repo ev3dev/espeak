@@ -47,7 +47,6 @@
 #include "wave.h"
 
 unsigned char *outbuf=NULL;
-extern espeak_VOICE voice_selected;
 
 espeak_EVENT *event_list=NULL;
 int event_list_ix=0;
@@ -96,11 +95,9 @@ static int dispatch_audio(short* outbuf, int length, espeak_EVENT* event)
 	case AUDIO_OUTPUT_PLAYBACK:
 	{
 		int event_type=0;
-		int event_data=0;
 		if(event)
 		{
 			event_type = event->type;
-			event_data = event->id.number;
 		}
 
 		if(event_type == espeakEVENT_SAMPLERATE)
@@ -391,8 +388,8 @@ static int initialise(int control)
 			fprintf(stderr,"Wrong version of espeak-data 0x%x (expects 0x%x) at %s\n",result,version_phdata,path_home);
 	}
 
-	memset(&voice_selected,0,sizeof(voice_selected));
-	SetVoiceStack(NULL);
+	memset(&current_voice_selected,0,sizeof(current_voice_selected));
+	SetVoiceStack(NULL, "");
 	SynthesizeInit();
 	InitNamedata();
 
@@ -1193,6 +1190,7 @@ ESPEAK_API espeak_ERROR espeak_Synchronize(void)
 
 
 extern void FreePhData(void);
+extern void FreeVoiceList(void);
 
 ESPEAK_API espeak_ERROR espeak_Terminate(void)
 {//===========================================
@@ -1215,6 +1213,7 @@ ESPEAK_API espeak_ERROR espeak_Terminate(void)
 	Free(outbuf);
 	outbuf = NULL;
 	FreePhData();
+	FreeVoiceList();
 
 	if(f_logespeak)
 	{

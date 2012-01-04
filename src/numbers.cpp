@@ -506,7 +506,6 @@ void LookupLetter(Translator *tr, unsigned int letter, int next_byte, char *ph_b
 	static char single_letter[10] = {0,0};
 	unsigned int dict_flags[2];
 	char ph_buf3[40];
-	char *ptr;
 
 	ph_buf1[0] = 0;
 	len = utf8_out(letter,&single_letter[2]);
@@ -552,7 +551,6 @@ void LookupLetter(Translator *tr, unsigned int letter, int next_byte, char *ph_b
 
 	// if the $accent flag is set for this letter, use the accents table (below)
 	dict_flags[1] = 0;
-	ptr = &single_letter[1];
 	
 	if(Lookup(tr, &single_letter[1], ph_buf3) == 0)
 	{
@@ -1302,7 +1300,7 @@ static int LookupNum2(Translator *tr, int value, int control, char *ph_out)
 		{
 			Lookup(tr, "_0and", ph_and);
 
-			if(tr->langopts.numbers2 & NUM2_MULTIPLE_ORDINAL)
+			if((control & 1) && (tr->langopts.numbers2 & NUM2_MULTIPLE_ORDINAL))
 				ph_and[0] = 0;
 
 			if(tr->langopts.numbers & NUM_SWAP_TENS)
@@ -1586,17 +1584,16 @@ static int TranslateNumber_1(Translator *tr, char *word, char *ph_out, unsigned 
 	int decimal_count;
 	int max_decimal_count;
 	int decimal_mode;
-	int hyphen;
 	int suffix_ix;
 	int skipwords = 0;
 	char *p;
-	char string[20];  // for looking up entries in **_list
+	char string[32];  // for looking up entries in **_list
 	char buf1[100];
 	char ph_append[50];
 	char ph_buf[200];
 	char ph_buf2[50];
 	char ph_zeros[50];
-	char suffix[20];
+	char suffix[30];  // string[] must be long enough for sizeof(suffix)+2
 	char buf_digit_lookup[50];
 
 	static const char str_pause[2] = {phonPAUSE_NOLINK,0};
@@ -1651,12 +1648,10 @@ static int TranslateNumber_1(Translator *tr, char *word, char *ph_out, unsigned 
 // NOTE lang=hu, allow both dot and ordinal suffix, eg. "december 21.-én"
 		// look for an ordinal number suffix after the number
 		ix++;
-		hyphen = 0;
 		p = suffix;
 		if(wtab[0].flags & FLAG_HYPHEN_AFTER)
 		{
 			*p++ = '-';
-			hyphen = 1;
 			ix++;
 		}
 		while((word[ix] != 0) && (word[ix] != ' ') && (ix < (int)(sizeof(suffix)-1)))

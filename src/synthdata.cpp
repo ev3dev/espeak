@@ -35,8 +35,8 @@
 #include "translate.h"
 #include "wave.h"
 
-const char *version_string = "1.45.04  25.Apr.11";
-const int version_phdata  = 0x014500;
+const char *version_string = "1.46.01  22.Nov.11";
+const int version_phdata  = 0x014600;
 
 int option_device_number = -1;
 FILE *f_logespeak = NULL;
@@ -172,9 +172,11 @@ void FreePhData(void)
 	Free(phoneme_tab_data);
 	Free(phoneme_index);
 	Free(phondata_ptr);
+	Free(tunes);
 	phoneme_tab_data=NULL;
 	phoneme_index=NULL;
 	phondata_ptr=NULL;
+	tunes=NULL;
 }
 
 
@@ -512,6 +514,7 @@ void LoadConfig(void)
 			}
 		}
 	}
+	fclose(f);
 }  //  end of LoadConfig
 
 
@@ -588,6 +591,22 @@ static bool StressCondition(Translator *tr, PHONEME_LIST *plist, int condition, 
 }  // end of StressCondition
 
 
+static int CountVowelPosition(PHONEME_LIST *plist)
+{//===============================================
+	int count = 0;
+
+	for(;;)
+	{
+		if(plist->ph->type == phVOWEL)
+			count++;
+		if(plist->sourceix != 0)
+			break;
+		plist--;
+	}
+	return(count);
+}  // end of CoundVowelPosition
+
+
 static bool InterpretCondition(Translator *tr, int control, PHONEME_LIST *plist, int instn)
 {//========================================================================================
 	int which;
@@ -596,7 +615,16 @@ static bool InterpretCondition(Translator *tr, int control, PHONEME_LIST *plist,
 	int count;
 	PHONEME_TAB *ph;
 	PHONEME_LIST *plist_this;
-	static int ph_position[8] = {0, 1, 2, 3, 2, 0, 1, 3};  // prevPh, thisPh, nextPh, next2Ph, nextPhW, prevPhW, nextVowel, next2PhW
+	static int ph_position[8] = {0, 1, 2, 3, 2, 0, 1, 3};  // prevPh, thisPh, nextPh, next2Ph, nextPhW, prevPhW, nextVowel, (other conditions)
+
+	// instruction: 2xxx, 3xxx
+
+	// bits 8-10 = 0 to 6,  which phoneme
+	// bit 11 = 0, bits 0-7 are a phoneme code
+	// bit 11 = 1, bits 5-7 type of data, bits 0-4 data value
+
+	// bits 8-10 = 7,  other conditions
+
 
 	data = instn & 0xff;
 	instn2 = instn >> 8;
@@ -617,13 +645,6 @@ static bool InterpretCondition(Translator *tr, int control, PHONEME_LIST *plist,
 			if(plist[0].sourceix)
 				return(false);
 		}
-		if(which==7)
-		{
-			// nextPh2 not word boundary
-			if((plist[1].sourceix) || (plist[2].sourceix))
-				return(false);
-		}
-
 		if(which==6)
 		{
 			// nextVowel, not word boundary
@@ -739,19 +760,37 @@ static bool InterpretCondition(Translator *tr, int control, PHONEME_LIST *plist,
 
 			case 12:  // isVoiced
 				return((ph->type == phVOWEL) || (ph->type == phLIQUID) || (ph->phflags & phVOICED));
-			}
 
 			case 13:  // isFirstVowel
+				return(CountVowelPosition(plist)==1);
+
+			case 14:  // isSecondVowel
+				return(CountVowelPosition(plist)==2);
+
+			case 15:  // isSeqFlag1
+				// is this preceded  by a sequence if 1 or more vowels which have 'flag1' ?  (lang=hi)
+				if(plist->sourceix != 0)
+					return(false);   // this is the first phoneme in the word, so no.
+
 				count = 0;
 				for(;;)
 				{
+					plist--;
 					if(plist->ph->type == phVOWEL)
-						count++;
+					{
+						if(plist->ph->phflags & phFLAG1)
+							count++;
+						else
+							break;  // stop when we find a vowel without flag1
+					}
 					if(plist->sourceix != 0)
 						break;
-					plist--;
 				}
-				return(count==1);
+				return(count > 0);
+
+			case 0x10:  //  isTranslationGiven
+				return((plist->synthflags & SFLAG_DICTIONARY) != 0);
+			}
 			break;
 
 		}
@@ -871,7 +910,7 @@ void InterpretPhoneme(Translator *tr, int control, PHONEME_LIST *plist, PHONEME_
 		
 		switch(instn >> 12)
 		{
-		case 0:
+		case 0:   // 0xxx
 			data = instn & 0xff;
 
 			if(instn2 == 0)
