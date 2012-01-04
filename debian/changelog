@@ -4,7 +4,10 @@ espeak (1.46.01-1) UNRELEASED; urgency=low
   * Update the explanation of the -b command-line flag in the espeak manpage
   * New upstream release
   * debian/control: Add libpulse-dev as a build dependency
-  * debian/rules: Build espeak with AUDIO=runtime
+  * debian/rules:
+    - Build espeak with AUDIO=runtime
+    - Reinstate parsing the changelog for the soname version, and extend the
+      command to only extract the major version of the soname
   * debian/patches/leak: Dropped, applied upstream
 
   [ Samuel Thibault ]
