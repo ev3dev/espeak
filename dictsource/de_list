@@ -49,6 +49,8 @@ _[	'EkIg@kl'am3||_|'aUf
 _]	'EkIg@kl'am3||ts'u:
 _<	klaIn3
 _>	grY:s3
+_«	'anfy:RUNsts,aIC@n
+_»	'anfy:RUNsts,aIC@n||ts'u:
 _`	grA:v
 _^	tsIrkUmflEks
 _—	g@d'aNk@nStr,IC
@@ -188,7 +190,7 @@ oder		o:d3	$u+ $pause
 sondern			$pause
 denn		dEn	$u+ $pause
 weil			$pause
-als			$u+ $brk
+als		als	$u+ $brk
 bevor		b@fo:r	$2 $pause
 also			$pause
 wenn		,vEn	$pause $strend
@@ -210,6 +212,7 @@ bis		bIs	$u+ $pause
 da			$u+
 durch			$u+ $pause
 für		fy:r	$u+ $pause $only
+fuer		fy:r	$u+ $pause $only
 gegen		ge:g@n	$u+ $pause
 hin		hIn
 in		In        $u+ $brk
@@ -248,27 +251,12 @@ noch			$pause
 (nicht nur)	n'ICt||n'u:r	$pause
 (gar nicht)	g,A:rn'ICt
 
-// should these be in the Rules because they can be a prefix in a
+// should these be in the Rules if they can be a prefix in a
 // compound verb ?
-daran		dA:r'an
-darauf		$2
-daraus		$2
-dabei		$2
 dadurch		dA:d'UrC
-dafür		$2
 dagegen		$2
-daher		dA:h'Er
-dahin		dA:h'In
 damit		dA:m'It
 danach		$2
-daneben		$2
-darein		$2
-darin		dA:r'In
-darüber		$2
-darum		$2
-darunter	$2
-davon		dA:f'On
-dazu		dA:ts'u:
 umher		Umh'Er
 umhin		Umh'In
 woran		vo:r'an
@@ -376,7 +364,7 @@ hätten		h,Et@n  $only
 war		%vA:r   $only
 warst		%vA:rst $only
 wart		%vA:rt  $only
-waren		'vA:r@n
+waren		%vA:r@n
 
 will		%vIl   $only
 willst		%vIlst $only
@@ -420,7 +408,7 @@ apple		_^_EN
 association	_^_EN
 baseball	_^_EN
 bbc		_^_EN
-beat		_^_EN
+beat		_^_EN  $only
 browser         _^_EN
 byte		_^_EN
 camcorder	_^_EN
@@ -550,6 +538,7 @@ bronchie         $alt
 
 changier        SaNZ'i:r
 ciao            tSaU
+clique          klIk@
 coup            ku:
 
 dahlie           $alt
@@ -582,6 +571,7 @@ erde            e:rd@
 erst            e:rst
 ersten          e:rst@n
 erstmal         e:rstma:l
+erzgebirg       e:rtsg@bIrg
 extravagant      $1
 extrem          Ekstr'e:m
 

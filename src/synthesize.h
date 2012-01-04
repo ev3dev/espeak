@@ -327,6 +327,10 @@ typedef struct {
 #define i_isFinalVowel 0x8b
 #define i_isVoiced     0x8c
 #define i_isFirstVowel 0x8d
+#define i_isSecondVowel 0x8e
+#define i_isSeqFlag1   0x8f
+#define i_IsTranslationGiven 0x90
+
 
 // place of articulation
 #define i_isVel      0x28
@@ -453,8 +457,8 @@ extern unsigned char pitch_adjust_tab[MAX_PITCH_VALUE+1];
 
 
 
-#define N_WCMDQ   160
-#define MIN_WCMDQ  22   // need this many free entries before adding new phoneme
+#define N_WCMDQ   170
+#define MIN_WCMDQ  25   // need this many free entries before adding new phoneme
 
 extern long wcmdq[N_WCMDQ][4];
 extern int wcmdq_head;
@@ -551,7 +555,7 @@ espeak_ERROR LoadMbrolaTable(const char *mbrola_voice, const char *phtrans, int 
 void SetParameter(int parameter, int value, int relative);
 int MbrolaTranslate(PHONEME_LIST *plist, int n_phonemes, int resume, FILE *f_mbrola);
 int MbrolaGenerate(PHONEME_LIST *phoneme_list, int *n_ph, int resume);
-int MbrolaFill(int length, int resume);
+int MbrolaFill(int length, int resume, int amplitude);
 void MbrolaReset(void);
 void DoEmbedded(int *embix, int sourceix);
 void DoMarker(int type, int char_posn, int length, int value);

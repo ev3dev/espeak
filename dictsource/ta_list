@@ -89,6 +89,8 @@ _[	id.V||sadUrVm	// இட சதுரம்
 _]	vVlV||sadUrVm	// வல சதுரம்
 _{	id.V||gVn.Vm	// இட கணம்
 _}	vVlV||gVn.Vm	// வல கணம்
+<	kuRaIvU		// குறைவு
+>	migUdi		// மிகுதி
 _"	me:Rgo:l.	// மேற்கோள்
 _'	ot.RaI||m'e:Rgo:l.	// ொற்றை மேற்கோள்
 __	ad.ig||ko:d.U	// அடிக் கோடு
@@ -104,6 +106,8 @@ _?	ke:l.vi		// கேள்வி
 /	sa:jvU		// சாய்வு
 ÷	vVgUttVl	// வகுத்தல்
 %	viz.Ukka:d.U	$max3	// விழுக்காடு
+&	mVt.RUm
+|	seNgUttU	$max3
 U+bf9	ru:ba:j
 ¼	ka:l
 ½	araI
@@ -111,6 +115,8 @@ U+bf9	ru:ba:j
 
 // abbreviations
 ரூ	ru:ba:j  $dot $only
+(பி . ஏ)	bije: $dot
+(கி . மீ)	kilo:mi:t.t.Vr $dot
 
 // numbers
 _0	suz.ijVm    // சுழியம்
@@ -120,7 +126,7 @@ _3	mu:nRU
 _4	na:ngU
 _5	aIndU
 _6	a:RU
-_7	;e:lU
+_7	;e:z.U
 _8	;et.t.U
 _9	onbVd.U
 _10	pattU
@@ -182,8 +188,50 @@ _1M3	orUko:d.ie:
 
 _dpt	_pul.l.i
 
+// drop final [U] when followed by an ordinal suffix
+_1o	onR
+_2o	irVn.d.
+_3o	mu:nR
+_4o	na:ng
+_5o	aInd
+_6o	a:R
+_7o	;e:l
+_8o	;et.t.
+_9o	onbVd.
+_10o	patt
+_11o	patinonR
+_12o	pVnnirVn.d.
+_19o	pattonbVd
 
+_20o	irUbVd
+_30o	muppVd	// முப்பது
+_40o	na:RpVd
+_50o	aImbVd
+_60o	aRUbVd
+_70o	;ez.UbVd
+_80o	;en.bVd
+_90o	ton.n.u:R
 
+_1Co	nu:R
+_2Co	irUnu:R
+_3Co	munnu:R
+_4Co	na:nu:R
+_5Co	aInu:R
+_6Co	aRUnu:R
+_7Co	;ez.Unu:R
+_8Co	;en.n.u:R
+
+_#ம்	a:m  // ordinal suffix
+_#ல்	il
+_#வது	a:vVdU
+_#வதும்	a:vVdUm
+_#வதுமாக a:vVdUma:gV
+
+_#-ம்	a:m  // ordinal suffix with hyphen
+_#-ல்	il
+_#-வது	a:vVdU
+_#-வதும்	a:vVdUm
+_#-வதுமாக a:vVdUma:gV
 
 // English words
 tamil	தமிழ்	$text
@@ -295,7 +343,26 @@ tamil	தமிழ்	$text
 பிகு	$alt
 பூத்துக்கு	$alt
 பீரின்	$alt
-(பி . ஏ)	bije:
+போரடிக்காம	$alt
+பரத்	$alt
+பாஷா	$alt
+பூட்	$alt
+படுக	$alt
+படுகா	$alt
+பந்தா	$alt
+பிரா	bra:
+ப்ரா	$alt
+பலம்	$alt
+பலமாக	$alt
+பலமா	$alt
+பாதிப்பு	$alt
+பீடா	$alt
+பைக்க	$alt
+பாதிக்கும்	$alt
+பாதிக்குமா	$alt
+பத்திரப்	bVttirVp
+
+
 
 
 	// initial த as [d]
@@ -355,6 +422,11 @@ tamil	தமிழ்	$text
 தடிக்க	$alt
 தின	$alt
 தில்	$alt
+தன	$alt
+தடியா	$alt
+தட	$alt
+தடியாய்	$alt
+தொள	$alt
 
 
 	// initial ட
@@ -379,6 +451,8 @@ tamil	தமிழ்	$text
 சிக்கன்		$alt
 சாரு		$alt
 பிரசார்		prVsa:r
+சாயா		$alt
+
 
 கக	$alt	// initial க as [g]
 கனம்	$alt
@@ -427,6 +501,15 @@ tamil	தமிழ்	$text
 களிலும்	$alt
 கடம்	$alt
 காட்	$alt
+கிடு	$alt
+களிலேயே	$alt
+கோபிக்கு	$alt
+கிரே	gre:
+க்ரே	$alt
+கவுன்	$alt
+கௌன்	$alt
+கிண்	$alt
+கிர்	$alt
 
 
 
@@ -452,9 +535,9 @@ tamil	தமிழ்	$text
 பைக்கில் 	baIkkIl
 தாங்ஸ்	Ta:Nks		// thanks
 டிபுடி	d.EpjUt.i	// deputy
-டிபன்	t.ifVn
 ஆகா	a:Ha:
 ஓகோ	o:Ho:
 கப்	kVp
 செட்	set.
 திக்	dik
+பிட்	bit.
