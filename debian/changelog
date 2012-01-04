@@ -10,6 +10,7 @@ espeak (1.46.01-1) UNRELEASED; urgency=low
       command to only extract the major version of the soname
   * debian/patches/leak: Dropped, applied upstream
   * Build for multi-arch
+  * Fix some lintian warnings
 
   [ Samuel Thibault ]
   * control: Depend on hardening-check.
