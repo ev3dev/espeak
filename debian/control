@@ -12,6 +12,7 @@ Standards-Version: 3.9.2
 
 Package: espeak
 Architecture: any
+Multi-Arch: foreign
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Multi-lingual software speech synthesizer
  eSpeak is a software speech synthesizer for English, and some other
@@ -59,6 +60,8 @@ Description: Multi-lingual software speech synthesizer: data for d-i
 Package: libespeak1
 Architecture: any
 Section: libs
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends}, espeak-data (= ${binary:Version})
 Description: Multi-lingual software speech synthesizer: shared library
  eSpeak is a software speech synthesizer for English, and some other
@@ -69,6 +72,8 @@ Description: Multi-lingual software speech synthesizer: shared library
 Package: libespeak-dev
 Architecture: any
 Section: libdevel
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, libespeak1 (= ${binary:Version})
 Description: Multi-lingual software speech synthesizer: development files
  eSpeak is a software speech synthesizer for English, and some other
