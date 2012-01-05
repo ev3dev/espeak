@@ -1,3 +1,10 @@
+espeak (1.46.01-0ubuntu2) UNRELEASED; urgency=low
+
+  * Do not build libespeak.a with pulse support, as there are cases where
+    espeak is used in low memory/low resource environments, like d-i
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Fri, 06 Jan 2012 08:01:35 +1100
+
 espeak (1.46.01-0ubuntu1) precise; urgency=low
 
   * New upstream release
