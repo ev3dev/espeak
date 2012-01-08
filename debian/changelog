@@ -1,3 +1,9 @@
+espeak (1.46.02-0ubuntu1) UNRELEASED; urgency=low
+
+  * New upstream release
+
+ -- Luke Yelavich <themuso@ubuntu.com>  Sun, 08 Jan 2012 11:26:33 +0000
+
 espeak (1.46.01-0ubuntu2) precise; urgency=low
 
   * Do not build libespeak.a with pulse support, as there are cases where
