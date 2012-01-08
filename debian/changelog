@@ -1,10 +1,10 @@
-espeak (1.46.02-0ubuntu1) UNRELEASED; urgency=low
+espeak (1.46.02-0ubuntu1) precise; urgency=low
 
   * New upstream release
   * Re-enable the use of the endianness conversion utility for architectures
     that need it
 
- -- Luke Yelavich <themuso@ubuntu.com>  Sun, 08 Jan 2012 11:27:19 +0000
+ -- Luke Yelavich <themuso@ubuntu.com>  Sun, 08 Jan 2012 11:31:23 +0000
 
 espeak (1.46.01-0ubuntu2) precise; urgency=low
 
