@@ -33,7 +33,7 @@ build-stamp:
 	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) espeak AUDIO=runtime
 
 	# Build static speak binary
-#	cd platforms/big_endian && CFLAGS="$(CFLAGS)" $(MAKE)
+	cd platforms/big_endian && CFLAGS="$(CFLAGS)" $(MAKE)
 	# Build voice metadata.
 	cp -a $(CURDIR)/espeak-data $(CURDIR)/espeak-data-local
 	cd dictsource && $(CURDIR)/src/speak --compile=en
