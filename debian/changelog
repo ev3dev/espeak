@@ -1,4 +1,4 @@
-espeak (1.46.02-1) UNRELEASED; urgency=low
+espeak (1.46.02-1) unstable; urgency=low
 
   [ Luke Yelavich ]
   * Update the explanation of the -b command-line flag in the espeak manpage
