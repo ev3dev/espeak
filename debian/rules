@@ -8,8 +8,11 @@ soname=libespeak.so.1
 version=$(shell dpkg-parsechangelog|sed -n -e 's/^Version: //p'|cut -d- -f1|cut -d. -f1-2)
 
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+ESPEAK_DATA=/usr/lib/$(DEB_HOST_MULTIARCH)
 
 CFLAGS = -Wall -g
+
+export DEB_BUILD_HARDENING=1
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -O0
@@ -29,8 +32,8 @@ build-stamp:
 
 	cp src/portaudio19.h src/portaudio.h
 	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) speak DATADIR=$(CURDIR)/espeak-data-local
-	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) libespeak.a
-	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) espeak AUDIO=runtime
+	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) DATADIR=$(ESPEAK_DATA)/espeak-data libespeak.a
+	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) DATADIR=$(ESPEAK_DATA)/espeak-data espeak AUDIO=runtime
 
 	# Build static speak binary
 	cd platforms/big_endian && CFLAGS="$(CFLAGS)" $(MAKE)
@@ -61,18 +64,19 @@ install: build
 	dh_installdirs
 
 	install -m 755 -o root -g root src/espeak $(CURDIR)/debian/espeak/usr/bin/espeak
-	cp -r espeak-data-local $(CURDIR)/debian/espeak-data/usr/share/espeak-data
-	find $(CURDIR)/debian/espeak-data/usr/share -type f -exec chmod 644 {} \;
-	find $(CURDIR)/debian/espeak-data/usr/share -type d -exec chmod 755 {} \;
+	install -d $(CURDIR)/debian/espeak-data$(ESPEAK_DATA)
+	cp -r espeak-data-local $(CURDIR)/debian/espeak-data$(ESPEAK_DATA)/espeak-data
+	find $(CURDIR)/debian/espeak-data/usr/lib -type f -exec chmod 644 {} \;
+	find $(CURDIR)/debian/espeak-data/usr/lib -type d -exec chmod 755 {} \;
 	cp -al $(CURDIR)/debian/espeak-data/usr $(CURDIR)/debian/espeak-data-udeb
-	rm -fr $(CURDIR)/debian/espeak-data-udeb/usr/share/espeak-data/mbrola* $(CURDIR)/debian/espeak-data-udeb/usr/share/espeak-data/voices/mb $(CURDIR)/debian/espeak-data-udeb/usr/share/espeak-data/voices/test
-	mkdir -p $(CURDIR)/debian/libespeak1/usr/lib/$(DEB_HOST_MULTIARCH)
-	mkdir -p $(CURDIR)/debian/libespeak-dev/usr/lib/$(DEB_HOST_MULTIARCH)
-	install -m 644 -o root -g root src/$(soname).$(version) $(CURDIR)/debian/libespeak1/usr/lib/$(DEB_HOST_MULTIARCH)/$(soname).$(version)
-	cd $(CURDIR)/debian/libespeak1/usr/lib/$(DEB_HOST_MULTIARCH) && ln -s $(soname).$(version) $(soname)
-	cd $(CURDIR)/debian/libespeak1/usr/lib/$(DEB_HOST_MULTIARCH) && ln -s $(soname).$(version) libespeak.so 
-	mv $(CURDIR)/debian/libespeak1/usr/lib/$(DEB_HOST_MULTIARCH)/libespeak.so $(CURDIR)/debian/libespeak-dev/usr/lib/$(DEB_HOST_MULTIARCH)
-	install -m 644 -o root -g root src/libespeak.a $(CURDIR)/debian/libespeak-dev/usr/lib/$(DEB_HOST_MULTIARCH)
+	rm -fr $(CURDIR)/debian/espeak-data-udeb$(ESPEAK_DATA)/espeak-data/mbrola* $(CURDIR)/debian/espeak-data-udeb$(ESPEAK_DATA)/espeak-data/voices/mb $(CURDIR)/debian/espeak-data-udeb$(ESPEAK_DATA)/espeak-data/voices/test
+	mkdir -p $(CURDIR)/debian/libespeak1$(ESPEAK_DATA)
+	mkdir -p $(CURDIR)/debian/libespeak-dev$(ESPEAK_DATA)
+	install -m 644 -o root -g root src/$(soname).$(version) $(CURDIR)/debian/libespeak1$(ESPEAK_DATA)/$(soname).$(version)
+	cd $(CURDIR)/debian/libespeak1$(ESPEAK_DATA) && ln -s $(soname).$(version) $(soname)
+	cd $(CURDIR)/debian/libespeak1$(ESPEAK_DATA) && ln -s $(soname).$(version) libespeak.so 
+	mv $(CURDIR)/debian/libespeak1$(ESPEAK_DATA)/libespeak.so $(CURDIR)/debian/libespeak-dev$(ESPEAK_DATA)
+	install -m 644 -o root -g root src/libespeak.a $(CURDIR)/debian/libespeak-dev$(ESPEAK_DATA)
 	install -m 644 -o root -g root src/speak_lib.h $(CURDIR)/debian/libespeak-dev/usr/include/espeak
 
 # Build architecture-independent files here.
