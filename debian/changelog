@@ -3,7 +3,9 @@ espeak (1.46.02-2) UNRELEASED; urgency=low
   * debian/rules: Move espeak-data to /usr/lib/$multiarch/espeak-data to
     permit...
   * debian/control: ... make espeak-data multiarch: same.
-  * control: Bump Standards-Version to 3.9.3 (no changes).
+  * control:
+    - Bump Standards-Version to 3.9.3 (no changes).
+    - Do not make espeak-data recommend espeak (Closes: Bug#674851).
 
  -- Samuel Thibault <sthibault@debian.org>  Sat, 25 Feb 2012 17:34:46 +0100
 
