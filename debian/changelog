@@ -3,6 +3,7 @@ espeak (1.47.07-1) UNRELEASED; urgency=low
   * New upstream release
   * debian/rules: Use phondata-manifest in the espeak-data directory
   * Updated espeak manpage
+  * Updated copyright
 
  -- Luke Yelavich <themuso@ubuntu.com>  Mon, 22 Apr 2013 08:18:08 +1000
 
