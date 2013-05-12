@@ -1,11 +1,15 @@
 espeak (1.47.07-1) UNRELEASED; urgency=low
 
+  [ Luke Yelavich ]
   * New upstream release
   * debian/rules: Use phondata-manifest in the espeak-data directory
   * Updated espeak manpage
   * Updated copyright
 
- -- Luke Yelavich <themuso@ubuntu.com>  Mon, 22 Apr 2013 08:18:08 +1000
+  [ Jason White ]
+  * Don't override compiler flags from the environment in Makefile.
+
+ -- Jason White <jason@jasonjgw.net>  Mon, 22 Apr 2013 08:18:08 +1000
 
 espeak (1.46.02-2) unstable; urgency=low
 

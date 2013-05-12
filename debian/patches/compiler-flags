@@ -1,0 +1,13 @@
+Index: espeak/src/Makefile
+===================================================================
+--- espeak.orig/src/Makefile	2013-05-12 17:08:13.919581196 +1000
++++ espeak/src/Makefile	2013-05-12 17:13:29.755725063 +1000
+@@ -93,7 +93,7 @@
+ OBJS3=$(patsubst %.cpp,%.o,$(SRCS3))
+ LIBS3=-lstdc++ -L . -lespeak
+ 
+-CXXFLAGS=-O2
++CXXFLAGS?=-O2
+ 
+ 
+ all: $(BIN_NAME) $(LIB_NAME) $(STATIC_LIB_NAME) $(BIN2_NAME)
