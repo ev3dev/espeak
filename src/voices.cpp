@@ -601,7 +601,7 @@ voice_t *LoadVoice(const char *vname, int control)
 
 	// which directory to look for a named voice. List of voice names, must end in a space.
 	static const char *voices_asia =
-		"bn fa fa-pin hi hy hy-west id ka kn ku ml ms ne pa ta te tr vi vi-hue zh zh-yue ";
+		"az bn fa fa-pin hi hy hy-west id ka kn ku ml ms ne pa ta te tr vi vi-hue vi-sgn zh zh-yue ";
 	static const char *voices_europe =
 		"an bg bs ca cs cy da de el en en-us es et fi fr fr-be ga hr hu is it lt lv mk nl no pl pt-pt ro ru sk sq sr sv ";
 
@@ -902,7 +902,8 @@ voice_t *LoadVoice(const char *vname, int control)
 
 		case V_OPTION:
 			value2 = 0;
-			if((sscanf(p,"%s %d %d",option_name,&value,&value2) >= 2) && ((ix = LookupMnem(options_tab, option_name)) >= 0))
+			if(((sscanf(p,"%s %d %d",option_name,&value,&value2) >= 2) && ((ix = LookupMnem(options_tab, option_name)) >= 0)) ||
+				((sscanf(p,"%d %d %d",&ix,&value,&value2) >= 2) && (ix < N_LOPTS)))
 			{
 				langopts->param[ix] = value;
 				langopts->param2[ix] = value2;
