@@ -10,7 +10,6 @@ espeak (1.47.07-1) UNRELEASED; urgency=low
   * Don't override compiler flags from the environment in Makefile.
     (Closes: #707925)
   * Pass compiler flags on make command line so they won't be ignored.
-    (Closes: #707925)
 
  -- Jason White <jason@jasonjgw.net>  Mon, 22 Apr 2013 08:18:08 +1000
 
