@@ -8,6 +8,8 @@ espeak (1.47.11-1) UNRELEASED; urgency=low
   [ Jason White ]
   * Pass compiler flags on make command line so they won't be ignored.
     (Closes: #707925)
+  * Rebuild object files with AUDIO=runtime after building static library
+    without it. (Closes: #707912)
 
  -- Jason White <jason@jasonjgw.net>  Mon, 22 Apr 2013 08:18:08 +1000
 

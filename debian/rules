@@ -32,6 +32,9 @@ build-stamp:
 
 	cp src/portaudio19.h src/portaudio.h
 	cd src && $(MAKE) CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" DATADIR=$(ESPEAK_DATA)/espeak-data libespeak.a
+	# Remove object files so we can rebuild them with
+	# AUDIO=runtime enabled
+	rm -f src/*.o
 	cd src && $(MAKE) CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" DATADIR=$(ESPEAK_DATA)/espeak-data espeak AUDIO=runtime
 
 	# Build static speak binary
