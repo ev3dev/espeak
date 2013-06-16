@@ -1,4 +1,4 @@
-espeak (1.47.11-1) UNRELEASED; urgency=low
+espeak (1.47.11-2) UNRELEASED; urgency=low
 
   * New upstream release
   * debian/rules: Use phondata-manifest in the espeak-data directory
@@ -11,7 +11,11 @@ espeak (1.47.11-1) UNRELEASED; urgency=low
   * Rebuild object files with AUDIO=runtime after building static library
     without it. (Closes: #707912)
 
- -- Jason White <jason@jasonjgw.net>  Mon, 22 Apr 2013 08:18:08 +1000
+  [ Samuel Thibault ]
+  * Add utf-8-init patch to fix initialization of utf-8 locale for proper
+    character properties detection.
+
+ -- Samuel Thibault <sthibault@debian.org>  Mon, 17 Jun 2013 00:20:08 +0200
 
 espeak (1.46.02-2) unstable; urgency=low
 
