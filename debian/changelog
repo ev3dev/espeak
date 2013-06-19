@@ -1,4 +1,4 @@
-espeak (1.47.11-2) unstable; urgency=low
+espeak (1.47.11-1) unstable; urgency=low
 
   * New upstream release
   * debian/rules: Use phondata-manifest in the espeak-data directory
