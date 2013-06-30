@@ -1,3 +1,9 @@
+espeak (1.47.11-2) UNRELEASED; urgency=low
+
+  * Remove pulse-trigger-on-final-chunk, it actually does not have effect.
+
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 30 Jun 2013 09:58:09 +0200
+
 espeak (1.47.11-1) unstable; urgency=low
 
   * New upstream release
