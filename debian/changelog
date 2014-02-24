@@ -1,11 +1,11 @@
-espeak (1.47.11-2) UNRELEASED; urgency=low
+espeak (1.47.11-2) unstable; urgency=medium
 
   * Remove pulse-trigger-on-final-chunk, it actually does not have effect.
   * Bump Standards-Version to 3.9.5 (no changes).
   * Add libespeak1-udeb shared library for the installer, so it can be
     upgraded at the same time as libespeak-data.
 
- -- Samuel Thibault <sthibault@debian.org>  Sun, 30 Jun 2013 09:58:09 +0200
+ -- Samuel Thibault <sthibault@debian.org>  Mon, 24 Feb 2014 00:50:40 -0500
 
 espeak (1.47.11-1) unstable; urgency=low
 
