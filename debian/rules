@@ -98,7 +98,7 @@ binary-arch: build install
 	dh_strip --dbg-package=espeak-dbg
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs -V
+	dh_makeshlibs -V --add-udeb=libespeak1-udeb
 	dh_shlibdeps -L libespeak1 -l debian/libespeak1/usr/lib
 	dh_installdeb -v
 	dh_gencontrol

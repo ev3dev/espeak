@@ -3,6 +3,7 @@ espeak (1.47.11-2) unstable; urgency=medium
   * Add libespeak1-udeb shared library for the installer, so it can be
     upgraded at the same time as libespeak-data.
 
+  * libespeak1.shlibs: Remove file, replaced by dh_makeshlibs call.
   * Remove pulse-trigger-on-final-chunk, it actually does not have effect.
   * Bump Standards-Version to 3.9.5 (no changes).
 
