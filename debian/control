@@ -71,7 +71,7 @@ Description: Multi-lingual software speech synthesizer: shared library
 Package: libespeak1-udeb
 Architecture: any
 Section: debian-installer
-Depends: ${shlibs:Depends}, ${misc:Depends}, espeak-data (= ${binary:Version})
+Depends: ${shlibs:Depends}, ${misc:Depends}, espeak-data-udeb (= ${binary:Version})
 Package-Type: udeb
 Description: Multi-lingual software speech synthesizer: shared library
  eSpeak is a software speech synthesizer for English, and some other
