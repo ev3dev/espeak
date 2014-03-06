@@ -1,0 +1,30 @@
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -27,7 +27,7 @@
+ 
+ # 'runtime' uses pulseaudio if it is running, else uses portaudio
+ #AUDIO = runtime
+-AUDIO = portaudio
++#AUDIO = portaudio
+ #AUDIO = portaudio0
+ #AUDIO = portaudio2
+ #AUDIO = pulseaudio
+@@ -83,15 +83,15 @@
+ 
+ SRCS1=$(speak_SOURCES)
+ OBJS1=$(patsubst %.cpp,%.o,$(SRCS1))
+-LIBS1=-lstdc++ $(LIB_AUDIO) -lpthread $(EXTRA_LIBS) -lsonic
++LIBS1=$(LIB_AUDIO) -lpthread $(EXTRA_LIBS) -lsonic
+ 
+ SRCS2=$(libespeak_SOURCES)
+ OBJS2=$(patsubst %.cpp,x_%.o,$(SRCS2))
+-LIBS2=-lstdc++ $(LIB_AUDIO) -lpthread -lsonic
++LIBS2=$(LIB_AUDIO) -lpthread -lsonic
+ 
+ SRCS3 = espeak.cpp
+ OBJS3=$(patsubst %.cpp,%.o,$(SRCS3))
+-LIBS3=-lstdc++ -L . -lespeak
++LIBS3=-L . -lespeak
+ 
+ CXXFLAGS=-O2
+ 

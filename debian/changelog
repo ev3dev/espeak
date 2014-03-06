@@ -1,3 +1,9 @@
+espeak (1.46.02-2ev3dev1) stable; urgency=low
+
+  * Remove pulse and port audio dependancies.
+
+ -- David Lechner <david@lechnology.com>  Wed, 05 Mar 2014 20:40:42 -0600
+
 espeak (1.46.02-2) unstable; urgency=low
 
   * debian/rules: Move espeak-data to /usr/lib/$multiarch/espeak-data to

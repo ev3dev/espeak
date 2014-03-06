@@ -32,7 +32,7 @@ build-stamp:
 
 	cp src/portaudio19.h src/portaudio.h
 	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) DATADIR=$(ESPEAK_DATA)/espeak-data libespeak.a
-	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) DATADIR=$(ESPEAK_DATA)/espeak-data espeak AUDIO=runtime
+	cd src && CXXFLAGS="$(CXXFLAGS) $(CFLAGS)" $(MAKE) DATADIR=$(ESPEAK_DATA)/espeak-data espeak
 
 	# Build static speak binary
 	cd platforms/big_endian && CFLAGS="$(CFLAGS)" $(MAKE)
