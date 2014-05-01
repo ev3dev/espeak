@@ -1,3 +1,11 @@
+espeak (1.48.04-1) UNRELEASED; urgency=medium
+
+  * New upstream release
+  * copyright: Update.
+  * patches/utf-8-init: Refresh.
+
+ -- Samuel Thibault <sthibault@debian.org>  Thu, 01 May 2014 19:05:04 +0200
+
 espeak (1.47.11-2) unstable; urgency=medium
 
   * Add libespeak1-udeb shared library for the installer, so it can be
