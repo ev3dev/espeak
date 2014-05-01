@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2013 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2014 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -50,7 +50,9 @@ static char *hash_chains[N_HASH_DICT];
 static char letterGroupsDefined[N_LETTER_GROUPS];
 
 MNEM_TAB mnem_rules[] = {
-	{"unpr",   0x01},
+	{"unpr",   DOLLAR_UNPR},
+	{"noprefix", DOLLAR_NOPREFIX},  // rule fails if a prefix has been removed
+	{"list",   DOLLAR_LIST},    // a pronunciation is given in the *_list file
 
 	{"w_alt1", 0x11},
 	{"w_alt2", 0x12},
@@ -235,6 +237,7 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 	unsigned char rb;
 	unsigned char c;
 	char *p;
+	char *p_end;
 	int  ix;
 	int  match_type;
 	int  finished=0;
@@ -245,10 +248,10 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 	int  condition_num=0;
 	int  at_start = 0;
 	const char *name;
-	char buf[60];
-	char buf_pre[60];
+	char buf[200];
+	char buf_pre[200];
 	char suffix[20];
-	static char output[60];
+	static char output[80];
 
 	static char symbols[] =
 		{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
@@ -312,6 +315,7 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 			value = *rule++ & 0xff;
 			if((value != 0x01) || (control & FLAG_UNPRON_TEST))
 			{
+				// TODO write the string backwards if in RULE_PRE
 				p[0] = '$';
 				name = LookupMnemName(mnem_rules, value);
 				strcpy(&p[1],name);
@@ -367,6 +371,8 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 	*p = 0;
 
 	p = output;
+	p_end = p + sizeof(output) - 1;
+
 	if(linenum > 0)
 	{
 		sprintf(p,"%5d:\t",linenum);
@@ -381,12 +387,14 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 	{
 		if(at_start)
 			*p++ = '_';
-		while(--ix >= 0)
+		while((--ix >= 0) && (p < p_end-3))
 			*p++ = buf_pre[ix];
 		*p++ = ')';
 		*p++ = ' ';
 	}
 	*p = 0;
+
+	buf[p_end - p] = 0;  // prevent overflow in output[]
 	strcat(p,buf);
 	ix = strlen(output);
 	while(ix < 8)
@@ -425,7 +433,8 @@ static int compile_line(char *linebuf, char *dict_line, int *hash)
 	char *mnemptr;
 	unsigned char flag_codes[100];
 	char encoded_ph[200];
-	unsigned char bad_phoneme[4];
+	char bad_phoneme_str[4];
+	int bad_phoneme;
 	static char nullstring[] = {0};
 
 	text_not_phonemes = 0;
@@ -660,17 +669,18 @@ static int compile_line(char *linebuf, char *dict_line, int *hash)
 	}
 	else
 	{
-		EncodePhonemes(phonetic,encoded_ph,bad_phoneme);
+		EncodePhonemes(phonetic,encoded_ph,&bad_phoneme);
 		if(strchr(encoded_ph,phonSWITCH) != 0)
 		{
 			flag_codes[n_flag_codes++] = BITNUM_FLAG_ONLY_S;  // don't match on suffixes (except 's') when switching languages
 		}
 
 		// check for errors in the phonemes codes
-		if(bad_phoneme[0] != 0)
+		if(bad_phoneme != 0)
 		{
 			// unrecognised phoneme, report error
-			fprintf(f_log,"%5d: Bad phoneme [%c] (0x%x) in: %s  %s\n",linenum,bad_phoneme[0],bad_phoneme[0],word,phonetic);
+			bad_phoneme_str[utf8_out(bad_phoneme, bad_phoneme_str)] = 0;
+			fprintf(f_log,"%5d: Bad phoneme [%s] (U+%x) in: %s  %s\n",linenum,bad_phoneme_str,bad_phoneme,word,phonetic);
 			error_count++;
 		}
 	}
@@ -919,8 +929,8 @@ int isHexDigit(int c)
 }
 
 
-static void copy_rule_string(char *string, int &state)
-{//===================================================
+static void copy_rule_string(char *string, int *state_out)
+{//=======================================================
 // state 0: conditional, 1=pre, 2=match, 3=post, 4=phonemes
 	static char *outbuf[5] = {rule_cond, rule_pre, rule_match, rule_post, rule_phonemes};
 	static int next_state[5] = {2,2,4,4,4};
@@ -934,6 +944,7 @@ static void copy_rule_string(char *string, int &state)
 	int  value;
 	int  literal;
 	int  hexdigit_input = 0;
+	int state = *state_out;
 	MNEM_TAB *mr;
 
 	if(string[0] == 0) return;
@@ -1093,21 +1104,33 @@ static void copy_rule_string(char *string, int &state)
 					break;
 
 				case '$':
-					output[ix++] = RULE_DOLLAR;
-					c = 0;
+					value = 0;
 					mr = mnem_rules;
 					while(mr->mnem != NULL)
 					{
 						len = strlen(mr->mnem);
 						if(memcmp(p, mr->mnem, len) == 0)
 						{
-							c = mr->value;
+							value = mr->value;
 							p += len;
 							break;
 						}
 						mr++;
 					}
-					if(c == 0)
+
+					if(state == 1)
+					{
+						// pre-rule, put the number before the RULE_DOLLAR
+						output[ix++] = value;
+						c = RULE_DOLLAR;
+					}
+					else
+					{
+						output[ix++] = RULE_DOLLAR;
+						c = value;
+					}
+
+					if(value == 0)
 					{
 						fprintf(f_log,"%5d: $ command not recognized\n",linenum);
 						error_count++;
@@ -1174,7 +1197,7 @@ static void copy_rule_string(char *string, int &state)
 		if(c == 0) break;
 	}
 
-	state = next_state[state];
+	*state_out = next_state[state];
 }  //  end of copy_rule_string
 
 
@@ -1193,7 +1216,8 @@ static char *compile_rule(char *input)
 	int finish=0;
 	char buf[80];
 	char output[150];
-	unsigned char bad_phoneme[4];
+	int bad_phoneme;
+	char bad_phoneme_str[4];
 
 	buf[0]=0;
 	rule_cond[0]=0;
@@ -1213,14 +1237,14 @@ static char *compile_rule(char *input)
 		case ')':		// end of prefix section
 			*p = 0;
 			state = 1;
-			copy_rule_string(buf,state);
+			copy_rule_string(buf,&state);
 			p = buf;
 			break;
 
 		case '(':		// start of suffix section
 			*p = 0;
 			state = 2;
-			copy_rule_string(buf,state);
+			copy_rule_string(buf,&state);
 			state = 3;
 			p = buf;
 			if(input[ix+1] == ' ')
@@ -1234,14 +1258,14 @@ static char *compile_rule(char *input)
 		case '\r':
 		case 0:			// end of line
 			*p = 0;
-			copy_rule_string(buf,state);
+			copy_rule_string(buf,&state);
 			finish=1;
 			break;
 
 		case '\t':		// end of section section
 		case ' ':
 			*p = 0;
-			copy_rule_string(buf,state);
+			copy_rule_string(buf,&state);
 			p = buf;
 			break;
 
@@ -1271,10 +1295,11 @@ static char *compile_rule(char *input)
 		return(NULL);
 	}
 
-	EncodePhonemes(rule_phonemes,buf,bad_phoneme);
-	if(bad_phoneme[0] != 0)
+	EncodePhonemes(rule_phonemes,buf,&bad_phoneme);
+	if(bad_phoneme != 0)
 	{
-		fprintf(f_log,"%5d: Bad phoneme [%c] in %s\n",linenum,bad_phoneme[0],input);
+		bad_phoneme_str[utf8_out(bad_phoneme, bad_phoneme_str)] = 0;
+		fprintf(f_log,"%5d: Bad phoneme [%s] (U+%x) in: %s\n",linenum,bad_phoneme_str,bad_phoneme,input);
 		error_count++;
 	}
 	strcpy(output,buf);
@@ -1922,7 +1947,7 @@ int CompileDictionary(const char *dsource, const char *dict_name, FILE *log, cha
 	if((f_out = fopen_log(fname_out,"wb+")) == NULL)
 	{
 		if(fname_err)
-			strcpy(fname_err,fname_in);
+			strcpy(fname_err,fname_out);
 		return(-1);
 	}
 	sprintf(fname_temp,"%s%ctemp",path_home,PATHSEP);
@@ -1958,6 +1983,7 @@ int CompileDictionary(const char *dsource, const char *dict_name, FILE *log, cha
 	fseek(f_out,4,SEEK_SET);
 	Write4Bytes(f_out,offset_rules);
 	fclose(f_out);
+	fflush(f_log);
 
 	LoadDictionary(translator, dict_name, 0);
 

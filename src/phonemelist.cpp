@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2013 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2014 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -399,6 +399,14 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 
 		InterpretPhoneme(tr, 0x100, plist3, &phdata, &worddata);
 
+		if((alternative = phdata.pd_param[pd_CHANGE_NEXTPHONEME]) > 0)
+		{
+			ph_list3[j+1].ph = phoneme_tab[alternative];
+			ph_list3[j+1].phcode = alternative;
+			ph_list3[j+1].type = phoneme_tab[alternative]->type;
+			next = phoneme_tab[alternative];
+		}
+
 		if(((alternative = phdata.pd_param[pd_INSERTPHONEME]) > 0) && (inserted == 0))
 		{
 			// PROBLEM: if we insert a phoneme before a vowel then we loose the stress.
@@ -509,9 +517,10 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 		if((plist3+1)->synthflags & SFLAG_LENGTHEN)
 		{
 			static char types_double[] = {phFRICATIVE,phVFRICATIVE,phNASAL,phLIQUID,0};
-			if(strchr(types_double,next->type))
+			if((j > 0) && (strchr(types_double,next->type)))
 			{
 				// lengthen this consonant by doubling it
+				// BUT, can't insert a phoneme at position plist3[0] because it crashes PrevPh()
 				insert_ph = next->code;
 				(plist3+1)->synthflags ^= SFLAG_LENGTHEN;
 			}

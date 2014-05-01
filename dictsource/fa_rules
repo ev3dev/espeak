@@ -1,6 +1,5 @@
-// *   Farsi Language fa (or Parsi or Persian) fa_rules Version 3.0
-// *   Farsi Language fa (or Parsi or Persian) fa_rules Version 3.0
-// *   This file writen by Shadyar Khodayari 2013
+// *   Farsi Language fa (or Parsi or Persian) fa_rules Version 3.11
+// *   This file writen by Shadyar Khodayari 02-05-2014
 //*********
 // *   This program is free software; you can redistribute it and/or modify  *
 // *   it under the terms of the GNU General Public License as published by  *
@@ -25,13 +24,6 @@
 
 // replacing unknown characters and Arabic   numbers with Farsi characters and Latin  numbers
 .replace
-		٪	%
-		ي	ی
-		ۍ	ی
-		ى	ی
-		ك	ک
-		ە	ه
-		ھ	ه
 		٠	0
 		۰	0
 		۱	1
@@ -52,9 +44,157 @@
 		۸	8
 		٩	9
 		۹	9
+		
+		٪	%
+		ٔ	ٴ
+		ي	ی	// this is "ي" Shift + x on the Persian Keyboard ("ye Arabi") that has been replaced with "ی" Standard for some programing reasones.
+		ﺁ	آ
+		ﺍ	ا
+		ﺎ	ا
+		ﺄ	أ
+		ﺏ	ب
+		ﺐ	ب
+		ﺑ ب
+		ﺒ	ب
+		ﭖ	پ
+		ﭗ	پ
+		ﭘ	پ
+		ﭙ	پ
+		ﺕ	ت
+		ﺖ	ت
+		ﺗ	ت
+		ﺘ	ت
+		ﺚ	ث
+		ﺛ	ث
+		ﺜ	ث
+		ﺝ	ج
+		ﺞ	ج
+		ﺠ	ج
+		ﺟ	ج
+		ﭻ	چ
+		ﭼ چ
+		ﭽ	چ
+		ﺢ	ح
+		ﺣ	ح
+		ﺤ	ح
+		ﺥ	خ
+		ﺦ	خ
+		ﺧ	خ
+		ﺨ	خ
+		ﺩ	د
+		ﺪ	د
+		ﺫ	ذ
+		ﺬ	ذ
+		ﺭ	ر
+		ﺮ ر
+		ﺯ	ز
+		ﺰ	ز
+		ﮊ	ژ
+		ﮋ	ژ
+		ﺱ	س
+		ﺲ	س
+		ﺳ	س
+		ﺴ	س
+		ﺵ	ش
+		ﺶ	ش
+		ﺷ	ش
+		ﺸ	ش
+		ﺹ	ص
+		ﺺ	ص
+		ﺻ	ص
+		ﺼ	ص
+		ﺽ	ض
+		ﺿ	ض
+		ﻀ	ض
+		ﻁ	ط
+		ﻂ	ط
+		ﻃ	ط
+		ﻄ	ط
+		ﻇ	ظ
+		ﻈ	ظ
+		ﻉ	ع
+		ﻊ	ع
+		ﻋ	ع
+		ﻌ ع
+		ﻍ	غ
+		ﻎ	غ
+		ﻏ	غ
+		ﻐ	غ
+		ﻑ	ف
+		ﻒ	ف
+		ﻓ	ف
+		ﻔ	ف			
+		ﻕ	ق
+		ﻖ	ق
+		ﻗ	ق
+		ﻘ	ق
+		ك	ک
+		ﮎ	ک
+		ﮏ	ک
+		ﮐ	ک
+		ﮑ	ک
+		ﻛ	ک
+		ﻚ	ک
+		ﻜ	ک
+		ﮒ	گ
+		ﮓ	گ
+		ﮔ	گ
+		ﮕ	گ
+		ﻝ	ل
+		ﻞ	ل
+		ﻟ	ل
+		ﻠ	ل
+		ﻡ م
+		ﻢ م
+		ﻣ	م
+		ﻤ	م
+		ﻥ	ن
+		ﻦ	ن
+		ﻧ	ن
+		ﻨ ن
+		ﻭ	و
+		ﻮ	و
+		ھ	ه
+		ە	ه
+		ﻩ	ه
+		ﻪ	ه
+		ﻫ	ه
+		ﻬ	ه
+		ى	ی
+		ۍ	ی
+		ﯼ	ی
+		ﯽ ی
+		ﯾ ی
+		ﯿ	ی
+		ﻰ	ی
+		ﻱ	ی
+		ﻲ	ی
+		ﻳ	ی
+		ﻴ	ی
+		ﻯ	ی
+		ﻻ	لا
+		ﻼ	لا
+		ﺔ	ة
+		ﺋ	ئ
+		ﺌ	ئ
+		ﺆ	ؤ
+		ﺀ	ء
+		ﹺ	ِ
+		// Urdu for Persian users added
+			ٹ	ت
+			ڈ	د
+			ڑ	ر
+			ہ	ه
+			ﮩ	ه
+			ﮨ	ه
+			ے	ی
+			ں	ن
+			ۃ	ت
+			ۂ	ه
+			ۓ	ی
 
 
-// (ZWNJ) U+200c character (half space) is recognized as Hyphen and this simbole "-" have been definded for this character in the rules.
+			// (ZWNJ) U+200c character (half space) is recognized as Hyphen and this simbole "-" have been definded for this character in the rules.
 
 // the groups of letters
 // Long vowels
@@ -88,6 +228,16 @@
 // (ZWNJ) U+200c character (half space) is recognized as Hyphen and this simbole "-" has been definded for this character in the rules.
 
 
+.group +
+		+ (.D	mosbate-
+		__) + (_D	mosbate-
+
+
+.group -
+		- (.D	manfije-
+		__) - (_D	manfije-
+
+
 .group آ
 	_) آN	'A:
 	آ	'A
@@ -105,6 +255,8 @@
 		L09L09) آموخته (_Sm6	Amuxte:
 		L09L09) آموختۀ (_Sm6	Amuxteje
 		L09L09) آگاه (_Sm4	AgAh
+		L09L09)آلات  (_Sm4	AlAt
+		L09L09)آباد  (_Sm4	A'bAd
 
 
 .group ا
@@ -121,6 +273,7 @@
 	اً	an
 	اٍ	en
 	اٌ	on
+	ا (ٓ	A
 
 	// Prefixes ا
 		_) ال (L09L09L09P2@	al
@@ -130,10 +283,10 @@
 		_) اکبر (آL09L09P4@	akbaR
 		_) اصغر (L04L09L09P4@	asq1aR
 		_) اصغر (آL09L09P4@	asq1aR
-		_) ابو (L04L09L09P3@	abu
-		_) ابو (آL09L09P3@	abu
-		_) ابوال (L04L09L09P5@	abol'
-		_) ابوال (آL09L09P5@	abol'
+		_) ابو (L04L09L09$noprefixP3@	abu	// $noprefix means if another prefix has been removed before this prefix, this rule is not matched.
+		_) ابو (آL09L09$noprefixP3@	abu
+		_) ابوال (L04L09L09$noprefixP5@	abol'
+		_) ابوال (آL09L09$noprefixP5@	abol'
 
 	// Suffixes ا
 		L09L04) الله (_Sm4	ollAh
@@ -201,9 +354,22 @@
 			l09l09l03) انیدید (_NSm6	Anidid
 			l09l09l03) انیدند (_NSm6	Anidand
 			l09l09l03) انیدن (_NSm5	Anidan
-		L09L04) افرین (_Sm5	AfaRin
 		L09L04) الدین (_Sm5	oddin
 		L09L04) الدّین (_Sm6	oddin
+		L09L04) الدوله (_Sm6	oddole:
+		L09L04) الدّوله (_Sm7	oddole:
+L09L04) الدولۀ (_Sm6	oddoleje
+		L09L04) الدّولۀ (_Sm7	oddoleje
+		L09L04) الملک (_Sm5	olmolk
+		L09L04) الملوک (_Sm6	olmoluk
+		L09L04) الحکما (_Sm6	olhokamA
+		L09L04) الممالک (_Sm7	olmamAlek
+L09L04) السلطنه (_Sm7	ossaltane:
+L09L04) السّلطنه (_Sm8	ossaltane:
+L09L04) السلطنۀ (_Sm7	ossaltaneje
+L09L04) السّلطنۀ (_Sm8	ossaltaneje
+L09L04) السادات (_Sm7	ossAdAt
+L09L04) السّادات (_Sm8	ossAdAt
 
 	// arabic form of words  (Babs) ا
 		//استفعال eg. استخراج (Fa eSpeak read itd correctly)
@@ -299,22 +465,32 @@
 			L09L09L09L09) ب (L03L09L09L09_	ba
 
 	// Prefixes ب
-		_) ب (L03L09L09P1@	be
-		_) ب (وL01L09P1@	be
-		_) ب (وL02L09P1@	be
-		_) بر (L04L09L09P2@	baR
-		_) بر (آL09L09P2@	baR
-		_) به (L04L09L09P2@	beh
-		_) به (آL09L09P2@	beh
-		_) بد (آL09L09P2@	bad\
+		_) ب (L03L09L09$noprefixP1@	be
+		_) ب (وL01L09$noprefixP1@	be
+		_) ب (وL02L09$noprefixP1@	be
+		_) بر (L04L09L09$noprefixP2@	baR
+		_) بر (آL09L09$noprefixP2@	baR
+		_) برمی (L04L09L09$noprefixP4@	baRmi
+		_) برمی (آL09L09$noprefixP4@	baRmi
+		_) برنمی (L04L09L09$noprefixP5@	baRnemi
+		_) برنمی (آL09L09$noprefixP5@	baRnemi
+		_) به (L04L09L09$noprefixP2@	beh
+		_) به (آL09L09$noprefixP2@	beh
+		_) بد (آL09L09$noprefixP2@	bad\
 		_) باز (L04L09L09P3@	bAz
 		_) باز (آL09L09P3@	bAz
+		_) بازمی (L04L09L09$noprefixP5@	bAzmi
+		_) بازمی (آL09L09$noprefixP5@	bAzmi
+		_) بازنمی (L04L09L09$noprefixP6@	bAznemi
+		_) بازنمی (آL09L09$noprefixP6@	bAznemi
 		_) بلند (L04L09L09P4@	boland
 		_) بلند (آL09L09P4@	boland
-		_) بلا (L04L09L09P3@	belA
-		_) بلا (آL09L09P3@	belA
+		_) بلا (L04L09L09$noprefixP3@	belA
+		_) بلا (آL09L09$noprefixP3@	belA
 		_) بزرگ (L04L09L09P4@	bozoRg
 		_) بزرگ (آL09L09P4@	bozoRg
+		_) بنفش (آL09L09P4@	banafS
+		_) بنفش (L04L09L09P4@	banafS
 
 	// suffixes ب
 		L09L09) بخش (_Sm3	baxS
@@ -341,6 +517,7 @@
 				L09L09) بندهاتون (_NSm8	bandhAtun
 				L09L09) بندهایشان (_NSm9	bandhAjeSAn
 				L09L09) بندهاشون (_NSm8	bandhASun
+		L09L09) بار (_Sm3	bAR
 		L09L09) باز (_Sm3	bAz
 		L09L09) بست (_Sm3	bast
 		L09L09) بان (_Sm3	bAn
@@ -352,7 +529,10 @@
 		L09L09) باش (_Sm3	bAS
 		L09L09) بزرگ (_Sm4	bozoRg
 		L09L09) باور (_Sm4	bAvaR
-		L09L09) برانگیز (_Sm	baRangiz
+		L09L09) برانگیز (_Sm7	baRangiz
+		L09L09) باف (_Sm3	bAf
+		L09L09) بافت (_Sm4	bAft
+		L09L09) بلند (_Sm4	boland
 
 	// arabic form of words  (Babs) ب
 		//فواعل eg. جوامع
@@ -497,14 +677,14 @@
 			L09L09L09L09) پ (L03L09L09L09_	pa
 
 	// Prefixes پ
-		_) پر (L04L09L09P2@	poR
-		_) پر (آL09L09P2@	poR
-		_) پیش (L04L09L09P3@	'piS
-		_) پیش (آL09L09P3@	'piS
+		_) پر (L04L09L09$noprefixP2@	poR
+		_) پر (آL09L09$noprefixP2@	poR
+		_) پیش (L04L09L09$noprefixP3@	'piS
+		_) پیش (آL09L09$noprefixP3@	'piS
 		_) پیشا (L04L09L09P4@	'piSA
 		_) پیشا (آL09L09P4@	'piSA
-		_) پس (L04L09L09P2@	'pas
-		_) پس (آL09L09P2@	'pas
+		_) پس (L04L09L09$noprefixP2@	'pas
+		_) پس (آL09L09$noprefixP2@	'pas
 		_) پسا (L04L09L09P3@	'pasA
 		_) پسا (آL09L09P3@	'pasA
 		_) پیکو (L04L09L09P4@	'piko
@@ -526,6 +706,7 @@
 		L09L09) پندار (_Sm5	pendAR
 		L09L09) پرست (_Sm4	paRast
 		L09L09) پناه (_Sm4	panAh
+		L09L09) پسند (_Sm4	pasand
 
 	// arabic form of words  (Babs) پ
 		//فواعل eg. جوامع
@@ -671,10 +852,10 @@
 			L09L09L09L09) ت (L03L09L09L09_	ta
 
 	// Prefixes ت
-		_) تند (L04L09L09P3@	tond		
-		_) تند (آL09L09P3@	tond		
+		_) تند (L04L09L09$noprefixP3@	tond		
+		_) تند (آL09L09$noprefixP3@	tond		
 
-	// Suffixes ت
+	// Suffixes ت
 		L09L09) تقی (_Sm3	taq1i
 		L09L09) تر (_Sm2	taR
 		L09L09) ترین (_Sm4	taRin
@@ -1153,12 +1334,12 @@
 			L09L09L09L09) چ (L03L09L09L09_	tSa
 
 	// Prefixes چ
-		_) چار (L04L09L09P3@	'tSAR
-		_) چار (آL09L09P3@	'tSAR
+		_) چار (L04L09L09$noprefixP3@	'tSAR
+		_) چار (آL09L09$noprefixP3@	'tSAR
 		_) چهار (L04L09L09P4@	'tSAhAR
 		_) چهار (آL09L09P4@	'tSAhAR
-		_) چند (L04L09L09P3@	'tSand
-		_) چند (آL09L09P3@	'tSand
+		_) چند (L04L09L09$noprefixP3@	'tSand
+		_) چند (آL09L09$noprefixP3@	'tSand
 
 	// Suffixes چ
 		L09L09L09) چی (_Sm2	tSi
@@ -1478,8 +1659,8 @@
 		_) خواب (آL09L09P4@	xAb
 		_) خویش (L04L09L09P4@	xiS
 		_) خویش (آL09L09P4@	xiS
-		_) خان (L04L09L09P3@	xAn
-		_) خان (آL09L09P3@	xAn
+		_) خان (L04L09L09$noprefixP3@	xAn
+		_) خان (آL09L09$noprefixP3@	xAn
 		_) خواهش (L04L09L09P5@	xAheS
 		_) خواهش (آL09L09P5@	xAheS
 		_) خواهد (L04L09L09P5@	xAhad
@@ -1502,6 +1683,9 @@
 		L09L09) خیز (_Sm3	xiz
 		L09L09) خواست (_Sm5	xAst
 		L09L09) خواب (_Sm4	xAb
+		L09L09) خواند (_Sm5	xAnd
+		L09L09) خورد (_Sm4	xoRd
+		L09L09) خوردگی (_Sm6	xoRdegi
 
 	// arabic form of words  (Babs) خ
 		//فواعل eg. جوامع
@@ -1647,18 +1831,24 @@
 			L09L09L09L09) د (L03L09L09L09_	da
 
 	// Prefixes د
-		_) دو (L04L09L09P2@	do
-		_) دو (آL09L09P2@	do
-				_) در (L04L09L09P2@	daR
-				_) در (آL09L09P2@	daR
-		_) دل (L04L09L09P2@	del
-		_) دل (آL09L09P2@	del
-		_) دیر (L04L09L09P3@	diR
-		_) دیر (آL09L09P3@	diR
+		_) دو (L04L09L09$noprefixP2@	do
+		_) دو (آL09L09$noprefixP2@	do
+		_) در (L04L09L09$noprefixP2@	daR
+		_) در (آL09L09$noprefixP2@	daR
+		_) دل (L04L09L09$noprefixP2@	del
+		_) دل (آL09L09$noprefixP2@	del
+		_) دیر (L04L09L09$noprefixP3@	diR
+		_) دیر (آL09L09$noprefixP3@	diR
 		_) دست (L04L09L09P3@	dast
 		_) دست (آL09L09P3@	dast
 		_) درست (L04L09L09P4@	dorost
 		_) درست (آL09L09P4@	dorost
+		_) دراز (L04L09L09P4@	deRAz
+		_) دراز (آL09L09P4@	deRAz
+		_) درال (L04L09L09$noprefixP4@	dARol
+		_) درال (تL09L09+$noprefixP4@	dARo_'
+		_) درال (دL09L09+$noprefixP4@	dARo_'
+		_) درال (آL09L09$noprefixP4@	dARol
 
 	// suffixes د
 		L09L09) داد (_Sm3	dAd
@@ -1679,6 +1869,8 @@
 		L09L09) دوش (_Sm3	duS
 		L09L09) دهی (_Sm3	dehi
 		L09L09) دوست (_Sm4	dust
+		L09L09) دوز (_Sm3	duz
+		L09L09) دخت (_Sm3	doxt
 
 	// arabic form of words  (Babs) د
 		//فواعل eg. جوامع
@@ -1832,8 +2024,10 @@
 			L09L09L09L09) ذ (L03L09L09L09_	za
 
 	// Prefixes ذ
-		_) ذی (L04L09L09P2@	zi
-		_) ذی (آL09L09P2@	zi
+		_) ذی (L04L09L09$noprefixP2@	zi
+		_) ذی (آL09L09$noprefixP2@	zi
+		_) ذوال (L04L09L09P4@	zol
+		_) ذوال (آL09L09P4@	zol
 
 	// Suffixes ذ
 		
@@ -1984,10 +2178,12 @@
 	// Prefixes ر
 		_) رضا (L04L09L09P3@	RezA
 		_) رضا (آL09L09P3@	RezA
-		_) ریز (L04L09L09P2@	Riz
+		_) ریز (L04L09L09P3@	Riz
 		_) ریز (آL09L09P3@	Riz
 		_) راست (L04L09L09P4@	RAst:
 		_) راست (آL09L09P4@	RAst
+		_) رنگ (L04L09L09P3@	Rang
+		_) رنگ (آL09L09P3@	Rang
 
 	// suffixes ر
 		//L09L09L09) ران (_Sm3	RAn
@@ -2156,11 +2352,12 @@
 			L09L09L09L09) ز (L03L09L09L09_	za
 
 	// Prefixes ز
-		_) زیر (L04L09L09P3@	ziR
-		_) زیر (آL09L09P3@	ziR
-		_) زود (L04L09L09P3@	zud
-		_) زود (آL09L09P3@	zud
-				_) زیر (آL09L09P3@	ziR
+		_) زیر (L04L09L09$noprefixP3@	ziR
+		_) زیر (آL09L09$noprefixP3@	ziR
+		_) زود (L04L09L09$noprefixP3@	zud
+		_) زود (آL09L09$noprefixP3@	zud
+		_) زرد (L04L09L09$noprefixP3@	zaRd
+		_) زرد (آL09L09$noprefixP3@	zaRd
 
 	// suffixes ز
 		L09L09) زاد (_Sm3	zAd
@@ -2415,6 +2612,7 @@
 		س (ـــL02	s
 		س (ـــL03	sa
 		س (ــ	sa
+		_) ست (_	set	// eg. "این سِتِ جواهر"
 	// Consonants Analyzer
 	// Right to left characters Analyzer
 		// Analyzing 2nd Consonant of 3 Consonants
@@ -2471,18 +2669,31 @@
 			L09L09L09L09) س (L03L09L09L09_	sa
 
 	// Prefixes س
-		_) سر (L04L09L09P2@	saR
-		_) سر (آL09L09P2@	saR
+		_) سر (L04L09L09$noprefixP2@	saR
+		_) سر (آL09L09$noprefixP2@	saR
 		_) سوء (L09L09P3@	su?e
 		_) سانتی (L04L09L09P5@	sAnti
 		_) سانتی (آL09L09P5@	sAnti
-		_) سید (L09P3@	sej:ed:
-		_) سید (آL09L09P3@	sej:ed
+		_) سید (L04L09L09P3@	sejjed
+		_) سید (آL09L09P3@	sejjed
+		_) سیّد (L04L09L09P4@	sejjed
+		_) سیّد (آL09L09P4@	sejjed
+		_) سپید (L04L09L09P4@	sepid
+		_) سپید (آL09L09P4@	sepid
+		_) سفید (L04L09L09P4@	sefid
+		_) سفید (آL09L09P4@	sefid
+		_) سپید (آL09L09P4@	sepid
+		_) سبز (L04L09L09P3@	sabz
+		_) سبز (آL09L09P3@	sabz
+		_) سنگ (L04L09L09P3@	sang
+		_) سنگ (آL09L09P3@	sang
 
 	// suffixes س
-		L09L01) ست (_+NSm2	st
-		L09L03) ست (_+NSm2	ast
-		-) ست (_+NSm2	st	// eg. "کجا‌ست"
+		L09L01) ست (_++NSm2	st
+		L09L03) ست (_++NSm2	ast
+		L01-) ست (_+NSm2	st	// eg. "کجا‌ست"
+		L02-) ست (_+NSm2	ast
+		L03-) ست (_+NSm2	ast	// eg. "میز‌ست"
 		L09L03) ستان (_Sm4	estAn
 		L09L01) ستان (_Sm4	stAn
 		L09L09) سان (_Sm3	sAn
@@ -2494,6 +2705,8 @@
 		L09L09) سوار (_Sm4	savAR
 		L09L09) سال (_Sm3	sAl
 		L09L09) سالار (_Sm5	sAlAR
+		L09L09) سرشت (_Sm4	seReSt
+		L09L09) ستیز (_Sm4	setiz
 
 	// arabic form of words  (Babs) س
 		//فواعل eg. جوامع
@@ -2646,6 +2859,8 @@
 		_) شاد (آL09L09P3@	S'Ad
 		_) شاه (L04L09L09P3@	S'Ah
 		_) شاه (آL09L09P3@	S'Ah
+		_) شیر (L04L09L09P3@	SiR-
+		_) شیر (آL09L09P3@	SiR-
 
 	// suffixes ش
 		L09L09) شناس (_Sm4	SenAs
@@ -2840,7 +3055,8 @@
 		_) صدر (آL09L09P5@	sadr
 
 	// Suffixes ص
-		L09L09) صد (_Sm2	sad
+		// L09L09) صد (_Sm2	sad
+		L09L09) صفت (_Sm3	sefat
 
 	// arabic form of words  (Babs) ص
 		//فواعل eg. جوامع
@@ -2995,8 +3211,8 @@
 			L09L09L09L09) ض (L03L09L09L09_	za
 
 	// Prefixes ض
-		_) ضد (L04L09L09P2@	zedde
-		_) ضد (آL09L09P2@	zedde
+		_) ضد (L04L09L09$noprefixP2@	zedde
+		_) ضد (آL09L09$noprefixP2@	zedde
 		_) ضدّ (L04L09L09P3@	zedde
 		_) ضدّ (آL09L09P3@	zedde
 
@@ -3776,8 +3992,8 @@
 			L09L09L09L09) ف (L03L09L09L09_	fa
 
 	// Prefixes ف
-		_) فرا (L04L09P3@	faRA
-		_) فرا (آL09P3@	faRA
+		_) فرا (L04L09$noprefixP3@	faRA
+		_) فرا (آL09$noprefixP3@	faRA
 
 	// suffixes ف
 		L09L09) فام (_Sm3	fAm
@@ -3787,6 +4003,7 @@
 		L09L09) فریب (_Sm4	faRib
 		L09L09) فرما (_Sm4	faRmA
 		L09L09) فرسا (_Sm4	faRsA
+		L09L09) فرنگی (_Sm5	faRangi
 
 	// arabic form of words  (Babs) ف
 		//فواعل eg. جوامع
@@ -3933,6 +4150,8 @@
 	// Prefixes ق
 		_) قابل (L04L09L09P4@	q1'Abele
 		_) قابل (آL09L09P4@	q1'Abele
+		_) قرمز (L04L09L09P4@	q1eRmez
+		_) قرمز (آL09L09P4@	q1eRmez
 
 	// suffixes ق
 		
@@ -4080,8 +4299,8 @@
 			L09L09L09L09) ک (L03L09L09L09_	ka
 
 	// Prefixes ک
-		_) کم (L04L09L09P2@	kam
-		_) کم (آL09L09P2@	kam
+		_) کم (L04L09L09$noprefixP2@	kam
+		_) کم (آL09L09$noprefixP2@	kam
 		_) کند (L04L09L09P3@	kond
 		_) کند (آL09L09P3@	kond
 		_) کیلو (L04L09L09P4@	kilu
@@ -4103,6 +4322,8 @@
 		L09L09) کنندۀ (_Sm5	konandeje
 		L09L09) کنندگان (_Sm7	konandegAn
 		L09L09) کوچک (_Sm4	kutSak
+		L09L09) کلام (_Sm4	kalAm
+		L09L09) کرد (_Sm3	kaRd
 
 	// arabic form of words  (Babs) ک
 		//فواعل eg. جوامع
@@ -4252,8 +4473,8 @@
 		_) گذر (آL09L09P3@	gozaR
 		_) گزر (L04L09L09P3@	gozaR
 		_) گزر (آL09L09P3@	gozaR
-		_) گل (L04L09P2@	gol
-		_) گل (آL09L09P2@	gol
+		_) گل (L04L09$noprefixP2@	gol
+		_) گل (آL09L09$noprefixP2@	gol
 
 	// suffixes گ
 		L09L09) گرا (_Sm3	gaRA
@@ -4286,10 +4507,8 @@
 			L09L01) گانمان (_Sm6	gAnemAn
 			L09L01) گانتان (_Sm6	gAnetAn
 			L09L01) گانشان (_Sm6	gAneSAn
-		L09L01) گانه (_Sm4	g'Ane:
-		L09L01) گانۀ (_Sm4	g'Aneje
-		L09L03) گانه (_Sm4	eg'Ane:
-		L09L03) گانۀ (_Sm4	eg'Aneje
+		L09L09) گانه (_Sm4	g'Ane:
+		L09L09) گانۀ (_Sm4	g'Aneje
 		L09L09) گون (_Sm3	gun
 		L09L09) گونه (_Sm4	gune:
 		L09L09) گاه (_Sm3	g'Ah
@@ -4307,6 +4526,8 @@
 		L09L09) گشا (_Sm3	goSA
 		L09L09) گریز (_Sm4	goRiz
 		L09L09) گسار (_Sm4	gosAR
+		L09L09) گراف (_Sm4	geRAf
+		L09L09) گزین (_Sm4	gozin
 
 	// arabic form of words  (Babs) گ
 		//فواعل eg. جوامع
@@ -4613,9 +4834,9 @@
 			L09L09L09L09) م (L03L09L09L09_	ma
 
 	// Prefixes م
-		_) می (L03L09+P2@	mi
-		_) می (آL09L09P2@	mi
-		_) می (وL09L09P2@	mi
+		_) می (L03L09+$noprefixP2@	mi
+		_) می (آL09L09$noprefixP2@	mi
+		_) می (وL09L09$noprefixP2@	mi
 		_) میرزا (آL09L09P5@	miRzA
 		_) میرزا (L04L09L09P5@	miRzA
 		_) محمد (آL09L09P4@	mohammad
@@ -4634,14 +4855,20 @@
 		_) مرتضی (L04L09L09P5@	moRtezA
 		_) مصطفی (آL09L09P5@	mostafA
 		_) مصطفی (L04L09L09P5@	mostafA
-		_) میلی (L04L09L09P4@	mili
-		_) میلی (آL09L09P4@	mili
-		_) ماه (L04L09L09P3@	mAh
-		_) ماه(آL09L09P3@	mAh
-		_) مگا (L04L09L09P3@	megA
-		_) مگا(آL09L09P3@	megA
+		_) میلی (L04L09L09$noprefixP4@	mili
+		_) میلی (آL09L09$noprefixP4@	mili
+		_) ماه (L03L09L09$noprefixP3@	mAh
+		_) ماه(آL09L09$noprefixP3@	mAh
+		_) مگا (L04L09L09$noprefixP3@	megA
+		_) مگا(آL09L09$noprefixP3@	megA
 		_) مولتی (L04L09L09P5@	multi
 		_) مولتی(آL09L09P5@	multi
+		_) مایکرو (L04L09L09P6@	mAjkRo
+		_) مایکرو (آL09L09P6@	mAjkRo
+		_) ماکرو (L04L09L09P5@	mAkRo
+		_) ماکرو (آL09L09P5@	mAkRo
+		_) میکرو (L04L09L09P5@	mikRo
+		_) میکرو (آL09L09P5@	mikRo
 
 	// suffixes م
 		L09L09) ماه (_Sm3	mAh
@@ -4674,6 +4901,8 @@
 		L09L09) مردان (_Sm5	maRdAn
 		L09L09) منش (_Sm3	maneS
 		L09L09) مآب (_Sm3	maAb
+		L09L09) مقام (_Sm4	maq1Am
+		L09L09) مرغ (_Sm3	moRq1
 
 	// arabic form of words  (Babs) م
 		//فواعل eg. جوامع
@@ -4841,17 +5070,19 @@
 			L09L09L09L09) ن (L03L09L09L09_	na
 
 	// Prefixes ن
-		_) ن (L03L09L09P1@	'na
-		_) ن (یاL09P1@	'na
-		_) نی (آL04L09L09P2@	'naj
-		_) نمی (L04L09P3@	'nemi
-		_) نمی (آL09P3@	'nemi
-		_) نا (L04L09L09P2@	nA'
-		_) نا (آL09L09P2@	nA'
-		_) نو (L04L09L09P2@	no'
-		_) نو (آL09L09P2@	no'
-		_) نیم (L04L09L09P3@	nim
-		_) نیم (آL09L09P3@	nim
+		_) ن (L03L09L09$noprefixP1@	'na
+		_) ن (یاL09$noprefixP1@	'na
+		_) نی (آL04L09L09$noprefixP2@	'naj
+		_) نمی (L04L09$noprefixP3@	'nemi
+		_) نمی (آL09$noprefixP3@	'nemi
+		_) نا (L04L09L09$noprefixP2@	nA'
+		_) نا (آL09L09$noprefixP2@	nA'
+		_) نو (L04L09L09$noprefixP2@	no'
+		_) نو (آL09L09$noprefixP2@	no'
+		_) نیم (L04L09L09$noprefixP3@	nim
+		_) نیم (آL09L09$noprefixP3@	nim
+		_) نیکو (L04L09L09$noprefixP4@	niku
+		_) نیکو (آL09L09$noprefixP4@	niku
 
 	// suffixes ن
 		L09L09L03) ن (_NSm1	an
@@ -4888,6 +5119,8 @@
 		L09L09) نشین (_Sm4	neSin
 		L09L09) نکردن (_Sm5	nakaRdan
 		L09L09L09) نشدن (_Sm4	naSodan
+		L09L09L09) نشانده (_Sm6	neSAnde:
+		L09L09L09) نشاندۀ (_Sm6	neSAndeje
 
 	// arabic form of words  (Babs) ن
 		//فواعل eg. جوامع
@@ -4975,13 +5208,13 @@
 	//و in first of words
 		_)  و (L03	va
 		_) و (L01	v
-	// و preceded by another latter
+	// و preceded by another letter
 		_ا) و (L03	u:
 		_ا) و (یا	u:
 		_ا) و (یو	u:
-		_ا) و (ا	av
-		_ا) و (یL03	av
-		_ا) و (یی	av
+		_ا) و (ا	v
+		_ا) و (یL03	v
+		_ا) و (یی	v
 		_ای) و (L01	v
 		_ای) و (L03	va
 		_ی)  و (L01	v
@@ -5008,9 +5241,11 @@
 		L03) و (ا	v
 		L03) و (یL03	v
 		L03) و (یL01	u
+		_L03) و (آ	av
 		//otherwise
 			L09ا) و (ا	v
 			L09ا) و (آ	v
+			_و) و	u
 			L09ا) و (و_	v
 			او) و (_	v
 			L09او) و (_	u
@@ -5040,7 +5275,9 @@
 	_آ) و (L03_	va
 
 	// Prefixes و
-		
+		_) والا (L04L09P4@	vAlA
+		_) والا (آL09P4@	vAlA
+
 	// Suffixes و
 		L09L01) ور (_NSm2	vaR
 		L09L09) وند (_Sm3	vand
@@ -5210,8 +5447,8 @@
 			L09L09L09L09) ه (L03L09L09L09_	ha
 
 	// Prefixes ه
-		_) هم (L04L09P2@	ham
-		_) هم (آL09P2@	ham
+		_) هم (L04L09$noprefixP2@	ham
+		_) هم (آL09$noprefixP2@	ham
 
 	// suffixes ه
 		L09L03) ه (_++Sm1	e:
@@ -5345,6 +5582,8 @@
 		L02) ی	j
 		L09و) ی (L03	i
 		L09و) ی (L01	j
+		L09و) ی (و_+	ej
+		L09و) ی (وL09+	i
 		L09ا) ی (L03	j
 		L09ا) ی (L01	j
 		L03) ی (وL03	ij
@@ -5369,9 +5608,9 @@
 	_آ) ی (L03_	ja
 
 	// Prefixes ی
-		_) یک (L04L09L09P2@	jek
-		_) یک (آL09L09P2@	jek
-		_) یاد (L09L09P3@	jAd
+		_) یک (L04L09L09$noprefixP2@	jek
+		_) یک (آL09L09$noprefixP2@	jek
+		_) یاد (L04L09L09P3@	jAd
 		_) یاد (آL09L09P3@	jAd
 
 	// suffixes ی
@@ -5532,17 +5771,16 @@
 //this character "ٔ" is defrent of "ء" and "ۀ" for example "دانشنامهٔ "
 
 
-.group ٔ
-	L04) ٔ	
-	ا) ٔ	a?
-	ٔ	
+.group ٴ
+	L04) ٴ	
+	ا) ٴ	a?
+	ٴ	
 
-	// suffixes ٔ
-		L09L03) ٔ (_NSm1	je
+	// suffixes ٴ
+		L09L03) ٴ (_NSm1	je
 
 
 .group ّ
-	ّ (L02	taSdid
 	L02) ّ	taSdid
 
 
@@ -5580,9 +5818,11 @@
 
 
 .group ٰ
-	ٰ (L04	A
-	ٰ (ا	
-	ٰ (آ	
+	ٰ	A
+
+
+.group ٓ
+	ٓ	
 
 
 //short vowels that are not usually written:
@@ -5637,10 +5877,12 @@
 
 .group أ
 	أ	a?
+	أ (َ	
 
 
 .group إ
 	إ	e?
+	إ (ِ	
 
 
 .group ـ
@@ -5648,7 +5890,6 @@
 
 
 .group ،
-	،	_
 
 
 .group ؛
@@ -5850,3 +6091,10 @@
 	?1 z	z
 
 
+// Others mathematics characters
+.group
+	. (D     	noq1te:
+	±	m'osbat||jA:||m'anfi
+	>=	boz'oRgtaR||jA:||m,osAvi
+	<=	kutS'ektaR||jA:||m,osAvi
+	

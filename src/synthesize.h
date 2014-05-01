@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2013 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2014 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -72,6 +72,7 @@ extern int embedded_default[N_EMBEDDED_VALUES];
 
 
 #define N_PEAKS   9
+#define N_PEAKS2  9     // plus Notch and Fill (not yet implemented)
 #define N_MARKERS 8
 
 #define N_KLATTP   10   // this affects the phoneme data file format
@@ -211,7 +212,7 @@ typedef struct {
 	unsigned char tone_ph;    // tone phoneme to use with this vowel
 
 	PHONEME_TAB *ph;
-	short length;  // length_mod
+	unsigned int length;  // length_mod
 	unsigned char env;    // pitch envelope number
 	unsigned char type;
 	unsigned char prepause;
@@ -238,6 +239,7 @@ typedef struct {
 #define pd_INSERTPHONEME   i_INSERT_PHONEME
 #define pd_APPENDPHONEME   i_APPEND_PHONEME
 #define pd_CHANGEPHONEME   i_CHANGE_PHONEME
+#define pd_CHANGE_NEXTPHONEME  i_REPLACE_NEXT_PHONEME
 #define pd_LENGTHMOD       i_SET_LENGTH
 
 #define pd_FORNEXTPH     0x2
@@ -349,6 +351,7 @@ typedef struct {
 // phflags
 #define i_isSibilant   0x45    // bit 5 in phflags
 #define i_isPalatal    0x49    // bit 9 in phflags
+#define i_isLong       0x55    // bit 21 in phflags
 #define i_isRhotic     0x57    // bit 23 in phflags
 #define i_isFlag1      0x5c
 #define i_isFlag2      0x5d
@@ -377,7 +380,7 @@ typedef struct {
 typedef struct {
 	int pause_factor;
 	int clause_pause_factor;
-	int min_pause;
+	unsigned int min_pause;
 	int wav_factor;
 	int lenmod_factor;
 	int lenmod2_factor;
