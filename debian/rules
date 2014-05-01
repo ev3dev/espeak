@@ -93,6 +93,7 @@ binary-arch: build install
 	dh_testroot
 	dh_installchangelogs ChangeLog.txt
 	dh_installdocs
+	sed -i -e 's&<img src="http://sflogo.sourceforge.net[^>]*>&&' debian/espeak/usr/share/doc/espeak/docs/*.html
 	dh_installman debian/espeak.1
 	dh_link
 	dh_strip --dbg-package=espeak-dbg
