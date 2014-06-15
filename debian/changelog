@@ -1,8 +1,29 @@
+espeak (1.47.11-1) unstable; urgency=low
+
+  * New upstream release
+  * debian/rules: Use phondata-manifest in the espeak-data directory
+  * Updated espeak manpage
+  * Updated copyright
+
+  [ Jason White ]
+  * Pass compiler flags on make command line so they won't be ignored.
+    (Closes: #707925)
+  * Rebuild object files with AUDIO=runtime after building static library
+    without it. (Closes: #707912)
+
+  [ Samuel Thibault ]
+  * Add utf-8-init patch to fix initialization of utf-8 locale for proper
+    character properties detection.
+  * Add pulse-trigger-on-final-chunk patch to flush the pulse output.
+
+ -- Samuel Thibault <sthibault@debian.org>  Wed, 19 Jun 2013 20:57:44 +0200
+
 espeak (1.46.02-2ev3dev1) stable; urgency=low
 
   * Remove pulse and port audio dependancies.
 
  -- David Lechner <david@lechnology.com>  Wed, 05 Mar 2014 20:40:42 -0600
+
 
 espeak (1.46.02-2) unstable; urgency=low
 

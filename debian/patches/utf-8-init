@@ -1,0 +1,32 @@
+diff --git a/src/speak.cpp b/src/speak.cpp
+index be869a0..071cc62 100755
+--- a/src/speak.cpp
++++ b/src/speak.cpp
+@@ -426,8 +426,9 @@ static int initialise(void)
+ #else
+ 	if(setlocale(LC_CTYPE,"en_US.UTF-8") == NULL)
+ 	{
+-		if(setlocale(LC_CTYPE,"UTF-8") == NULL)
+-			setlocale(LC_CTYPE,"");
++		if(setlocale(LC_CTYPE,"C.UTF-8") == NULL)
++			if(setlocale(LC_CTYPE,"UTF-8") == NULL)
++				setlocale(LC_CTYPE,"");
+ 	}
+ #endif
+ 
+diff --git a/src/speak_lib.cpp b/src/speak_lib.cpp
+index c0d197c..aff9010 100755
+--- a/src/speak_lib.cpp
++++ b/src/speak_lib.cpp
+@@ -767,8 +767,9 @@ ENTER("espeak_Initialize");
+ #else
+ 	if(setlocale(LC_CTYPE,"en_US.UTF-8") == NULL)
+ 	{
+-		if(setlocale(LC_CTYPE,"UTF-8") == NULL)
+-			setlocale(LC_CTYPE,"");
++		if(setlocale(LC_CTYPE,"C.UTF-8") == NULL)
++			if(setlocale(LC_CTYPE,"UTF-8") == NULL)
++				setlocale(LC_CTYPE,"");
+ 	}
+ #endif
+ 

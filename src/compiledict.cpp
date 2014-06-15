@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2010 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2013 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -51,13 +51,24 @@ static char letterGroupsDefined[N_LETTER_GROUPS];
 
 MNEM_TAB mnem_rules[] = {
 	{"unpr",   0x01},
+
+	{"w_alt1", 0x11},
 	{"w_alt2", 0x12},
 	{"w_alt3", 0x13},
+	{"w_alt4", 0x14},
+	{"w_alt5", 0x15},
+	{"w_alt6", 0x16},
 	{"w_alt", 0x11},   // note: put longer names before their sub-strings
+
+	{"p_alt1", 0x21},
 	{"p_alt2", 0x22},
 	{"p_alt3", 0x23},
+	{"p_alt4", 0x24},
+	{"p_alt5", 0x25},
+	{"p_alt6", 0x26},
 	{"p_alt", 0x21},
-	{NULL, -1} };
+	{NULL, -1}
+};
 
 MNEM_TAB mnem_flags[] = {
 	// these in the first group put a value in bits0-3 of dictionary_flags
@@ -79,24 +90,22 @@ MNEM_TAB mnem_flags[] = {
 
 
 	// these set the corresponding numbered bit if dictionary_flags
-	{"$pause",     8},    /* ensure pause before this word */
-	{"$only",      9},    /* only match on this word without suffix */
-	{"$onlys",     10},    /* only match with none, or with 's' suffix */
-	{"$strend",    11},    /* full stress if at end of clause */
-	{"$strend2",   12},    /* full stress if at end of clause, or only followed by unstressed */
-	{"$unstressend",13},   /* reduce stress at end of clause */
-	{"$atend",     14},    /* use this pronunciation if at end of clause */
-	{"$atstart",   15},   // use this pronunciation at start of clause
-
-	{"$abbrev",    17},    /* use this pronuciation rather than split into letters */
-	{"$stem",      18},   // must have a suffix
+	{"$pause",     8},    // ensure pause before this word
+	{"$strend",    9},   // full stress if at end of clause
+	{"$strend2",   10},   // full stress if at end of clause, or only followed by unstressed
+	{"$unstressend",11},  // reduce stress at end of clause
+	{"$abbrev",    13},   // use this pronuciation rather than split into letters
 
 // language specific
-	{"$double",    19},   // IT double the initial consonant of next word
-	{"$alt",       20},   // use alternative pronunciation
-	{"$alt1",      20},   // synonym for $alt
-	{"$alt2",      21},
-	{"$alt3",      22},
+	{"$double",    14},   // IT double the initial consonant of next word
+	{"$alt",       15},   // use alternative pronunciation
+	{"$alt1",      15},   // synonym for $alt
+	{"$alt2",      16},
+	{"$alt3",      17},
+	{"$alt4",      18},
+	{"$alt5",      19},
+	{"$alt6",      20},
+
 	{"$combine",   23},   // Combine with the next word
 
 	{"$dot",       24},   // ignore '.' after this word (abbreviation)
@@ -107,18 +116,24 @@ MNEM_TAB mnem_flags[] = {
 	{"$text",      29},   // word translates to replcement text, not phonemes
 
 // flags in dictionary word 2
-	{"$verbf",   0x20},    /* verb follows */
-	{"$verbsf",  0x21},    /* verb follows, allow -s suffix */
-	{"$nounf",   0x22},    /* noun follows */
-	{"$pastf",   0x23},   /* past tense follows */
-	{"$verb",    0x24},   /* use this pronunciation when its a verb */
-	{"$noun",    0x25},   /* use this pronunciation when its a noun */
-	{"$past",    0x26},   /* use this pronunciation when its past tense */
-	{"$verbextend",0x28},   /* extend influence of 'verb follows' */
-	{"$capital", 0x29},   /* use this pronunciation if initial letter is upper case */
-	{"$allcaps", 0x2a},   /* use this pronunciation if initial letter is upper case */
+	{"$verbf",   0x20},   // verb follows
+	{"$verbsf",  0x21},   // verb follows, allow -s suffix
+	{"$nounf",   0x22},   // noun follows
+	{"$pastf",   0x23},   // past tense follows
+	{"$verb",    0x24},   // use this pronunciation when its a verb
+	{"$noun",    0x25},   // use this pronunciation when its a noun
+	{"$past",    0x26},   // use this pronunciation when its past tense
+	{"$verbextend",0x28}, // extend influence of 'verb follows'
+	{"$capital", 0x29},   // use this pronunciation if initial letter is upper case
+	{"$allcaps", 0x2a},   // use this pronunciation if initial letter is upper case
 	{"$accent",  0x2b},   // character name is base-character name + accent name
 	{"$sentence",0x2d},   // only if this clause is a sentence (i.e. terminator is {. ? !} not {, ; :}
+	{"$only",    0x2e},   // only match on this word without suffix
+	{"$onlys",   0x2f},   // only match with none, or with 's' suffix
+	{"$stem",    0x30},   // must have a suffix
+	{"$atend",   0x31},   // use this pronunciation if at end of clause
+	{"$atstart", 0x32},   // use this pronunciation at start of clause
+	{"$native",  0x33},   // not if we've switched translators
 
 	// doesn't set dictionary_flags
 	{"$?",        100},   // conditional rule, followed by byte giving the condition number
@@ -169,22 +184,45 @@ const char *LookupMnemName(MNEM_TAB *table, const int value)
 //==========================================================
 /* Lookup a mnemonic string in a table, return its name */
 {
-   while(table->mnem != NULL)
-   {
-      if(table->value==value)
-         return(table->mnem);
-      table++;
-   }
-   return("");   /* not found */
+	while(table->mnem != NULL)
+	{
+		if(table->value==value)
+			return(table->mnem);
+		table++;
+	}
+	return("");   /* not found */
 }   /* end of LookupMnemValue */
 
 
-char *print_dictionary_flags(unsigned int *flags)
-{//==============================================
-	static char buf[20];
+void print_dictionary_flags(unsigned int *flags, char *buf, int buf_len)
+{//========================================================================
+	int stress;
+	int ix;
+	const char *name;
+	int len;
+	int total = 0;
 
-	sprintf(buf,"%s  0x%x/%x",LookupMnemName(mnem_flags,(flags[0] & 0xf)+0x40), flags[0], flags[1]);
-	return(buf);
+	buf[0] = 0;
+	if((stress = flags[0] & 0xf) != 0)
+	{
+		sprintf(buf, "%s", LookupMnemName(mnem_flags, stress + 0x40));
+		total = strlen(buf);
+		buf += total;
+	}
+
+	for(ix=8; ix<64; ix++)
+	{
+		if(((ix < 30) && (flags[0] & (1 << ix))) || ((ix >= 0x20) && (flags[1] & (1 << (ix-0x20)))))
+		{
+			name = LookupMnemName(mnem_flags, ix);
+			len = strlen(name) + 1;
+			total += len;
+			if(total >= buf_len)
+				continue;
+			sprintf(buf, " %s", name);
+			buf += len;
+		}
+	}
 }
 
 
@@ -192,12 +230,12 @@ char *print_dictionary_flags(unsigned int *flags)
 
 char *DecodeRule(const char *group_chars, int group_length, char *rule, int control)
 {//=================================================================================
-/* Convert compiled match template to ascii */
+	/* Convert compiled match template to ascii */
 
-   unsigned char rb;
+	unsigned char rb;
 	unsigned char c;
 	char *p;
-   int  ix;
+	int  ix;
 	int  match_type;
 	int  finished=0;
 	int  value;
@@ -207,18 +245,20 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 	int  condition_num=0;
 	int  at_start = 0;
 	const char *name;
-   char buf[60];
-   char buf_pre[60];
+	char buf[60];
+	char buf_pre[60];
 	char suffix[20];
 	static char output[60];
 
-	static char symbols[] = {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
-		'&','%','+','#','S','D','Z','A','L','!',' ','@','?','J','N','K','V','?','T','X','?','W'};
+	static char symbols[] =
+		{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+		'&','%','+','#','S','D','Z','A','L','!',' ','@','?','J','N','K','V','?','T','X','?','W'
+		};
 
 	static char symbols_lg[] = {'A','B','C','H','F','G','Y'};
 
 	match_type = 0;
-   buf_pre[0] = 0;
+	buf_pre[0] = 0;
 
 	for(ix=0; ix<group_length; ix++)
 	{
@@ -227,8 +267,8 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 	buf[ix] = 0;
 
 	p = &buf[strlen(buf)];
-   while(!finished)
-   {
+	while(!finished)
+	{
 		rb = *rule++;
 
 		if(rb <= RULE_LINENUM)
@@ -266,7 +306,7 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 			}
 			continue;
 		}
-		
+
 		if(rb == RULE_DOLLAR)
 		{
 			value = *rule++ & 0xff;
@@ -279,8 +319,7 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 			}
 			c = ' ';
 		}
-		else
-		if(rb == RULE_ENDING)
+		else if(rb == RULE_ENDING)
 		{
 			static const char *flag_chars = "eipvdfq tba ";
 			flags = ((rule[0] & 0x7f)<< 8) + (rule[1] & 0x7f);
@@ -289,7 +328,7 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 				suffix_char = 'P';
 			sprintf(suffix,"%c%d",suffix_char,rule[2] & 0x7f);
 			rule += 3;
-			for(ix=0;ix<9;ix++)
+			for(ix=0; ix<9; ix++)
 			{
 				if(flags & 1)
 					sprintf(&suffix[strlen(suffix)],"%c",flag_chars[ix]);
@@ -299,13 +338,11 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 			p += strlen(suffix);
 			c = ' ';
 		}
-		else
-		if(rb == RULE_LETTERGP)
+		else if(rb == RULE_LETTERGP)
 		{
 			c = symbols_lg[*rule++ - 'A'];
 		}
-		else
-		if(rb == RULE_LETTERGP2)
+		else if(rb == RULE_LETTERGP2)
 		{
 			value = *rule++ - 'A';
 			p[0] = 'L';
@@ -319,11 +356,9 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 			}
 			p+=2;
 		}
-		else
-		if(rb <= RULE_LAST_RULE)
+		else if(rb <= RULE_LAST_RULE)
 			c = symbols[rb];
-		else
-		if(rb == RULE_SPACE)
+		else if(rb == RULE_SPACE)
 			c = '_';
 		else
 			c = rb;
@@ -357,7 +392,7 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 	while(ix < 8)
 		output[ix++]=' ';
 	output[ix]=0;
-   return(output);
+	return(output);
 }   /* end of DecodeRule */
 
 
@@ -380,18 +415,18 @@ static int compile_line(char *linebuf, char *dict_line, int *hash)
 	int  multiple_numeric_hyphen = 0;
 	char *multiple_string = NULL;
 	char *multiple_string_end = NULL;
-	
+
 	int len_word;
 	int len_phonetic;
 	int text_not_phonemes;   // this word specifies replacement text, not phonemes
 	unsigned int  wc;
 	int all_upper_case;
-	
+
 	char *mnemptr;
 	unsigned char flag_codes[100];
 	char encoded_ph[200];
 	unsigned char bad_phoneme[4];
-static char nullstring[] = {0};
+	static char nullstring[] = {0};
 
 	text_not_phonemes = 0;
 	phonetic = word = nullstring;
@@ -416,12 +451,12 @@ static char nullstring[] = {0};
 #endif
 
 	step = 0;
-	
+
 	c = 0;
 	while(c != '\n')
 	{
 		c = *p;
-	
+
 		if((c == '?') && (step==0))
 		{
 			// conditional rule, allow only if the numbered condition is set for the voice
@@ -436,12 +471,12 @@ static char nullstring[] = {0};
 			}
 
 			ix = 0;
-			if(isdigit(*p))
+			if(IsDigit09(*p))
 			{
 				ix += (*p-'0');
 				p++;
 			}
-			if(isdigit(*p))
+			if(IsDigit09(*p))
 			{
 				ix = ix*10 + (*p-'0');
 				p++;
@@ -449,14 +484,14 @@ static char nullstring[] = {0};
 			flag_codes[n_flag_codes++] = ix + flag_offset;
 			c = *p;
 		}
-		
+
 		if((c == '$') && isalnum(p[1]))
 		{
 			/* read keyword parameter */
 			mnemptr = p;
 			while(!isspace2(c = *p)) p++;
 			*p = 0;
-	
+
 			flagnum = LookupMnem(mnem_flags,mnemptr);
 			if(flagnum > 0)
 			{
@@ -464,13 +499,11 @@ static char nullstring[] = {0};
 				{
 					text_mode = 1;
 				}
-				else
-				if(flagnum == 201)
+				else if(flagnum == 201)
 				{
 					text_mode = 0;
 				}
-				else
-				if(flagnum == BITNUM_FLAG_TEXTMODE)
+				else if(flagnum == BITNUM_FLAG_TEXTMODE)
 				{
 					text_not_phonemes = 1;
 				}
@@ -485,12 +518,12 @@ static char nullstring[] = {0};
 				error_count++;
 			}
 		}
-	
+
 		if((c == '/') && (p[1] == '/') && (multiple_words==0))
 		{
 			c = '\n';   /* "//" treat comment as end of line */
 		}
-	
+
 		switch(step)
 		{
 		case 0:
@@ -500,18 +533,17 @@ static char nullstring[] = {0};
 				word = p+1;
 				step = 1;
 			}
-			else
-			if(!isspace2(c))
+			else if(!isspace2(c))
 			{
 				word = p;
 				step = 1;
 			}
 			break;
-	
+
 		case 1:
 			if((c == '-') && multiple_words)
 			{
-				if(isdigit(word[0]))
+				if(IsDigit09(word[0]))
 				{
 					multiple_numeric_hyphen = 1;
 				}
@@ -535,8 +567,7 @@ static char nullstring[] = {0};
 					step = 3;
 				}
 			}
-			else
-			if(c == ')')
+			else if(c == ')')
 			{
 				if(multiple_words)
 				{
@@ -544,8 +575,7 @@ static char nullstring[] = {0};
 					multiple_words = 0;
 					step = 3;
 				}
-				else
-				if(word[0] != '_')
+				else if(word[0] != '_')
 				{
 					fprintf(f_log, "%5d: Missing '('\n", linenum);
 					error_count++;
@@ -559,15 +589,14 @@ static char nullstring[] = {0};
 			{
 				multiple_words++;
 			}
-			else
-			if(c == ')')
+			else if(c == ')')
 			{
 				p[0] = ' ';   // terminate extra string
 				multiple_string_end = p+1;
 				step = 3;
 			}
 			break;
-	
+
 		case 3:
 			if(!isspace2(c))
 			{
@@ -575,7 +604,7 @@ static char nullstring[] = {0};
 				step = 4;
 			}
 			break;
-	
+
 		case 4:
 			if(isspace2(c))
 			{
@@ -583,13 +612,13 @@ static char nullstring[] = {0};
 				step = 5;
 			}
 			break;
-	
+
 		case 5:
 			break;
 		}
 		p++;
 	}
-	
+
 	if(word[0] == 0)
 	{
 		return(0);   /* blank line */
@@ -605,9 +634,9 @@ static char nullstring[] = {0};
 			// This is a special word, used by eSpeak.  Translate this into phonemes now
 			strcat(phonetic, " ");     // need a space to indicate word-boundary
 
-	// PROBLEM  vowel reductions are not applied to the translated phonemes
-	// condition rules are not applied
-			TranslateWord(translator,phonetic,0,NULL);
+			// PROBLEM  vowel reductions are not applied to the translated phonemes
+			// condition rules are not applied
+			TranslateWord(translator,phonetic,0,NULL,NULL);
 			text_not_phonemes = 0;
 			strncpy0(encoded_ph, word_phonemes, N_WORD_BYTES-4);
 
@@ -617,11 +646,11 @@ static char nullstring[] = {0};
 				error_need_dictionary++;
 				fprintf(f_log,"%5d: Need to compile dictionary again\n",linenum);
 			}
-{
+			{
 //char decoded_phonemes[128];
 //DecodePhonemes(word_phonemes,decoded_phonemes);
 //printf("Translator %x  %s  [%s] [%s]\n",translator->translator_name,word,phonetic,decoded_phonemes);
-}
+			}
 		}
 		else
 		{
@@ -658,8 +687,7 @@ static char nullstring[] = {0};
 		ix = utf8_out(wc, word);
 		word[ix] = 0;
 	}
-	else
-	if(word[0] != '_')
+	else if(word[0] != '_')
 	{
 		// convert to lower case, and note if the word is all-capitals
 		int c2;
@@ -673,9 +701,9 @@ static char nullstring[] = {0};
 			ix = utf8_in(&c2,p);
 			if(c2 == 0)
 				break;
-			if(iswupper(c2))
+			if(iswupper2(c2))
 			{
-				utf8_out(towlower(c2),p);
+				utf8_out(towlower2(c2),p);
 			}
 			else
 			{
@@ -698,7 +726,7 @@ static char nullstring[] = {0};
 
 	*hash = HashDictionary(word);
 	len_phonetic = strlen(encoded_ph);
-	
+
 	dict_line[1] = len_word;   // bit 6 indicates whether the word has been compressed
 	len_word &= 0x3f;
 
@@ -715,7 +743,7 @@ static char nullstring[] = {0};
 		length = len_word + len_phonetic + 3;
 		strcpy(&dict_line[(len_word)+2],encoded_ph);
 	}
-	
+
 	for(ix=0; ix<n_flag_codes; ix++)
 	{
 		dict_line[ix+length] = flag_codes[ix];
@@ -790,12 +818,12 @@ static void compile_dictlist_end(FILE *f_out)
 		fflush(f_log);
 #endif
 	}
-	
+
 	for(hash=0; hash<N_HASH_DICT; hash++)
 	{
 		p = hash_chains[hash];
 		hash_counts[hash] = (int)ftell(f_out);
-	
+
 		while(p != NULL)
 		{
 			length = *(p+sizeof(char *));
@@ -818,7 +846,7 @@ static int compile_dictlist_file(const char *path, const char* filename)
 	char buf[200];
 	char fname[sizeof(path_home)+45];
 	char dict_line[128];
-	
+
 	text_mode = 0;
 
 	// try with and without '.txt' extension
@@ -833,7 +861,7 @@ static int compile_dictlist_file(const char *path, const char* filename)
 	fprintf(f_log,"Compiling: '%s'\n",fname);
 
 	linenum=0;
-	
+
 	while(fgets(buf,sizeof(buf),f_in) != NULL)
 	{
 		linenum++;
@@ -842,7 +870,7 @@ static int compile_dictlist_file(const char *path, const char* filename)
 		if(length == 0)  continue;   /* blank line */
 
 		hash_counts[hash]++;
-	
+
 		p = (char *)malloc(length+sizeof(char *));
 		if(p == NULL)
 		{
@@ -853,13 +881,13 @@ static int compile_dictlist_file(const char *path, const char* filename)
 			}
 			break;
 		}
-	
+
 		memcpy(p,&hash_chains[hash],sizeof(char *));
 		hash_chains[hash] = p;
 		memcpy(p+sizeof(char *),dict_line,length);
 		count++;
 	}
-	
+
 	fprintf(f_log,"\t%d entries\n",count);
 	fclose(f_in);
 	return(0);
@@ -920,7 +948,7 @@ static void copy_rule_string(char *string, int &state)
 		output = &rule_phonemes[len];
 	}
 	sxflags = 0x808000;           // to ensure non-zero bytes
-	
+
 	for(p=string,ix=0;;)
 	{
 		literal = 0;
@@ -1046,8 +1074,7 @@ static void copy_rule_string(char *string, int &state)
 						fprintf(f_log,"%5d: Expected 2 digits after 'L'\n",linenum);
 						error_count++;
 					}
-					else
-					if((c <= 0) || (c >= N_LETTER_GROUPS) || (letterGroupsDefined[(int)c] == 0))
+					else if((c <= 0) || (c >= N_LETTER_GROUPS) || (letterGroupsDefined[(int)c] == 0))
 					{
 						fprintf(f_log,"%5d: Letter group L%.2d not defined\n",linenum,c);
 						error_count++;
@@ -1126,8 +1153,11 @@ static void copy_rule_string(char *string, int &state)
 						case 'a':
 							sxflags |= SUFX_A;
 							break;
+						case 'm':
+							sxflags |= SUFX_M;
+							break;
 						default:
-							if(isdigit(c))
+							if(IsDigit09(c))
 								value = (value*10) + (c - '0');
 							break;
 						}
@@ -1173,7 +1203,7 @@ static char *compile_rule(char *input)
 	rule_phonemes[0]=0;
 
 	p = buf;
-	
+
 	for(ix=0; finish==0; ix++)
 	{
 		c = input[ix];
@@ -1186,7 +1216,7 @@ static char *compile_rule(char *input)
 			copy_rule_string(buf,state);
 			p = buf;
 			break;
-			
+
 		case '(':		// start of suffix section
 			*p = 0;
 			state = 2;
@@ -1199,7 +1229,7 @@ static char *compile_rule(char *input)
 				error_count++;
 			}
 			break;
-			
+
 		case '\n':		// end of line
 		case '\r':
 		case 0:			// end of line
@@ -1207,14 +1237,14 @@ static char *compile_rule(char *input)
 			copy_rule_string(buf,state);
 			finish=1;
 			break;
-			
+
 		case '\t':		// end of section section
 		case ' ':
 			*p = 0;
 			copy_rule_string(buf,state);
 			p = buf;
 			break;
-			
+
 		case '?':
 			if(state==2)
 				state=0;
@@ -1227,7 +1257,7 @@ static char *compile_rule(char *input)
 			break;
 		}
 	}
-	
+
 	if(strcmp(rule_match,"$group")==0)
 		strcpy(rule_match,group_name);
 
@@ -1249,7 +1279,7 @@ static char *compile_rule(char *input)
 	}
 	strcpy(output,buf);
 	len = strlen(buf)+1;
-	
+
 	len_name = strlen(group_name);
 	if((len_name > 0) && (memcmp(rule_match,group_name,len_name) != 0))
 	{
@@ -1337,11 +1367,11 @@ int __cdecl string_sorter(char **a, char **b)
 	char *pa, *pb;
 	int ix;
 
-   if((ix = strcmp(pa = *a,pb = *b)) != 0)
-	   return(ix);
+	if((ix = strcmp(pa = *a,pb = *b)) != 0)
+		return(ix);
 	pa += (strlen(pa)+1);
 	pb += (strlen(pb)+1);
-   return(strcmp(pa,pb));
+	return(strcmp(pa,pb));
 }   /* end of string_sorter */
 
 
@@ -1382,7 +1412,7 @@ static void print_rule_group(FILE *f_out, int n_rules, char **rules, char *name)
 		len1 = strlen(p) + 1;
 		p = &p[len1];
 		len2 = strlen(p);
-		
+
 		rule_match[0]=0;
 		rule_pre[0]=0;
 		rule_post[0]=0;
@@ -1420,7 +1450,7 @@ static void print_rule_group(FILE *f_out, int n_rules, char **rules, char *name)
 			}
 		}
 		*pout = 0;
-		
+
 		spaces = 12;
 		if(condition > 0)
 		{
@@ -1432,19 +1462,19 @@ static void print_rule_group(FILE *f_out, int n_rules, char **rules, char *name)
 		if(rule_pre[0] != 0)
 		{
 			p = buf;
-			for(ix=strlen(rule_pre)-1;ix>=0;ix--)
+			for(ix=strlen(rule_pre)-1; ix>=0; ix--)
 				*p++ = rule_pre[ix];
 			sprintf(p,") ");
 			spaces -= strlen(buf);
 			for(ix=0; ix<spaces; ix++)
-			   fputc(' ',f_out);
+				fputc(' ',f_out);
 			fprintf(f_out,"%s",buf);
 			spaces = 0;
 		}
-		
+
 		for(ix=0; ix<spaces; ix++)
 			fputc(' ',f_out);
-		
+
 		spaces = 14;
 		sprintf(buf," %s ",rule_match);
 		if(rule_post[0] != 0)
@@ -1541,12 +1571,12 @@ static int compile_lettergroup(char *input, FILE *f_out)
 	int length;
 	int max_length = 0;
 
-	#define N_LETTERGP_ITEMS 200
+#define N_LETTERGP_ITEMS 200
 	char *items[N_LETTERGP_ITEMS];
 	char item_length[N_LETTERGP_ITEMS];
 
 	p = input;
-	if(!isdigit(p[0]) || !isdigit(p[1]))
+	if(!IsDigit09(p[0]) || !IsDigit09(p[1]))
 	{
 		fprintf(f_log,"%5d: Expected 2 digits after '.L'\n",linenum);
 		error_count++;
@@ -1583,6 +1613,7 @@ static int compile_lettergroup(char *input, FILE *f_out)
 		items[n_items] = p_start = p;
 		while((*p & 0xff) > ' ')
 		{
+			if (*p == '_') *p = ' ';   // allow '_' for word break
 			p++;
 		}
 		*p++ = 0;
@@ -1633,7 +1664,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 	int n_rgroups = 0;
 	int n_groups3 = 0;
 	RGROUP rgroup[N_RULE_GROUP2];
-	
+
 	linenum = 0;
 	group_name[0] = 0;
 
@@ -1649,7 +1680,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 			if((p = (unsigned char *)strstr(buf,"//")) != NULL)
 				*p = 0;
 
-			if(buf[0] == '\r') buf++;  // ignore extra \r in \r\n 
+			if(buf[0] == '\r') buf++;  // ignore extra \r in \r\n
 		}
 
 		if((buf == NULL) || (buf[0] == '.'))
@@ -1711,7 +1742,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 				{
 					// group character is given as a character code (max 16 bits)
 					p = (unsigned char *)group_name;
-	
+
 					if(char_code > 0x100)
 					{
 						*p++ = (char_code >> 8);
@@ -1730,7 +1761,7 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 						}
 					}
 				}
-	
+
 				if((group3_ix == 0) && (strlen(group_name) > 2))
 				{
 					if(utf8_in(&c,group_name) < 2)
@@ -1738,14 +1769,14 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 						fprintf(f_log,"%5d: Group name longer than 2 bytes (UTF8)",linenum);
 						error_count++;
 					}
-	
+
 					group_name[2] = 0;
 				}
 			}
 
 			continue;
 		}
-		
+
 		switch(compile_mode)
 		{
 		case 1:    //  .group
@@ -1757,37 +1788,37 @@ static int compile_dictrules(FILE *f_in, FILE *f_out, char *fname_temp)
 			break;
 
 		case 2:   //  .replace
-			{
-				int replace1;
-				int replace2;
-				char *p;
+		{
+			int replace1;
+			int replace2;
+			char *p;
 
-				p = buf;
-				replace1 = 0;
-				replace2 = 0;
-				while(isspace2(*p)) p++;
-				ix = 0;
-				while((unsigned char)(*p) > 0x20)   // not space or zero-byte
-				{
-					p += utf8_in(&c,p);
-					replace1 += (c << ix);
-					ix += 16;
-				}
-				while(isspace2(*p)) p++;
-				ix = 0;
-				while((unsigned char)(*p) > 0x20)
-				{
-					p += utf8_in(&c,p);
-					replace2 += (c << ix);
-					ix += 16;
-				}
-				if(replace1 != 0)
-				{
-					Write4Bytes(f_out,replace1);   // write as little-endian
-					Write4Bytes(f_out,replace2);   // if big-endian, reverse the bytes in LoadDictionary()
-				}
+			p = buf;
+			replace1 = 0;
+			replace2 = 0;
+			while(isspace2(*p)) p++;
+			ix = 0;
+			while((unsigned char)(*p) > 0x20)   // not space or zero-byte
+			{
+				p += utf8_in(&c,p);
+				replace1 += (c << ix);
+				ix += 16;
 			}
-			break;
+			while(isspace2(*p)) p++;
+			ix = 0;
+			while((unsigned char)(*p) > 0x20)
+			{
+				p += utf8_in(&c,p);
+				replace2 += (c << ix);
+				ix += 16;
+			}
+			if(replace1 != 0)
+			{
+				Write4Bytes(f_out,replace1);   // write as little-endian
+				Write4Bytes(f_out,replace2);   // if big-endian, reverse the bytes in LoadDictionary()
+			}
+		}
+		break;
 		}
 	}
 	fclose(f_temp);
@@ -1915,10 +1946,10 @@ int CompileDictionary(const char *dsource, const char *dict_name, FILE *log, cha
 		compile_dictlist_file(path,"list");
 	}
 	compile_dictlist_file(path,"extra");
-	
+
 	compile_dictlist_end(f_out);
 	offset_rules = ftell(f_out);
-	
+
 	fprintf(f_log,"Compiling: '%s'\n",fname_in);
 
 	compile_dictrules(f_in,f_out,fname_temp);

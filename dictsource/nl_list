@@ -1,6 +1,7 @@
-
+﻿
 // This file in UTF8 encoded
 
+// $alt2, remove s from plural, remove en from plural
 // Use $alt3  where 'ng' and 'nk' is 'n+g' not [N]
 
 // Letters
@@ -35,6 +36,8 @@ _s	Es
 _t	te:
 
 _cap	h'o:fdlEt@r
+_sub	s'8pskrIpt||
+_sup	s'yp@rskrIpt||
 _?A	l'Et@r
 _??	s'imbo:l
 
@@ -57,7 +60,7 @@ _tld	t'Ild@
 
 
 // punctuation
-.	p8nt		$max3
+.	p8nt
 _,	k'Oma:
 _:	d'8b@l@p,8nt
 _;	p'8ntkOm,a:
@@ -74,10 +77,12 @@ _)	h'a:kj@sl'Wyt@n
 _{	v'irkAnt@h,a:k
 _}	v'irkAnt@h,a:ksl'Wyt@n
 _-	k'OpElt,e:k@n
-+	pl'8s		$max3
-*	st'E*rEt;@	$max3
++	pl'8s
+*	st'E*rEt;@
+=	Q@l'EIkte:k@n
 __	l'IgEntst@-*'e:pj@
 €	'Y:*o:t,e:k@n
+°	Qra:d@n
 
 
 // numbers
@@ -109,7 +114,7 @@ _6X	z'Est@x
 _7X	z'e:v@nt@x
 _8X	t'Axt@x
 _9X	n'e:g@nt@x
-_0C	h'OndErt
+_0C	h'Ond@rt
 _0M1	d'WyzEnt
 _0M2	m'iljun
 _0M3	m'iljArt
@@ -132,6 +137,7 @@ _0Co	h'OndErtst@
 
 // abbreviations
 be	$abbrev   // used as domain abbrev for Belgium and in a lot of other names
+ca	ka: $hasdot
 enz	Enzo:vo:rt
 bvb	bEIv'o:rbe:lt
 eu	e:_y: $abbrev
@@ -373,11 +379,13 @@ keten		$alt
 loochen		$alt
 oefen		$alt
 open		$alt
+reden		$alt
 regen		$alt
 reken		$alt
 schepen		$alt
 steven		$alt
 teken		$alt
+volwassen	$alt
 wapen		$alt
 zegen		$alt
 trokken		$alt
@@ -682,6 +690,7 @@ wapper		$alt
 water		$alt
 wedijver	$alt
 wegwijzer	$alt
+weiger		$alt
 wester		$alt
 wijder		$alt
 wilder		$alt
@@ -703,6 +712,27 @@ zwanger		$alt
 Vlaander	$alt
 
 
+// -s is not a suffix
+as		$alt
+bres		$alt
+chaos		$alt $1
+es		$alt
+fles		$alt
+fris		$alt
+glas		$alt
+mes		$alt
+moeras		$alt
+was		$alt // gewas
+
+// -s, just remove 's' from the plural
+charges		$alt2
+curves		$alt2
+droogtes	$alt2
+groeves		$alt2
+hoeves		$alt2
+reserves	$alt2
+marges		$alt2
+marge		mArZ@
 
 // words where -age  is [a:Q@] not French ['a:Z@]
 drage		$alt
@@ -1071,6 +1101,7 @@ gijzel		$alt
 gispel		$alt
 gniffel		$alt
 goochel		$alt
+googel		$alt
 gorgel		$alt
 grabbel		$alt
 grendel		$alt
@@ -1370,9 +1401,6 @@ meppel		$alt
 moesel		muz@l
 vondel		$alt
 
-// -s is not plural
-chaos		xa:Os
-
 // all words on _aard are treated as suffix in the rules.
 
 
@@ -1380,6 +1408,8 @@ chaos		xa:Os
 accessoire      aksEsw'ar@
 accessoires     aksEsw'ar@s
 actiepunt	Aksip8nt
+actieve		Akt'iv@
+adhesie		Ath'e:zi
 agenda		$2
 aldus		Ald'8s
 alles		Al@s
@@ -1418,14 +1448,18 @@ chassis		SAs'i
 chat		tSEt
 check		tSEk
 chiffon		Sif'On
+cohesie		$2
 contour		ko:nt'ur
 controle	$2
 coureur		ku:r'Y:r
 crèches		krES@s
 damascering     damA;s'e:rIN
 december	$2
+desillusie	dEsIlyzi
 dieet		$2
 diesel		diz@l
+diner		din'e:
+//discussie	$2
 divers		div'Ers
 diftongering    dIft,ON'e:rIN
 doordat		$2
@@ -1434,7 +1468,10 @@ eensgelijks	e:nsQ@l'EIks
 elfstedentocht	,Elf'ste:d@ntoQt
 embouchuur	A~buS'yr   // embouchure
 enorm		$2
+enquête		A~k'Et@ $alt2
+erosie		e:r'o:zi
 eucharistie	$4
+explosie	$2
 februari	fe:bry'a:ri
 fiche		fiS@
 franchise	frA'Si:z@
@@ -1452,10 +1489,15 @@ ingevolge	$3
 ingrediënt	$4
 ingenieur	Inzj@nj'Y:r
 informatie	$3
+invasie		$2
 januari		$3
 kadaster	$2
+leesregel	le:sre:Q@l
+lunch		l8nS
+lunches		l8nS@s
 mangat		$alt3
 materie		ma:t'e:ri
+maatregel	ma:tre:Q@l $alt2
 maxima		$1
 meteen		mEt'e:n
 metro		me:tro:
@@ -1498,6 +1540,7 @@ ongerieflijk	$3
 partijvoorzitters $2
 periferie	pI:rifI:r'i
 pistache	pist'AS
+privilege	privil'e:Z@ $alt2
 proces		$2
 projectielen    $3
 renaissance	rEne:s'A~s@
@@ -1515,9 +1558,16 @@ serie		sI:ri
 sms'jes		EsEm'Es_j@s
 spektakel	$2
 tegennatuur	$4
+tralie		$1
 travestie	$3
 verderop	$3
+vergezicht	vErQ@zIxt
+verre		vEr@
+verrekijker	vEr@kEIk@r
+verste		vErst@
+verte		vErt@
 volledig	$2
+voordeel	$1
 vrouwengek	$alt3
 waarschijnlijk	$2
 wanen		v#a:n@n

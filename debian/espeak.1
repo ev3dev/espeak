@@ -28,6 +28,9 @@ is a software speech synthesizer for English, and some other languages.
 .B \-h
 Show summary of options.
 .TP
+.B \-\-version
+Prints the espeak library version and the location of the espeak voice data.
+.TP
 .B \-f <text file>
 Text file to speak
 .TP
@@ -76,11 +79,14 @@ Write phonemes mnemonics and translation trace to stdout. If rules files have be
 .B \-\-stdout
 Write speech output to stdout
 .TP
-.B \-\-compile=<voice name>
-Compile the pronunciation rules and dictionary in the current directory. =<voice name> is optional and specifies which language
+.B \-\-ipa
+Write phonemes to stdout using International Phonetic Alphabet. --ipa=1 Use ties, --ipa=2 Use ZWJ, --ipa=3 Separate with _
 .TP
 .B \-\-path=<path>
 Specifies the directory containing the espeak-data directory
+.TP
+.B \-\-pho
+Write mbrola phoneme data (.pho) to stdout or to the file in --phonout
 .TP
 .B \-\-phonout=<filename>
 Write output from -x -X commands and mbrola phoneme data to this file
@@ -93,6 +99,9 @@ Indicate capital letters with: 1=sound, 2=the word "capitals", higher values = a
 .TP
 .B \-\-voices[=<language code>]
 Lists the available voices. If =<language code> is present then only those voices which are suitable for that language are listed.
+.TP
+.B \-\-voices=<directory>
+lists the voices in the specified subdirectory.
 .TP
 .B \-\-compile=voicename
 Compile the pronunciation rules and dictionary in the current directory. =<voice name> is optional and specifies which language
