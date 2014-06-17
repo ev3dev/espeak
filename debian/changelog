@@ -1,3 +1,9 @@
+espeak (1.47.11-1ev3dev1) testing; urgency=low
+
+  * Merge upstream for ev3dev-next
+
+ -- David Lechner <david@lechnology.com>  Sat, 14 Jun 2014 22:08:59 -0500
+
 espeak (1.47.11-1) unstable; urgency=low
 
   * New upstream release
