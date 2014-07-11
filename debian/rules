@@ -72,12 +72,9 @@ install: build
 	cp -al $(CURDIR)/debian/espeak-data/usr $(CURDIR)/debian/espeak-data-udeb
 	rm -fr $(CURDIR)/debian/espeak-data-udeb$(ESPEAK_DATA)/espeak-data/mbrola* $(CURDIR)/debian/espeak-data-udeb$(ESPEAK_DATA)/espeak-data/voices/mb $(CURDIR)/debian/espeak-data-udeb$(ESPEAK_DATA)/espeak-data/voices/test
 	mkdir -p $(CURDIR)/debian/libespeak1$(ESPEAK_DATA)
-	mkdir -p $(CURDIR)/debian/libespeak1-udeb$(ESPEAK_DATA)
 	mkdir -p $(CURDIR)/debian/libespeak-dev$(ESPEAK_DATA)
 	install -m 644 -o root -g root src/$(soname).$(version) $(CURDIR)/debian/libespeak1$(ESPEAK_DATA)/$(soname).$(version)
-	install -m 644 -o root -g root src/$(soname).$(version) $(CURDIR)/debian/libespeak1-udeb$(ESPEAK_DATA)/$(soname).$(version)
 	cd $(CURDIR)/debian/libespeak1$(ESPEAK_DATA) && ln -s $(soname).$(version) $(soname)
-	cd $(CURDIR)/debian/libespeak1-udeb$(ESPEAK_DATA) && ln -s $(soname).$(version) $(soname)
 	cd $(CURDIR)/debian/libespeak1$(ESPEAK_DATA) && ln -s $(soname).$(version) libespeak.so 
 	mv $(CURDIR)/debian/libespeak1$(ESPEAK_DATA)/libespeak.so $(CURDIR)/debian/libespeak-dev$(ESPEAK_DATA)
 	install -m 644 -o root -g root src/libespeak.a $(CURDIR)/debian/libespeak-dev$(ESPEAK_DATA)
@@ -99,7 +96,7 @@ binary-arch: build install
 	dh_strip --dbg-package=espeak-dbg
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs -V --add-udeb=libespeak1-udeb
+	dh_makeshlibs -V
 	dh_shlibdeps -L libespeak1 -l debian/libespeak1/usr/lib
 	dh_installdeb -v
 	dh_gencontrol

@@ -1,9 +1,11 @@
-espeak (1.48.04+dfsg-1) UNRELEASED; urgency=medium
+espeak (1.48.04+dfsg-1) unstable; urgency=medium
 
   * Rebuild upstream tarball without windows platform files.
   * copyright: Add portaudio and sonic licences. Closes: Bug#747214.
+  * Remove libespeak1-udeb, we will continue linking espeakup statically.
+    Closes: Bug#747240.
 
- -- Samuel Thibault <sthibault@debian.org>  Tue, 06 May 2014 20:35:23 +0200
+ -- Samuel Thibault <sthibault@debian.org>  Fri, 11 Jul 2014 12:04:40 +0200
 
 espeak (1.48.04-1) unstable; urgency=medium
 
