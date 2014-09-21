@@ -1,3 +1,9 @@
+espeak (1.48.04+dfsg-2) UNRELEASED; urgency=medium
+
+  * Bump Standards-Version to 3.9.6 (no changes).
+
+ -- Samuel Thibault <sthibault@debian.org>  Fri, 19 Sep 2014 17:35:59 +0200
+
 espeak (1.48.04+dfsg-1) unstable; urgency=medium
 
   * Rebuild upstream tarball without windows platform files.
