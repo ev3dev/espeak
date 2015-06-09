@@ -2,6 +2,7 @@ espeak (1.48.04+dfsg-2) UNRELEASED; urgency=medium
 
   * watch: Generalize URL.
   * Bump Standards-Version to 3.9.6 (no changes).
+  * espeak.1: Update, thus adding -g and -z documentation. Closes: Bug#788190.
 
  -- Samuel Thibault <sthibault@debian.org>  Fri, 19 Sep 2014 17:35:59 +0200
 
