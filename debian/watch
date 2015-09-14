@@ -1,2 +1,2 @@
 version=3
-http://sf.net/espeak/espeak-([\d.]*)-source\.zip
+opts=dversionmangle=s/\+dfsg$// http://sf.net/espeak/espeak-([\d.]*)-source\.(?:zip|tgz|tbz2|txz|tar\.(?:gz|bz2|xz))

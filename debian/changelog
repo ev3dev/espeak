@@ -1,8 +1,118 @@
+espeak (1.48.04+dfsg-2) UNRELEASED; urgency=medium
+
+  * watch: Generalize URL.
+  * Bump Standards-Version to 3.9.6 (no changes).
+  * espeak.1: Update, thus adding -g and -z documentation. Closes: Bug#788190.
+
+ -- Samuel Thibault <sthibault@debian.org>  Fri, 19 Sep 2014 17:35:59 +0200
+
+espeak (1.48.04+dfsg-1) unstable; urgency=medium
+
+  * Rebuild upstream tarball without windows platform files.
+  * watch: Mangle version for +dfsg.
+  * copyright: Add portaudio and sonic licences. Closes: Bug#747214.
+  * Remove libespeak1-udeb, we will continue linking espeakup statically.
+    Closes: Bug#747240.
+
+ -- Samuel Thibault <sthibault@debian.org>  Fri, 11 Jul 2014 12:04:40 +0200
+
+espeak (1.48.04-1) unstable; urgency=medium
+
+  * New upstream release
+  * copyright: Update.
+  * patches/utf-8-init: Refresh.
+  * rules: Fix privacy-breach-logo.
+
+ -- Samuel Thibault <sthibault@debian.org>  Thu, 01 May 2014 19:05:04 +0200
+
+espeak (1.47.11-2) unstable; urgency=medium
+
+  * Add libespeak1-udeb shared library for the installer, so it can be
+    upgraded at the same time as libespeak-data.
+
+  * libespeak1.shlibs: Remove file, replaced by dh_makeshlibs call.
+  * Remove pulse-trigger-on-final-chunk, it actually does not have effect.
+  * Bump Standards-Version to 3.9.5 (no changes).
+
+ -- Samuel Thibault <sthibault@debian.org>  Mon, 24 Feb 2014 00:50:40 -0500
+
+espeak (1.47.11-1) unstable; urgency=low
+
+  * New upstream release
+  * debian/rules: Use phondata-manifest in the espeak-data directory
+  * Updated espeak manpage
+  * Updated copyright
+
+  [ Jason White ]
+  * Pass compiler flags on make command line so they won't be ignored.
+    (Closes: #707925)
+  * Rebuild object files with AUDIO=runtime after building static library
+    without it. (Closes: #707912)
+
+  [ Samuel Thibault ]
+  * Add utf-8-init patch to fix initialization of utf-8 locale for proper
+    character properties detection.
+  * Add pulse-trigger-on-final-chunk patch to flush the pulse output.
+
+ -- Samuel Thibault <sthibault@debian.org>  Wed, 19 Jun 2013 20:57:44 +0200
+
 espeak (1.46.02-2ev3dev1) stable; urgency=low
 
   * Remove pulse and port audio dependancies.
 
  -- David Lechner <david@lechnology.com>  Wed, 05 Mar 2014 20:40:42 -0600
+
+ -- Samuel Thibault <sthibault@debian.org>  Fri, 19 Sep 2014 17:35:59 +0200
+
+espeak (1.48.04+dfsg-1) unstable; urgency=medium
+
+  * Rebuild upstream tarball without windows platform files.
+  * watch: Mangle version for +dfsg.
+  * copyright: Add portaudio and sonic licences. Closes: Bug#747214.
+  * Remove libespeak1-udeb, we will continue linking espeakup statically.
+    Closes: Bug#747240.
+
+ -- Samuel Thibault <sthibault@debian.org>  Fri, 11 Jul 2014 12:04:40 +0200
+
+espeak (1.48.04-1) unstable; urgency=medium
+
+  * New upstream release
+  * copyright: Update.
+  * patches/utf-8-init: Refresh.
+  * rules: Fix privacy-breach-logo.
+
+ -- Samuel Thibault <sthibault@debian.org>  Thu, 01 May 2014 19:05:04 +0200
+
+espeak (1.47.11-2) unstable; urgency=medium
+
+  * Add libespeak1-udeb shared library for the installer, so it can be
+    upgraded at the same time as libespeak-data.
+
+  * libespeak1.shlibs: Remove file, replaced by dh_makeshlibs call.
+  * Remove pulse-trigger-on-final-chunk, it actually does not have effect.
+  * Bump Standards-Version to 3.9.5 (no changes).
+
+ -- Samuel Thibault <sthibault@debian.org>  Mon, 24 Feb 2014 00:50:40 -0500
+
+espeak (1.47.11-1) unstable; urgency=low
+
+  * New upstream release
+  * debian/rules: Use phondata-manifest in the espeak-data directory
+  * Updated espeak manpage
+  * Updated copyright
+
+  [ Jason White ]
+  * Pass compiler flags on make command line so they won't be ignored.
+    (Closes: #707925)
+  * Rebuild object files with AUDIO=runtime after building static library
+    without it. (Closes: #707912)
+
+  [ Samuel Thibault ]
+  * Add utf-8-init patch to fix initialization of utf-8 locale for proper
+    character properties detection.
+  * Add pulse-trigger-on-final-chunk patch to flush the pulse output.
+
+ -- Samuel Thibault <sthibault@debian.org>  Wed, 19 Jun 2013 20:57:44 +0200
 
 espeak (1.46.02-2) unstable; urgency=low
 

@@ -7,7 +7,7 @@ Vcs-Browser: http://github.com/ev3dev-dpkg/espeak
 Vcs-Git: git://github.com/ev3dev-dpkg/espeak
 Homepage: http://espeak.sourceforge.net/
 Build-Depends: debhelper (>= 5.0.0), libsonic-dev, hardening-wrapper
-Standards-Version: 3.9.3
+Standards-Version: 3.9.6
 
 Package: espeak
 Architecture: any

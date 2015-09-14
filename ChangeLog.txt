@@ -1,3 +1,162 @@
+espeak 1.48.04  06.04.2014
+
+Corrections to languages en, nl, ta (rules, list, and dict files).
+No other changes from version 1.48.03. No change to program, phoneme
+data, or other languages.
+
+
+espeak 1.48.03  04.04.2014
+
+Fix bug, use of the command-line  "espeakedit --compile" produced phoneme data
+in which vowels started at full amplitude instead of gradual increase.
+
+Fix bug:  SSML <break time=""> with values greater than 23 seconds were ignored
+due to arithmetic overflow.
+
+Phoneme definition files:
+Added new function:  ChangeNextPhoneme().
+
+Language changes include: da, en, fa, gu, hu, it, nl, pt, ta
+
+Started new language: eu (Basque).
+
+*_rules files:
+Allow $p_alt1, $p_alt2, etc in pre-conditions.  The rule matches if the
+characters before the current point in the word occur as an entry in the
+*_list file with the corresponding $alt attibute.
+
+Added condition $list.  This is similar to $p_alt etc, but examines
+all words in the *_list file which don't have the $only attribute.
+
+
+
+espeak 1.48.01  02.02.2014
+
+*_rules files:
+Added rule attribute $noprefix.  The rule is not used if a prefix has been removed from the word.
+
+Windows:
+Program changes to enable audio output from Windows DLL.
+
+Language options: 
+Added attribute 'dictdialect' to specify en-us voice for words marked with _^_EN.
+
+Superscripts and subscripts are spoken as single letters and numbers during normal speech, and with "superscript" and "subscript" also spoken when spelling.
+
+API: Change function call espeak_TextToPhonemes().
+
+Klatt synthesizer: Fix parallel formant parameters.
+
+
+Language changes include:
+af, an, da, en, fa, ga, gu, hu, hy, it, ml, nl, ta, ur, vi. 
+
+
+espeak 1.47.10  30.04.2013
+  Data change only.
+  Revert 't' sound in Spanish to version 1.47.07.
+
+espeak 1.47.09  29.04.2013
+  Bug fix (lookup in *_list occasionally found the wrong word).
+
+espeak 1.47.08  26.04.2013
+
+Automatically generate character names for subscript and
+superscript characters.
+
+Use internal ctype data for character codes up to U+024F.
+
+Add API function  espeak_TextToPhonemes().
+
+Add test language az, Azerbaijani.
+
+
+espeak 1.47.07  18.04.2013
+Language data changes only.
+
+espeak 1.47.06  15.04.2013
+Bug fix for names of non-ascii digits.
+
+RISC OS version:
+  Fix for systems which have 44010Hz but not 22050Hz audio.
+  Now runs OK in ARMv7 mode.
+
+
+espeak 1.47.04  02.04.2013
+
+Bug fixes.
+
+Phoneme definitions: add conditions prev2PhW(), next3PhW().
+
+Added language: ms (Malay)
+
+Command line:
+  --voices=<directory>  lists the voices in the specified subdirectory.
+
+
+espeak 1.47.03  21.03.2013
+
+Bug fixes.
+
+
+espeak 1.47.01  18.03.2013
+
+Added languages:
+  an  Aragonese.
+  fa  Farsi.
+  ga  Irish.
+  lt  Lithuanian.
+  pa  Punjabi.
+
+Many language improvements, including American English, Danish, Dutch, Portuguese, Tamil.
+
+Command-line program.  Added -version option.
+
+Command-line program.  Added optional value to --ipa option.
+  --ipa=1 adds a 'tie' character to link letters in a multi-letter phoneme name.
+  --ipa=2 adds a zero-width joiner to link letters in a multi-letter phoneme name.
+
+Command-line program. -X option now lists the names of attributes from *_list files.
+
+Speak the names of Braille Dot characters, U+2800 to U+28FF.
+
+Speak names of characters in some non-native alphabets.
+
+Automatic switch to a different language for text in non-native alphabets.
+
+Improved speaking of text from a non-native alphabet after automatically switching
+to a different language voice.
+
+Break words with characters from different alphabets into separate words.
+
+Ignore soft-hyphen (U+00AD) in text.
+
+Klatt vioices, improved nasal vowels.
+
+espeak-data can be compiled using a different sample rate than the default
+22050Hz.  eSpeak will then generate speech at that sample rate.
+
+Change the structure of the espeak-data/voices directory to use subdirectories
+for europe, asia, and others.
+
+*_rules files.
+  Add suffix option 'm' to allow multiplr suffixes to be removed from a word.
+
+*_list files.
+  Allow $text attribute when a text translation is given in a different alphabet.
+
+Phoneme definitions.
+  Add NOT operator in conditions.
+  Add prevVowel() and nextPh2W() 
+  Ignore UTF8-BOM sequence at the start of phoneme definition files.
+
+espeakedit application.
+  Use wxWidgets 2.8 on Linux.
+  Use wxNotebook for prosody and vowel pages.
+  Add an option to compile the phoneme data at a specified sample rate (uses the 'sox'
+    program for the conversion of WAV file data).
+
+
 espeak 1.46.01  22.Nov.2011
 
 Added runtime detection of pulseaudio, with fallback to portaudio if pulse is not running.  Use build option "AUDIO=runtime" in the makefile.
